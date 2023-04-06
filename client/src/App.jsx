@@ -1,10 +1,11 @@
 import "./App.css";
-import Header from "./pages/Header";
+
+import Homepage from "./pages/Homepage";
 
 function App() {
   return (
-    <div className="App">
-      <Header />
+    <div className="App bg-BG h-screen">
+      <Homepage />
     </div>
   );
 }
