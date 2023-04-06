@@ -1,8 +1,10 @@
 import "./App.css";
+import { NavbarLogin, NavbarUser } from "./pages/Navbar";
+
 
 function App() {
   return (
-    <div className="App bg-BG h-screen">
+    <div className="App bg-black h-screen">
       <br />
       <br />
       <br />
@@ -20,6 +22,11 @@ function App() {
         <br />
         <button className="btn-ghost">Button Ghost</button>
       </center>
+      <NavbarLogin />
+      <br />
+      <NavbarUser />
+      <br />
+      
     </div>
   );
 }
