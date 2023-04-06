@@ -1,5 +1,5 @@
-import { NavbarLogin } from "./navbar";
-import Header from "./Header";
+import { NavbarLogin } from "./Navbar";
+import Header from "./header";
 import Service from "./Service";
 import Footer from "./Footer";
 
