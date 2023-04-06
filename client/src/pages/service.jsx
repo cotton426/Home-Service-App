@@ -3,7 +3,7 @@ import ServiceList from '../components/ServiceList'
 
 function Service() {
   return (
-    <div className="App bg-BG h-screen flex justify-center items-center flex-col space-y-12 ">
+    <div className="bg-BG h-screen flex justify-center items-center flex-col space-y-12 ">
       <h1 className="text-3xl text-blue-950 font-sans font-bold">บริการยอดฮิตของเรา</h1>
       <div className="content flex flex-row justify-center space-x-11 mt-6 ">
         < ServiceList/>
