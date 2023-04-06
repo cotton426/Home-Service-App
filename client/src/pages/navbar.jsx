@@ -5,43 +5,42 @@ import userProfile from "./iconNavbar/userProfile.png";
 
 // NavbarLeftContainer component
 const NavbarLeftContainer = () => {
-    return (
-      <div className="w-[60%] flex space-x-4 items-center">
-        <div className="flex">
-          <img
-            className="w-[32px] h-[32px]"
-            src={logoHomeService}
-            alt="HomeServices Logo"
-          />
-          <a href="/" className=" text-blue-600  text-[24px] mx-[5%]">
-            HomeServices
-          </a>
-        </div>
-  
-        <a href="/" className=" text-black  text-[16px] pt-1 pl-[5%]">
-          บริการของเรา
+  return (
+    <div className="w-[60%] flex space-x-4 items-center">
+      <div className="flex">
+        <img
+          className="w-[32px] h-[32px]"
+          src={logoHomeService}
+          alt="HomeServices Logo"
+        />
+        <a href="/" className=" text-blue-600  text-[24px] mx-[5%]">
+          HomeServices
         </a>
       </div>
-    );
-  };
-  
-  //navbar for login at Homepage
-  export const NavbarLogin = () => {
-    return (
-      <nav className="bg-BG p-4 w-screen h-[80px]">
-        <div className="w-[78%] mx-auto flex justify-between items-center">
-          {/* Left container */}
-          <NavbarLeftContainer />
-  
-          {/* Right container */}
-          <div className="flex w-[40%] justify-end">
-            <button className="btn-secondary">เข้าสู่ระบบ</button>
-          </div>
+
+      <a href="/" className=" text-black  text-[16px] pt-1 pl-[5%]">
+        บริการของเรา
+      </a>
+    </div>
+  );
+};
+
+//navbar for login at Homepage
+export const NavbarLogin = () => {
+  return (
+    <nav className="bg-red p-4 w-screen h-[80px]">
+      <div className="w-[78%] mx-auto flex justify-between items-center">
+        {/* Left container */}
+        <NavbarLeftContainer />
+
+        {/* Right container */}
+        <div className="flex w-[40%] justify-end">
+          <button className="btn-secondary">เข้าสู่ระบบ</button>
         </div>
-      </nav>
-    );
-  };
-  
+      </div>
+    </nav>
+  );
+};
 
 // dropdown component for user-afmin profile
 const DropdownItem = ({ href, text, icon }) => {

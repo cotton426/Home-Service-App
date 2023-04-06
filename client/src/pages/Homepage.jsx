@@ -1,6 +1,7 @@
 import { NavbarLogin } from "./navbar";
 import Header from "./Header";
 import Service from "./Service";
+import Footer from "./Footer";
 
 const Homepage = () => {
   return (
@@ -8,6 +9,7 @@ const Homepage = () => {
       <NavbarLogin />
       <Header />
       <Service />
+      <Footer />
     </>
   );
 };

@@ -2,7 +2,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="h-[613px]">
+    <footer className="h-[613px] w-screen">
       <div className="bg-blue-600 h-[378px] relative">
         <div className="flex flex-row gap-28 ">
           <img
