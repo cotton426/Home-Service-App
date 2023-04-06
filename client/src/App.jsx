@@ -1,11 +1,13 @@
 import "./App.css";
-import Footer from "./pages/Footer.jsx";
+import Homepage from "./pages/Homepage";
 
 function App() {
   return (
-    <div className="App">
-      <Footer />
+
+    <div className="App bg-BG h-screen">
+      <Homepage />
     </div>
+
   );
 }
 
