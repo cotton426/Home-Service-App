@@ -1,12 +1,13 @@
 import "./App.css";
-import Service from "./pages/service";
-
+import Homepage from "./pages/Homepage";
 
 function App() {
   return (
-    <div className="App">
-      <Service />
-  </div>
+
+    <div className="App bg-BG h-screen">
+      <Homepage />
+    </div>
+
   );
 }
 
