@@ -21,3 +21,11 @@
 .btn-ghost {
   @apply underline text-blue-600 text-base font-bold py-2.5 px-6 hover:text-blue-400 active:text-blue-800 disabled:text-gray-400;
 }
+
+label{
+  @apply text-gray-900 text-base font-medium pt-4
+}
+
+.input-default {
+  @apply border-gray-300 border rounded-lg h-11 placeholder:text-gray-700 placeholder:font-normal px-4 py-2.5 outline-none focus:placeholder:text-gray-950  focus:border-blue-600 invalid:text-red 
+}
