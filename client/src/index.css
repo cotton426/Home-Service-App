@@ -21,10 +21,7 @@
 .btn-ghost {
   @apply underline text-blue-600 text-base font-bold py-2.5 px-6 hover:text-blue-400 active:text-blue-800 disabled:text-gray-400;
 }
-/* <div class="mb-6">
-    <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-    <input type="email" id="email" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="name@flowbite.com" required>
-  </div> */
+
 label{
   @apply text-gray-900 text-base font-medium pt-4
 }
@@ -32,7 +29,3 @@ label{
 .input-default {
   @apply border-gray-300 border rounded-lg h-11 placeholder:text-gray-700 placeholder:font-normal px-4 py-2.5 outline-none focus:placeholder:text-gray-950  focus:border-blue-600 invalid:text-red 
 }
-
-/* .text-error {
-  @apply 
-} */
