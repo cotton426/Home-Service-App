@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="bg-blue-600 h-[378px] relative">
           <div className="flex flex-row gap-28 ">
             <img
-              src="/image/part-male-construction-worker_329181-3734 1.png"
+              src="\images\part-male-construction-worker_329181-3734 1.png"
               alt="engineer"
               className="h-full"
             />
@@ -28,17 +28,17 @@ const Footer = () => {
               </h2>
             </div>
             <img
-              src="\image\house 1.png"
+              src="\images\house.png"
               alt="home"
               className="absolute right-0 bottom-0 "
             />
           </div>
         </div>
 
-        <div className="h-[193px] flex  flex-row items-center justify-center gap-[10%] ml-10">
+        <div className="h-[193px]  flex  flex-row items-center justify-between gap-[10%] px-[10%]">
           <div className="flex flex-row gap-3">
             <img
-              src="\image\houseicon.png"
+              src="\icons\houseicon.png"
               alt="home-icon"
               className="w-[39.11px] h-[39.11px]"
             />
@@ -57,7 +57,7 @@ const Footer = () => {
           <div>
             <div className="flex flex-row gap-4">
               <img
-                src="\image\phone.png"
+                src="\icons\phone.png"
                 alt="phone-icon"
                 className="w-[20px] h-[20px]"
               />
@@ -65,7 +65,7 @@ const Footer = () => {
             </div>
             <div className="flex flex-row gap-4 mt-2">
               <img
-                src="\image\email.png"
+                src="\icons\email.png"
                 alt="email-icon"
                 className="w-[20px] h-[20px]"
               />
