@@ -1,7 +1,7 @@
-import { NavbarLogin } from "./Navbar";
-import Header from "./header";
-import Service from "./Service";
-import Footer from "./Footer";
+import { NavbarLogin } from "./homepage/Navbar";
+import Header from "./homepage/Header";
+import Service from "./homepage/Service";
+import Footer from "./homepage/Footer";
 
 const Homepage = () => {
   return (

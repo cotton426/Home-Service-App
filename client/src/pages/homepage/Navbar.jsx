@@ -1,19 +1,19 @@
 import { useState } from "react";
-import logoHomeService from "./iconNavbar/logoHomeService.png";
-import notification from "./iconNavbar/notification.png";
-import userProfile from "./iconNavbar/userProfile.png";
+import logoHomeService from "/icons/logoHomeService.png";
+import notification from "/icons/notification.png";
+import userProfile from "/icons/userProfile.png";
 
 // NavbarLeftContainer component
 const NavbarLeftContainer = () => {
   return (
-    <div className="w-[60%] flex space-x-4 items-center">
+    <div className="w-[60%] flex space-x-4 items-center ">
       <div className="flex">
         <img
           className="w-[32px] h-[32px]"
           src={logoHomeService}
           alt="HomeServices Logo"
         />
-        <a href="/" className=" text-blue-600  text-[24px] mx-[5%]">
+        <a href="/" className=" text-blue-600 font-bold text-[24px] mx-[5%]">
           HomeServices
         </a>
       </div>
@@ -28,8 +28,8 @@ const NavbarLeftContainer = () => {
 //navbar for login at Homepage
 export const NavbarLogin = () => {
   return (
-    <nav className="bg-red p-4 w-screen h-[80px]">
-      <div className="w-[78%] mx-auto flex justify-between items-center">
+    <nav className="bg-BG py-4 w-screen h-[80px] drop-shadow-[2px_2px_24px_rgba(23,51,106,0.12)] z-10">
+      <div className="w-[80%] mx-auto flex justify-between items-center ">
         {/* Left container */}
         <NavbarLeftContainer />
 
