@@ -27,5 +27,9 @@ label{
 }
 
 .input-default {
-  @apply border-gray-300 border rounded-lg h-11 placeholder:text-gray-700 placeholder:font-normal px-4 py-2.5 outline-none focus:placeholder:text-gray-950  focus:border-blue-600 invalid:text-red 
+  @apply border-gray-300 border rounded-lg h-11 placeholder:text-gray-700 placeholder:font-normal px-4 py-2.5 outline-none focus:placeholder:text-gray-950  focus:border-blue-600 
+}
+
+.error-massage{
+  @apply text-red text-sm font-normal
 }

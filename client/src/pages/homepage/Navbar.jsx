@@ -28,7 +28,7 @@ const NavbarLeftContainer = () => {
 //navbar for login at Homepage
 export const NavbarLogin = () => {
   return (
-    <nav className="bg-BG py-4 w-screen h-[80px] drop-shadow-[2px_2px_24px_rgba(23,51,106,0.12)] z-10">
+    <nav className="relative bg-BG py-4 w-screen h-[80px] drop-shadow-[2px_2px_24px_rgba(23,51,106,0.12)] z-10">
       <div className="w-[80%] mx-auto flex justify-between items-center ">
         {/* Left container */}
         <NavbarLeftContainer />
@@ -81,8 +81,8 @@ export const NavbarUser = () => {
     setDropdownVisible(!dropdownVisible);
   };
   return (
-    <nav className="bg-BG p-4 w-screen h-[80px]">
-      <div className="w-[78%] mx-auto flex justify-between items-center">
+    <nav className="relative bg-BG py-4 w-screen h-[80px] drop-shadow-[2px_2px_24px_rgba(23,51,106,0.12)] z-10">
+      <div className="w-[80%] mx-auto flex justify-between items-center">
         {/* Left container */}
         <NavbarLeftContainer />
 
