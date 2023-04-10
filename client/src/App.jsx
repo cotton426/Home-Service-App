@@ -1,16 +1,20 @@
-import "./App.css";
-import Homepage from "./pages/Homepage";
-import { Register } from "./pages/RegisterPage";
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import { AuthProvider, AuthContext } from "./contexts/auth.jsx";
 
+import HomePage from "./pages/Homepage.jsx";
+// import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage.jsx";
+// import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
-
-    <div className="App bg-BG h-screen">
-      {/* <Homepage /> */}
-      <Register/>
-    </div>
-
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      {/* <Route path="/login" component={LoginPage} /> */}
+      <Route path="/register" element={<RegisterPage />} />
+      {/* <Route path="/profile" component={ProfilePage} /> */}
+    </Routes>
   );
 }
 
