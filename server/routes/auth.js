@@ -5,15 +5,12 @@ const authRouter = Router();
 
 authRouter.post("/register", async (req, res) => {
   const { fullName, phoneNumber, email, password } = req.body;
-  console.log(req.body);
   const { user, error } = await supabase.auth.signUp({
     fullName,
     phoneNumber,
     email,
     password,
   });
-  console.log(fullName);
-  console.log(phoneNumber);
 
   if (error) {
     console.log("Error signing up:", error.message);
