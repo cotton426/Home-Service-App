@@ -1,5 +1,7 @@
 import express from "express";
 import authRouter from "./routes/auth.js";
+import cors from "cors";
+
 const init = async () => {
   const app = express();
   const port = 4000;
@@ -8,6 +10,7 @@ const init = async () => {
     res.send("Hello, World!");
   });
 
+  app.use(cors());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use("/auth", authRouter);

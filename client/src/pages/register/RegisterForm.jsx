@@ -1,6 +1,7 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { useAuth } from "../../contexts/auth";
 
 const FormField = ({ label, id, name, type, placeholder, onChange }) => {
   return (
@@ -21,25 +22,26 @@ const FormField = ({ label, id, name, type, placeholder, onChange }) => {
 
 function RegisterForm() {
   const initialValues = {
-    username: "",
+    fullName: "",
     email: "",
-    phone: "",
+    phoneNumber: "",
     password: "",
     agree: false,
   };
+  const { register } = useAuth();
 
   const validationSchema = Yup.object().shape({
-    username: Yup.string().required("Username is required"),
+    fullName: Yup.string().required("full name is required"),
     email: Yup.string()
       .email("Invalid email format")
       .required("Email is required"),
-    phone: Yup.string()
+    phoneNumber: Yup.string()
       .transform((value) => value.replace(/\D/g, ""))
       .matches(
         /^0\d{9}$/,
-        "Phone number must start with 0 and be 10 digits long"
+        "phone number must start with 0 and be 10 digits long"
       )
-      .required("Phone is required"),
+      .required("phone number is required"),
     password: Yup.string()
       .min(8, "Password must be at least 8 characters long")
       .matches(/[a-z]/, "Password must have at least one lowercase letter")
@@ -50,24 +52,23 @@ function RegisterForm() {
         "Password must have at least one special character"
       )
       .required("Password is required"),
-    agree: Yup.boolean()
-      .oneOf([true], "You must accept the Privacy Policy"),
+    agree: Yup.boolean().oneOf([true], "You must accept the Privacy Policy"),
   });
 
   const onSubmit = (values, { setSubmitting }) => {
-    console.log(values);
+    register(values);
     setSubmitting(false);
   };
   const formFields = [
     {
       label: "ชื่อ นามสกุล",
-      name: "username",
+      name: "fullName",
       type: "text",
       placeholder: "กรุณากรอกชื่อ นามสกุล",
     },
     {
       label: "เบอร์โทรศัพท์",
-      name: "phone",
+      name: "phoneNumber",
       type: "tel",
       placeholder: "กรุณากรอกเบอร์โทรศัพท์",
     },
@@ -102,14 +103,14 @@ function RegisterForm() {
                 key={field.name}
                 {...field}
                 onChange={
-                  field.name === "phone"
+                  field.name === "phoneNumber"
                     ? (event) => {
                         const formattedValue = event.target.value.replace(
                           /\D/g,
                           ""
                         );
                         if (formattedValue.length <= 10) {
-                          setFieldValue("phone", formattedValue);
+                          setFieldValue("phoneNumber", formattedValue);
                         }
                       }
                     : handleChange
@@ -118,7 +119,10 @@ function RegisterForm() {
             ))}
             <div className="flex items-center mt-4">
               <Field type="checkbox" id="agree" name="agree" className="mr-2" />
-              <label htmlFor="agree" className=" text-gray-900 text-base font-normal pt-0">
+              <label
+                htmlFor="agree"
+                className=" text-gray-900 text-base font-normal pt-0"
+              >
                 ยอมรับ
                 <a
                   href="https://example.com/privacy-policy"
