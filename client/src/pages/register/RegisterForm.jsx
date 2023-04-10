@@ -1,116 +1,154 @@
-import React, { useState } from "react";
+import React from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+
+const FormField = ({ label, id, name, type, placeholder, onChange }) => {
+  return (
+    <div className="flex flex-col">
+      <label htmlFor={id}>{label}</label>
+      <Field
+        type={type}
+        id={id}
+        name={name}
+        className="input-default"
+        placeholder={placeholder}
+        onChange={onChange}
+      />
+      <ErrorMessage name={name} component="p" className="error-massage" />
+    </div>
+  );
+};
 
 function RegisterForm() {
-  const [formData, setFormData] = useState({
+  const initialValues = {
     username: "",
     email: "",
+    phone: "",
     password: "",
-    confirmPassword: "",
+    agree: false,
+  };
+
+  const validationSchema = Yup.object().shape({
+    username: Yup.string().required("Username is required"),
+    email: Yup.string()
+      .email("Invalid email format")
+      .required("Email is required"),
+    phone: Yup.string()
+      .transform((value) => value.replace(/\D/g, ""))
+      .matches(
+        /^0\d{9}$/,
+        "Phone number must start with 0 and be 10 digits long"
+      )
+      .required("Phone is required"),
+    password: Yup.string()
+      .min(8, "Password must be at least 8 characters long")
+      .matches(/[a-z]/, "Password must have at least one lowercase letter")
+      .matches(/[A-Z]/, "Password must have at least one uppercase letter")
+      .matches(/\d/, "Password must have at least one number")
+      .matches(
+        /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/,
+        "Password must have at least one special character"
+      )
+      .required("Password is required"),
+    agree: Yup.boolean()
+      .oneOf([true], "You must accept the Privacy Policy"),
   });
-  const [errors, setErrors] = useState({});
 
-  const validateForm = () => {
-    const newErrors = {};
-    // Perform validation on formData and set any errors to newErrors object
-    if (formData.username.trim() === "") {
-      newErrors.username = "Username is required";
-    }
-    if (formData.email.trim() === "") {
-      newErrors.email = "Email is required";
-    }
-    if (formData.password.trim() === "") {
-      newErrors.password = "Password is required";
-    }
-    if (formData.confirmPassword.trim() === "") {
-      newErrors.confirmPassword = "Confirm password is required";
-    }
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  const onSubmit = (values, { setSubmitting }) => {
+    console.log(values);
+    setSubmitting(false);
   };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const isValid = validateForm();
-    if (isValid) {
-      // Submit the form
-      console.log(formData);
-    } else {
-      console.log("Form has errors, cannot submit");
-    }
-  };
-
-  const handleChange = (event) => {
-    setFormData({ ...formData, [event.target.name]: event.target.value });
-  };
+  const formFields = [
+    {
+      label: "ชื่อ นามสกุล",
+      name: "username",
+      type: "text",
+      placeholder: "กรุณากรอกชื่อ นามสกุล",
+    },
+    {
+      label: "เบอร์โทรศัพท์",
+      name: "phone",
+      type: "tel",
+      placeholder: "กรุณากรอกเบอร์โทรศัพท์",
+    },
+    {
+      label: "อีเมล",
+      name: "email",
+      type: "email",
+      placeholder: "กรุณากรอกอีเมล",
+    },
+    {
+      label: "รหัสผ่าน",
+      name: "password",
+      type: "password",
+      placeholder: "กรุณากรอกรหัสผ่าน",
+    },
+  ];
 
   return (
-    <div className="flex w-screen justify-center pt-[3%] ">
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col bg-white w-[45%] px-[5%] py-[2%] border border-gray-300 rounded-lg"
+    <div className="flex w-screen justify-center pt-[1%] ">
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
       >
-        <h1 className="text-center font-medium text-blue-950 text-4xl">
-          ลงทะเบียน
-        </h1>
-        <div className="flex flex-col">
-          <label htmlFor="username">ชื่อ นามสกุล</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            className="input-default"
-            placeholder="กรุณากรอกชื่อ นามสกุล"
-            value={formData.username}
-            onChange={handleChange}
-          />
-          {errors.username && <p>{errors.username}</p>}
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            className="input-default"
-            placeholder="กรุณากรอกชื่อ นามสกุล"
-            value={formData.email}
-            onChange={handleChange}
-          />
-          {errors.email && <p>{errors.email}</p>}
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            className="input-default"
-            placeholder="กรุณากรอกชื่อ นามสกุล"
-            value={formData.password}
-            onChange={handleChange}
-          />
-          {errors.password && <p>{errors.password}</p>}
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="confirmPassword">Confirm password:</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            className="input-default"
-            placeholder="กรุณากรอกชื่อ นามสกุล"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-          />
-          {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-        </div>
-        <button type="submit" className="btn-primary mt-6">
-          ลงทะเบียน
-        </button>
-      </form>
+        {({ isSubmitting, setFieldValue, handleChange }) => (
+          <Form className="flex flex-col bg-white w-[45%] px-[5%] py-[2%] border border-gray-300 rounded-lg">
+            <h1 className="text-center font-medium text-blue-950 text-4xl">
+              ลงทะเบียน
+            </h1>
+            {formFields.map((field) => (
+              <FormField
+                key={field.name}
+                {...field}
+                onChange={
+                  field.name === "phone"
+                    ? (event) => {
+                        const formattedValue = event.target.value.replace(
+                          /\D/g,
+                          ""
+                        );
+                        if (formattedValue.length <= 10) {
+                          setFieldValue("phone", formattedValue);
+                        }
+                      }
+                    : handleChange
+                }
+              />
+            ))}
+            <div className="flex items-center mt-4">
+              <Field type="checkbox" id="agree" name="agree" className="mr-2" />
+              <label htmlFor="agree" className=" text-gray-900 text-base font-normal pt-0">
+                ยอมรับ
+                <a
+                  href="https://example.com/privacy-policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline text-blue-600 text-base font-semibold hover:text-blue-400 active:text-blue-800 disabled:text-gray-400;"
+                >
+                  ข้อตกลงและเงื่อนไข
+                </a>
+                และ
+                <a
+                  href="https://example.com/privacy-policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline text-blue-600 text-base font-semibold hover:text-blue-400 active:text-blue-800 disabled:text-gray-400;"
+                >
+                  นโยบายความเป็นส่วนตัว
+                </a>
+              </label>
+            </div>
+            <button
+              type="submit"
+              className="btn-primary mt-6"
+              disabled={isSubmitting}
+            >
+              ลงทะเบียน
+            </button>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 }
