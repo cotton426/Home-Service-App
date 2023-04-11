@@ -2,6 +2,7 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useAuth } from "../../contexts/auth";
+import { Link } from "react-router-dom";
 
 const FormField = ({ label, id, name, type, placeholder, onChange }) => {
   return (
@@ -49,7 +50,7 @@ function LoginForm() {
   };
 
   return (
-    <div className="flex w-screen justify-center pt-[1%] ">
+    <div className="flex w-screen justify-center pt-[5%]">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -83,6 +84,10 @@ function LoginForm() {
             >
               Login
             </button>
+            <span className="text-gray-700 mt-5 font-normal text-base text-center">
+              ยังไม่มีบัญชีผู้ใช้ HomeService?
+              <Link to="/register" className="btn-ghost">ลงทะเบียน</Link>
+            </span>
           </Form>
         )}
       </Formik>

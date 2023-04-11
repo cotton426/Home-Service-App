@@ -1,19 +1,21 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
-
-import HomePage from "./pages/Homepage.jsx";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage.jsx";
-// import ProfilePage from "./pages/ProfilePage";
+import { useAuth } from "./contexts/auth";
+import AuthenticatedApp from "./pages/AuthenticatedApp";
+import UnauthenticatedApp from "./pages/UnauthenticatedApp";
+import { NavbarLogin, NavbarLogout } from "./components/Navbar";
 
 function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-      {/* <Route path="/profile" component={ProfilePage} /> */}
-    </Routes>
+  const { user } = useAuth();
+
+  return user ? (
+    <div>
+      <NavbarLogout />
+      <AuthenticatedApp />
+    </div>
+  ) : (
+    <div>
+      <NavbarLogin />
+      <UnauthenticatedApp />
+    </div>
   );
 }
 
