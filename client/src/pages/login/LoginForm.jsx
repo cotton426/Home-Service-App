@@ -77,6 +77,7 @@ function LoginForm() {
               placeholder="Enter your password"
               onChange={handleChange}
             />
+            {}
             <button
               type="submit"
               className="btn-primary mt-6"
