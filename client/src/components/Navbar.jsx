@@ -1,9 +1,15 @@
 import { useState } from "react";
 import logoHomeService from "/icons/logoHomeService.png";
-import notification from "/icons/notification.png";
 import userProfile from "/icons/userProfile.png";
+import { BsBellFill } from "react-icons/bs";
+import { BiUser } from "react-icons/bi";
+import { TiClipboard } from "react-icons/ti";
+import { MdHistory } from "react-icons/md";
+import { HiOutlineLogout } from "react-icons/hi";
+import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/auth";
 
-// NavbarLeftContainer component
+// Navbar Left Container component
 const NavbarLeftContainer = () => {
   return (
     <div className="w-[60%] flex space-x-4 items-center ">
@@ -28,14 +34,16 @@ const NavbarLeftContainer = () => {
 //navbar for login at Homepage
 export const NavbarLogin = () => {
   return (
-    <nav className="relative bg-BG py-4 w-screen h-[80px] drop-shadow-[2px_2px_24px_rgba(23,51,106,0.12)] z-10">
+    <nav className="relative bg-white py-4 w-screen h-[80px] drop-shadow-[2px_2px_24px_rgba(23,51,106,0.12)] z-10">
       <div className="w-[80%] mx-auto flex justify-between items-center ">
         {/* Left container */}
         <NavbarLeftContainer />
 
         {/* Right container */}
         <div className="flex w-[40%] justify-end">
-          <button className="btn-secondary">เข้าสู่ระบบ</button>
+          <Link to="/login">
+            <button className="btn-secondary">เข้าสู่ระบบ</button>
+          </Link>
         </div>
       </div>
     </nav>
@@ -43,36 +51,39 @@ export const NavbarLogin = () => {
 };
 
 // dropdown component for user-afmin profile
-const DropdownItem = ({ href, text, icon }) => {
+const DropdownItem = ({ href, text, IconComponent }) => {
   return (
     <li>
       <a
         href={href}
-        className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white flex items-center"
+        className="px-4 py-2 text-gray-600 hover:text-black hover:bg-gray-100 flex items-center"
       >
-        {icon && <img src={icon} className="inline-block mr-2" />}
-        {text}
+        {IconComponent && (
+          <IconComponent className="inline-block mr-2 icon-dropdown" />
+        )}
+        <span className="text-dropdown">{text}</span>
       </a>
     </li>
   );
 };
 
-export const NavbarUser = () => {
+export const NavbarLogout = () => {
+  const { logout, user } = useAuth();
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const menuItems = [
     {
       label: "ข้อมูลผู้ใช้งาน",
-      icon: "icon-placeholder.svg",
+      IconComponent: BiUser,
       href: "#",
     },
     {
       label: "รายการคำสั่งซ่อม",
-      icon: "icon-placeholder.svg",
+      IconComponent: TiClipboard,
       href: "#",
     },
     {
       label: "ประวัติการซ่อม",
-      icon: "icon-placeholder.svg",
+      IconComponent: MdHistory,
       href: "#",
     },
   ];
@@ -80,8 +91,14 @@ export const NavbarUser = () => {
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem("userData");
+    logout();
+  };
+
   return (
-    <nav className="relative bg-BG py-4 w-screen h-[80px] drop-shadow-[2px_2px_24px_rgba(23,51,106,0.12)] z-10">
+    <nav className="relative bg-white py-4 w-screen h-[80px] drop-shadow-[2px_2px_24px_rgba(23,51,106,0.12)] z-10">
       <div className="w-[80%] mx-auto flex justify-between items-center">
         {/* Left container */}
         <NavbarLeftContainer />
@@ -94,7 +111,7 @@ export const NavbarUser = () => {
                 id="user-name"
                 className="text-black pt-1 text-[16px] mx-2 flex text-right"
               >
-                ปอยฝ้ายมาลัยพร นามสกุลคนไทยมันยาว
+                {user.profiles[0].full_name}
               </span>
             </div>
 
@@ -102,22 +119,22 @@ export const NavbarUser = () => {
               <img
                 src={userProfile}
                 alt="userProfile"
-                className="w-10 h-10 p-2 bg-gray-200 rounded-full mx-2 cursor-pointer"
+                className="w-10 h-10 p-2 bg-gray-100 rounded-full mx-2 cursor-pointer"
                 onClick={toggleDropdown}
               />
               {dropdownVisible && (
                 <div
                   id="dropdown"
-                  className="absolute z-10 right-0 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+                  className="absolute z-10 right-[6px] bg-white divide-y divide-gray-100 rounded-lg shadow w-44 "
                 >
                   <ul
-                    className="py-2 text-sm text-gray-800 dark:text-gray-200"
+                    className="py-2 text-sm text-gray-800 "
                     aria-labelledby="dropdownDefaultButton"
                   >
                     {menuItems.map((item, index) => (
                       <DropdownItem
                         key={index}
-                        icon={item.icon}
+                        IconComponent={item.IconComponent}
                         text={item.label}
                         href={item.href}
                       />
@@ -126,12 +143,10 @@ export const NavbarUser = () => {
                     <li>
                       <a
                         href="#"
-                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        className="block px-4 py-2 text-gray-600 hover:text-gray-950 hover:bg-gray-100 "
+                        onClick={handleLogout}
                       >
-                        <img
-                          src="icon-placeholder.svg"
-                          className="inline-block mr-2"
-                        />
+                        <HiOutlineLogout className="inline-block mr-2  icon-dropdown" />
                         ออกจากระบบ
                       </a>
                     </li>
@@ -140,11 +155,9 @@ export const NavbarUser = () => {
               )}
             </div>
 
-            <img
-              src={notification}
-              alt="Notifications"
-              className="w-10 h-10 bg-gray-200 rounded-full mx-2 cursor-pointer"
-            />
+            <div className="w-10 h-10 rounded-full mx-2 cursor-pointer flex justify-center items-center transition-colors duration-300 icon-circle-hover">
+              <BsBellFill className="w-4 h-8 text-gray-400 icon transition-colors duration-300" />
+            </div>
           </div>
         </div>
       </div>

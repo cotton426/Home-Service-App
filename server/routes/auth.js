@@ -5,24 +5,26 @@ const authRouter = Router();
 
 authRouter.post("/register", async (req, res) => {
   const { fullName, phoneNumber, email, password } = req.body;
-  const { user, error } = await supabase.auth.signUp({
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.signUp({
     fullName,
     phoneNumber,
     email,
     password,
   });
-
+  
   if (error) {
     console.log("Error signing up:", error.message);
   } else {
     console.log("Signed up successfully!");
 
-    const { data, error } = await supabase.from("profiless").insert([
+    const { data, error } = await supabase.from("profiles").insert([
       {
         full_name: fullName,
         phone_number: phoneNumber,
-        email: email,
-        password: password,
+        user_id: user.id,
       },
     ]);
 
@@ -40,13 +42,19 @@ authRouter.post("/register", async (req, res) => {
 authRouter.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
-  const { user, error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
+  
+  let { data: profiles } = await supabase .from('profiles') .select("*").eq("user_id",data.user.id);
+  
 
   if (error) return res.status(400).json({ error: error.message });
-  res.status(200).json(user);
+
+  return res.status(200).json({data,profiles});
+
+
   //return res.json({ data: "work!!!" });
 });
 

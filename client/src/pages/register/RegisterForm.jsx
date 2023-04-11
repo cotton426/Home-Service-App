@@ -2,6 +2,7 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useAuth } from "../../contexts/auth";
+import { Link } from "react-router-dom";
 
 const FormField = ({ label, id, name, type, placeholder, onChange }) => {
   return (
@@ -87,7 +88,7 @@ function RegisterForm() {
   ];
 
   return (
-    <div className="flex w-screen justify-center pt-[1%] ">
+    <div className="flex w-screen justify-center pt-[5%] ">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -124,25 +125,20 @@ function RegisterForm() {
                 className=" text-gray-900 text-base font-normal pt-0"
               >
                 ยอมรับ
-                <a
-                  href="https://example.com/privacy-policy"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline text-blue-600 text-base font-semibold hover:text-blue-400 active:text-blue-800 disabled:text-gray-400;"
-                >
+                <Link to="/register" className="btn-ghost">
                   ข้อตกลงและเงื่อนไข
-                </a>
+                </Link>
                 และ
-                <a
-                  href="https://example.com/privacy-policy"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline text-blue-600 text-base font-semibold hover:text-blue-400 active:text-blue-800 disabled:text-gray-400;"
-                >
+                <Link to="/register" className="btn-ghost">
                   นโยบายความเป็นส่วนตัว
-                </a>
+                </Link>
               </label>
             </div>
+            <ErrorMessage
+              name="agree"
+              component="p"
+              className="error-massage"
+            />
             <button
               type="submit"
               className="btn-primary mt-6"
@@ -150,6 +146,9 @@ function RegisterForm() {
             >
               ลงทะเบียน
             </button>
+            <Link to="/login" className="btn-ghost text-center mt-5">
+              กลับไปหน้าเข้าสู่ระบบ
+            </Link>
           </Form>
         )}
       </Formik>

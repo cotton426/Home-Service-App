@@ -19,7 +19,7 @@
 }
 
 .btn-ghost {
-  @apply underline text-blue-600 text-base font-bold py-2.5 px-6 hover:text-blue-400 active:text-blue-800 disabled:text-gray-400;
+  @apply underline text-blue-600 text-base font-bold py-0.5 px-2 hover:text-blue-400 active:text-blue-800 disabled:text-gray-400;
 }
 
 label{
@@ -33,4 +33,26 @@ label{
 .error-massage{
   @apply text-red text-sm font-normal
 }
+/*icon dropdown */
+.icon-text-gray-hover {
+  color: #9AA1B0 ;
+}
 
+.icon-text-gray-hover:hover .icon-dropdown,
+.icon-text-gray-hover:hover .text-dropdown{
+  color: #323640;
+}
+/*icon notification */
+.icon-circle-hover {
+  background-color: #F3F4F6;
+}
+
+.icon-circle-hover:hover .icon,
+.icon-circle-hover:hover {
+  background-color: #E6E7EB;
+}
+
+.icon-circle-hover:active .icon,.icon-circle-hover:active {
+  color: #336DF2;
+  background-color:#E7EEFF;
+}

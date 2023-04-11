@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { FiTag } from "react-icons/fi";
 
 function ServiceList() {
   const [servicePost, setServicePost] = useState("");
@@ -38,11 +39,11 @@ function ServiceList() {
               </button>
               <h2 className="text-gray-950 text-xl font-bold">{item.topic}</h2>
               <div className="flex flex-row justify-center items-center">
-                <img className="h-4 pr-2 " src="\icons\tag.png" alt="tag" />
+                <FiTag className="w-3.5 mr-2 text-gray-700" />
                 <span className=" text-gray-700 text-sm">{item.detail}</span>
               </div>
             </div>
-            <button className="btn-ghost mb-3">เลือกบริการ</button>
+            <button className="btn-ghost mb-3 ml-4">เลือกบริการ</button>
           </div>
         );
       })}
