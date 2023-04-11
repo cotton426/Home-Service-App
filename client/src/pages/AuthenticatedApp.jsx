@@ -9,8 +9,6 @@ function AuthenticatedApp() {
   return (
     <Routes>
       <Route path="/" element={<Homepage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
       {/* <Route path="/profile" component={ProfilePage} /> */}
     </Routes>
   );
