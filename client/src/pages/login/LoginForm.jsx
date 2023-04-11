@@ -1,0 +1,93 @@
+import React from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { useAuth } from "../../contexts/auth";
+
+const FormField = ({ label, id, name, type, placeholder, onChange }) => {
+  return (
+    <div className="flex flex-col">
+      <label htmlFor={id}>{label}</label>
+      <Field
+        type={type}
+        id={id}
+        name={name}
+        className="input-default"
+        placeholder={placeholder}
+        onChange={onChange}
+      />
+      <ErrorMessage name={name} component="p" className="error-massage" />
+    </div>
+  );
+};
+
+function LoginForm() {
+  const initialValues = {
+    email: "",
+    password: "",
+  };
+  const { login } = useAuth();
+
+  const validationSchema = Yup.object().shape({
+    email: Yup.string()
+      .email("Invalid email format")
+      .required("Email is required"),
+    password: Yup.string()
+      .min(8, "Password must be at least 8 characters long")
+      .matches(/[a-z]/, "Password must have at least one lowercase letter")
+      .matches(/[A-Z]/, "Password must have at least one uppercase letter")
+      .matches(/\d/, "Password must have at least one number")
+      .matches(
+        /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/,
+        "Password must have at least one special character"
+      )
+      .required("Password is required"),
+  });
+
+  const onSubmit = (values, { setSubmitting }) => {
+    login(values);
+    setSubmitting(false);
+  };
+
+  return (
+    <div className="flex w-screen justify-center pt-[1%] ">
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
+        {({ isSubmitting, handleChange }) => (
+          <Form className="flex flex-col bg-white w-[45%] px-[5%] py-[2%] border border-gray-300 rounded-lg">
+            <h1 className="text-center font-medium text-blue-950 text-4xl">
+              Login
+            </h1>
+            <FormField
+              label="Email"
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              onChange={handleChange}
+            />
+            <FormField
+              label="Password"
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+              onChange={handleChange}
+            />
+            <button
+              type="submit"
+              className="btn-primary mt-6"
+              disabled={isSubmitting}
+            >
+              Login
+            </button>
+          </Form>
+        )}
+      </Formik>
+    </div>
+  );
+}
+
+export default LoginForm;

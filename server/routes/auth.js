@@ -5,24 +5,26 @@ const authRouter = Router();
 
 authRouter.post("/register", async (req, res) => {
   const { fullName, phoneNumber, email, password } = req.body;
-  const { user, error } = await supabase.auth.signUp({
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.signUp({
     fullName,
     phoneNumber,
     email,
     password,
   });
-
+  console.log(user);
   if (error) {
     console.log("Error signing up:", error.message);
   } else {
     console.log("Signed up successfully!");
 
-    const { data, error } = await supabase.from("profiless").insert([
+    const { data, error } = await supabase.from("profiles").insert([
       {
         full_name: fullName,
         phone_number: phoneNumber,
-        email: email,
-        password: password,
+        user_id: user.id,
       },
     ]);
 
