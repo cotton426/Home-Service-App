@@ -1,11 +1,20 @@
-import "./App.css";
+import { useAuth } from "./contexts/auth";
+import AuthenticatedApp from "./pages/AuthenticatedApp";
+import UnauthenticatedApp from "./pages/UnauthenticatedApp";
+import { NavbarLogin, NavbarLogout } from "./components/Navbar";
 
 function App() {
-  return (
-    <div className="App">
-      <h1 className="text-3xl font-bold underline text-red-500">
-        Hello world!
-      </h1>
+  const { user } = useAuth();
+
+  return user ? (
+    <div>
+      <NavbarLogout />
+      <AuthenticatedApp />
+    </div>
+  ) : (
+    <div>
+      <NavbarLogin />
+      <UnauthenticatedApp />
     </div>
   );
 }

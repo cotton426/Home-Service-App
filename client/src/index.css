@@ -1,3 +1,59 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btn-primary {
+  @apply bg-blue-600 text-white text-base font-bold py-2.5 px-6 rounded-lg hover:bg-blue-500 active:bg-blue-800 disabled:bg-gray-300;
+}
+
+.btn-primary-large {
+  @apply bg-blue-600 text-white text-xl font-bold py-3 px-8 rounded-lg hover:bg-blue-500 active:bg-blue-800 disabled:bg-gray-300;
+}
+
+.btn-secondary {
+  @apply border-blue-500 border text-base text-blue-600 font-bold py-2.5 px-6 rounded-lg hover:text-blue-400 hover:border-blue-400 active:text-blue-800 active:border-blue-800 disabled:text-gray-400 disabled:border-gray-400 disabled:bg-gray-100;
+}
+
+.btn-secondary-large {
+  @apply border-blue-500 border text-blue-600 text-xl font-bold py-3 px-8 rounded-lg hover:text-blue-400 hover:border-blue-400 active:text-blue-800 active:border-blue-800 disabled:text-gray-400 disabled:border-gray-400 disabled:bg-gray-100;
+}
+
+.btn-ghost {
+  @apply underline text-blue-600 text-base font-bold py-0.5 px-2 hover:text-blue-400 active:text-blue-800 disabled:text-gray-400;
+}
+
+label{
+  @apply text-gray-900 text-base font-medium pt-4
+}
+
+.input-default {
+  @apply border-gray-300 border rounded-lg h-11 placeholder:text-gray-700 placeholder:font-normal px-4 py-2.5 outline-none focus:placeholder:text-gray-950  focus:border-blue-600 
+}
+
+.error-massage{
+  @apply text-red text-sm font-normal mt-0.5
+}
+
+/*icon dropdown */
+.icon-text-gray-hover {
+  color: #9AA1B0 ;
+}
+
+.icon-text-gray-hover:hover .icon-dropdown,
+.icon-text-gray-hover:hover .text-dropdown{
+  color: #323640;
+}
+/*icon notification */
+.icon-circle-hover {
+  background-color: #F3F4F6;
+}
+
+.icon-circle-hover:hover .icon,
+.icon-circle-hover:hover {
+  background-color: #E6E7EB;
+}
+
+.icon-circle-hover:active .icon,.icon-circle-hover:active {
+  color: #336DF2;
+  background-color:#E7EEFF;
+}
