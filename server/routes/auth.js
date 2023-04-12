@@ -47,15 +47,12 @@ authRouter.post("/login", async (req, res) => {
     password,
   });
   
+  if (error) return res.status(401).json({ error: error.message });
   let { data: profiles } = await supabase .from('profiles') .select("*").eq("user_id",data.user.id);
   
 
-  if (error) return res.status(400).json({ error: error.message });
-
   return res.status(200).json({data,profiles});
 
-
-  //return res.json({ data: "work!!!" });
 });
 
 authRouter.post("/logout", async (req, res) => {

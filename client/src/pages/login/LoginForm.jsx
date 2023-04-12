@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 const FormField = ({ label, id, name, type, placeholder, onChange }) => {
   return (
     <div className="flex flex-col">
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={id}>{label}<label className="text-red">*</label></label>
       <Field
         type={type}
         id={id}
@@ -44,9 +44,17 @@ function LoginForm() {
       .required("Password is required"),
   });
 
-  const onSubmit = (values, { setSubmitting }) => {
-    login(values);
-    setSubmitting(false);
+  const onSubmit = async (values, { setSubmitting, setErrors }) => {
+    try {
+      const result = await login(values);
+      if (!result?.success) {
+        setErrors({ password: "Incorrect email or password" });
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -86,7 +94,9 @@ function LoginForm() {
             </button>
             <span className="text-gray-700 mt-5 font-normal text-base text-center">
               ยังไม่มีบัญชีผู้ใช้ HomeService?
-              <Link to="/register" className="btn-ghost">ลงทะเบียน</Link>
+              <Link to="/register" className="btn-ghost">
+                ลงทะเบียน
+              </Link>
             </span>
           </Form>
         )}

@@ -7,7 +7,10 @@ import { Link } from "react-router-dom";
 const FormField = ({ label, id, name, type, placeholder, onChange }) => {
   return (
     <div className="flex flex-col">
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={id}>
+        {label}
+        <label className="text-red">*</label>
+      </label>
       <Field
         type={type}
         id={id}
@@ -119,7 +122,12 @@ function RegisterForm() {
               />
             ))}
             <div className="flex items-center mt-4">
-              <Field type="checkbox" id="agree" name="agree" className="mr-2" />
+              <Field
+                type="checkbox"
+                id="agree"
+                name="agree"
+                className=" mr-2 scale-150 "
+              />
               <label
                 htmlFor="agree"
                 className=" text-gray-900 text-base font-normal pt-0"
