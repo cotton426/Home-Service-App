@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { useAuth } from "../../contexts/auth";
 import { Link } from "react-router-dom";
 
-const FormField = ({ label, id, name, type, placeholder, onChange }) => {
+export const FormField = ({ label, id, name, type, placeholder, onChange }) => {
   return (
     <div className="flex flex-col">
       <label htmlFor={id}>
@@ -40,7 +40,6 @@ function RegisterForm() {
       .email("Invalid email format")
       .required("Email is required"),
     phoneNumber: Yup.string()
-      .transform((value) => value.replace(/\D/g, ""))
       .matches(
         /^0\d{9}$/,
         "phone number must start with 0 and be 10 digits long"
@@ -59,9 +58,17 @@ function RegisterForm() {
     agree: Yup.boolean().oneOf([true], "You must accept the Privacy Policy"),
   });
 
-  const onSubmit = (values, { setSubmitting }) => {
-    register(values);
-    setSubmitting(false);
+  const onSubmit = async (values, { setSubmitting, setErrors }) => {
+    try {
+      const result = await register(values);
+      if (result?.message) {
+        setErrors({ email: "This email is already used" });
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setSubmitting(false);
+    }
   };
   const formFields = [
     {
@@ -133,6 +140,7 @@ function RegisterForm() {
                 className=" text-gray-900 text-base font-normal pt-0"
               >
                 ยอมรับ
+                {/* แปะลิงค์ เงื่อนไขและนโยบาย */}
                 <Link to="/register" className="btn-ghost">
                   ข้อตกลงและเงื่อนไข
                 </Link>

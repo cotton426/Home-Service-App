@@ -15,7 +15,6 @@ const loadUserDataFromLocalStorage = () => {
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(loadUserDataFromLocalStorage());
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const updateUserData = (userData) => {
@@ -25,13 +24,12 @@ const AuthProvider = ({ children }) => {
 
   const register = async (data) => {
     try {
-      const response = await axios.post(
-        "http://localhost:4000/auth/register",
-        data
-      );
+      await axios.post("http://localhost:4000/auth/register", data);
       navigate("/login");
     } catch (error) {
       console.error(error);
+      // console.log(error);
+      return error;
     }
   };
 
@@ -45,7 +43,6 @@ const AuthProvider = ({ children }) => {
       navigate("/");
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        setError("Incorrect email or password.");
         return error;
       } else {
         console.error("An error occurred:", error);

@@ -3,23 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useAuth } from "../../contexts/auth";
 import { Link } from "react-router-dom";
-
-const FormField = ({ label, id, name, type, placeholder, onChange }) => {
-  return (
-    <div className="flex flex-col">
-      <label htmlFor={id}>{label}<label className="text-red">*</label></label>
-      <Field
-        type={type}
-        id={id}
-        name={name}
-        className="input-default"
-        placeholder={placeholder}
-        onChange={onChange}
-      />
-      <ErrorMessage name={name} component="p" className="error-massage" />
-    </div>
-  );
-};
+import { FormField } from "../register/RegisterForm";
 
 function LoginForm() {
   const initialValues = {
@@ -47,7 +31,7 @@ function LoginForm() {
   const onSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
       const result = await login(values);
-      if (!result?.success) {
+      if (result?.message) {
         setErrors({ password: "Incorrect email or password" });
       }
     } catch (error) {

@@ -111,7 +111,8 @@ export const NavbarLogout = () => {
                 id="user-name"
                 className="text-black pt-1 text-[16px] mx-2 flex text-right"
               >
-                {user.profiles[0].full_name}
+                {console.log(user)}
+                {user?.profiles[0].full_name}
               </span>
             </div>
 
