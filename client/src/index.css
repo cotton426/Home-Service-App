@@ -31,8 +31,9 @@ label{
 }
 
 .error-massage{
-  @apply text-red text-sm font-normal
+  @apply text-red text-sm font-normal mt-0.5
 }
+
 /*icon dropdown */
 .icon-text-gray-hover {
   color: #9AA1B0 ;
