@@ -1,7 +1,19 @@
-import React from "react";
 import Footer from "../../components/Footer";
+import { BsSearch } from "react-icons/bs";
 
-const Footerservice = () => {
+export const HeaderService = () => {
+  return (
+    <header>
+      <img
+        src="public\images\banner.png"
+        alt="My service"
+        className=" w-screen"
+      />
+    </header>
+  );
+};
+
+export const Footerservice = () => {
   return (
     <footer className="h-[613px] w-screen">
       <div className="flex flex-col">
@@ -28,4 +40,22 @@ const Footerservice = () => {
   );
 };
 
-export default Footerservice;
+export const NavService = () => {
+  return (
+    <nav className="bg-white py-4 w-screen h-[80px]">
+      <div className="w-[80%] mx-auto flex items-center ">
+        <div className="w-screen flex justify-between relative">
+          <input
+            type="text"
+            className="input-default w-[350px]"
+            placeholder="ค้นหาบริการ..."
+          />
+          <span className="absolute inset-y-0 left-0 pl-3 flex items-center">
+            <BsSearch className="h-5 w-5 text-gray-500" />
+          </span>
+          <button className="btn-primary font-medium">ค้นหา</button>
+        </div>
+      </div>
+    </nav>
+  );
+};

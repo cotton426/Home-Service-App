@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .btn-primary {
-  @apply bg-blue-600 text-white text-base font-bold py-2.5 px-6 rounded-lg hover:bg-blue-500 active:bg-blue-800 disabled:bg-gray-300;
+  @apply bg-blue-600 text-white text-base py-2.5 px-6 rounded-lg hover:bg-blue-500 active:bg-blue-800 disabled:bg-gray-300 font-medium;
 }
 
 .btn-primary-large {
@@ -22,38 +22,39 @@
   @apply underline text-blue-600 text-base font-bold py-0.5 px-2 hover:text-blue-400 active:text-blue-800 disabled:text-gray-400;
 }
 
-label{
-  @apply text-gray-900 text-base font-medium pt-4
+label {
+  @apply text-gray-900 text-base font-medium pt-4;
 }
 
 .input-default {
-  @apply border-gray-300 border rounded-lg h-11 placeholder:text-gray-700 placeholder:font-normal px-4 py-2.5 outline-none focus:placeholder:text-gray-950  focus:border-blue-600 
+  @apply border-gray-300 border rounded-lg h-11 placeholder:text-gray-700 placeholder:font-normal px-4 py-2.5 outline-none focus:placeholder:text-gray-950  focus:border-blue-600;
 }
 
-.error-massage{
-  @apply text-red text-sm font-normal mt-0.5
+.error-massage {
+  @apply text-red text-sm font-normal mt-0.5;
 }
 
 /*icon dropdown */
 .icon-text-gray-hover {
-  color: #9AA1B0 ;
+  color: #9aa1b0;
 }
 
 .icon-text-gray-hover:hover .icon-dropdown,
-.icon-text-gray-hover:hover .text-dropdown{
+.icon-text-gray-hover:hover .text-dropdown {
   color: #323640;
 }
 /*icon notification */
 .icon-circle-hover {
-  background-color: #F3F4F6;
+  background-color: #f3f4f6;
 }
 
 .icon-circle-hover:hover .icon,
 .icon-circle-hover:hover {
-  background-color: #E6E7EB;
+  background-color: #e6e7eb;
 }
 
-.icon-circle-hover:active .icon,.icon-circle-hover:active {
-  color: #336DF2;
-  background-color:#E7EEFF;
+.icon-circle-hover:active .icon,
+.icon-circle-hover:active {
+  color: #336df2;
+  background-color: #e7eeff;
 }
