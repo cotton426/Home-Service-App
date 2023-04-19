@@ -1,5 +1,11 @@
 import { AdminSidebar } from "../components/AdminSidebar";
-import { AdminNavbar } from "../components/AdminNavbar";
+import {
+  AddServiceNavbar,
+  ServiceNavbar,
+  SubCategoryNavbar,
+  SubServiceNavbar,
+  EditSubCategoryNavbar,
+} from "../components/AdminNavbar";
 
 const AdminHomepage = () => {
   return (
@@ -7,11 +13,8 @@ const AdminHomepage = () => {
       <div id="left-container side-bar" className="flex h-full text-black">
         <AdminSidebar />
       </div>
-      <div
-        id="right-container nav-bar"
-        className="bg-BG h-full text-white"
-      >
-        <AdminNavbar />
+      <div id="right-container nav-bar" className="bg-BG h-full text-white">
+        <EditSubCategoryNavbar />
       </div>
     </div>
   );
