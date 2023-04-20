@@ -51,7 +51,7 @@ export const NavbarLogin = () => {
 };
 
 // dropdown component for user-afmin profile
-const DropdownItem = ({ href, text, IconComponent }) => {
+export const DropdownItem = ({ href, text, IconComponent }) => {
   return (
     <li>
       <a
