@@ -7,6 +7,7 @@ import {
   SubServiceNavbar,
   EditSubCategoryNavbar,
 } from "../components/AdminNavbar";
+import AddService from "../components/AddService";
 
 const AdminHomepage = () => {
   return (
@@ -16,6 +17,7 @@ const AdminHomepage = () => {
       </div>
       <div id="right-container nav-bar" className="bg-BG h-full text-white">
         <EditSubCategoryNavbar />
+        <AddService/>
       </div>
     </div>
   );
