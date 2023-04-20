@@ -39,12 +39,12 @@ export const AdminSidebar = () => {
           </div>
           <div>
             <SidebarItem
-              to="/serviceforcat"
+              to="/categories"
               icon={TbCategory2}
               text="หมวดหมู่"
             />
             <SidebarItem
-              to="/servicefordog"
+              to="/services"
               icon={HiOutlineDocumentDuplicate}
               text="บริการ"
             />

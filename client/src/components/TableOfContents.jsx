@@ -46,7 +46,7 @@ const TableRow = ({
           className="text-gray-500 hover:text-red-700  mr-2"
           onClick={() => handleDelete(item)}
         >
-          <HiOutlineTrash />
+          <HiOutlineTrash className="scale-110" />
         </button>
         <button
           className="text-blue-500 hover:text-blue-700"
@@ -129,53 +129,55 @@ const TableOfContents = () => {
   };
 
   return (
-    <div className="overflow-hidden w-full rounded-lg border border-gray-200 m-[5%]">
-      <table className="w-full text-left text-gray-700 border-collapse">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="py-3 px-4 w-1/12"></th>
-            <th className="py-3 px-4 text-center w-1/12">ลำดับ</th>
-            <th className="py-3 px-4 w-1/4">ชื่อหมวดหมู่</th>
-            <th className="py-3 px-4 w-1/6">สร้างเมื่อ</th>
-            <th className="py-3 px-4 ">แก้ไขล่าสุด</th>
-            <th className="py-3 px-4 w-1/12">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item, index) => (
-            <TableRow
-              key={item.id}
-              item={item}
-              index={index}
-              handleDragStart={handleDragStart}
-              handleDrop={handleDrop}
-              handleDragOver={handleDragOver}
-              handleEdit={handleEdit}
-              handleDelete={handleDelete}
-            />
-          ))}
-        </tbody>
-      </table>
-      {showDeleteConfirmation && (
-        <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="flex flex-col items-center bg-white text-black text-center px-10 py-9 rounded-2xl shadow-md">
-            <BsFillExclamationCircleFill className="text-red scale-150 mb-4" />
-            <h1 className="text-xl font-medium">ยืนยันการลบรายการ?</h1>
-            <p className="text-gray-700 font-light py-4">
-              คุณต้องการลบรายการ "{itemToDelete.title}" <br />
-              ใช่หรือไม่
-            </p>
-            <div className="flex justify-center gap-4">
-              <button className="btn-primary" onClick={confirmDelete}>
-                ลบรายการ
-              </button>
-              <button className="btn-secondary" onClick={cancelDelete}>
-                ยกเลิก
-              </button>
+    <div className="w-full p-[5%]">
+      <div className="overflow-hidden w-full rounded-lg border border-gray-200">
+        <table className="w-full text-left text-gray-700 border-collapse">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="py-3 px-4 w-1/12"></th>
+              <th className="py-3 px-4 text-center w-1/12">ลำดับ</th>
+              <th className="py-3 px-4 w-1/4">ชื่อหมวดหมู่</th>
+              <th className="py-3 px-4 w-1/6">สร้างเมื่อ</th>
+              <th className="py-3 px-4 ">แก้ไขล่าสุด</th>
+              <th className="py-3 px-4 w-1/12">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item, index) => (
+              <TableRow
+                key={item.id}
+                item={item}
+                index={index}
+                handleDragStart={handleDragStart}
+                handleDrop={handleDrop}
+                handleDragOver={handleDragOver}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
+              />
+            ))}
+          </tbody>
+        </table>
+        {showDeleteConfirmation && (
+          <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="flex flex-col items-center bg-white text-black text-center px-10 py-9 rounded-2xl shadow-md">
+              <BsFillExclamationCircleFill className="text-red scale-150 mb-4" />
+              <h1 className="text-xl font-medium">ยืนยันการลบรายการ?</h1>
+              <p className="text-gray-700 font-light py-4">
+                คุณต้องการลบรายการ "{itemToDelete.title}" <br />
+                ใช่หรือไม่
+              </p>
+              <div className="flex justify-center gap-4">
+                <button className="btn-primary" onClick={confirmDelete}>
+                  ลบรายการ
+                </button>
+                <button className="btn-secondary" onClick={cancelDelete}>
+                  ยกเลิก
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
