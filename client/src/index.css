@@ -58,3 +58,11 @@ label {
   color: #336df2;
   background-color: #e7eeff;
 }
+
+th {
+  @apply font-normal;
+}
+
+td {
+  @apply font-light;
+}
