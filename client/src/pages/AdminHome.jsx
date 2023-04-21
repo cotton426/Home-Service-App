@@ -12,6 +12,7 @@ import { Routes, Route } from "react-router-dom";
 import AddService from "../components/AddService";
 import TableOfContents from "../components/TableOfContents";
 import { AddCategory,SubCategory,EditSubCategory } from "../components/AdminCategory";
+import ServiceTable from "../components/ServicesTable";
 
 const AdminHomepage = () => {
   return (

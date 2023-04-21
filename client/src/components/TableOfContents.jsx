@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { TbGripVertical } from "react-icons/tb";
 import { HiOutlineTrash } from "react-icons/hi";
-import { BsFillExclamationCircleFill } from "react-icons/bs";
+import AlertConfirmation from "./AlertConfirmation";
 
 const formatTime = (date) => {
   const day = String(date.getDate()).padStart(2, "0");
@@ -17,6 +17,7 @@ const formatTime = (date) => {
 };
 
 const TableRow = ({
+  service,
   item,
   index,
   handleDragStart,
@@ -38,7 +39,15 @@ const TableRow = ({
         <TbGripVertical className="w-full" />
       </td>
       <td className="py-3 px-4 text-center">{index + 1}</td>
-      <td className="py-3 px-4">{item.title}</td>
+      {service ? (
+        <>
+          <td className="py-3 px-4">{item.title}</td>
+          <td className="py-3 px-4">{item.category}</td>
+        </>
+      ) : (
+        <td className="py-3 px-4">{item.title}</td>
+      )}
+
       <td className="py-3 px-4">{formatTime(item.created_at)}</td>
       <td className="py-3 px-4">{formatTime(item.updated_at)}</td>
       <td className="py-3 px-4">
@@ -59,7 +68,7 @@ const TableRow = ({
   );
 };
 
-const TableOfContents = () => {
+const TableOfContents = ({ service }) => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [items, setItems] = useState([
@@ -134,9 +143,16 @@ const TableOfContents = () => {
         <table className="w-full text-left text-gray-700 border-collapse">
           <thead className="bg-gray-100">
             <tr>
-              <th className="py-3 px-4 w-1/12"></th>
+              <th className="py-3 px-4 w-[5%]"></th>
               <th className="py-3 px-4 text-center w-1/12">ลำดับ</th>
-              <th className="py-3 px-4 w-1/4">ชื่อหมวดหมู่</th>
+              {service ? (
+                <>
+                  <th className="py-3 px-4 w-1/6">ชื่อบริการ</th>
+                  <th className="py-3 px-4 w-1/6">หมวดหมู่</th>
+                </>
+              ) : (
+                <th className="py-3 px-4 w-1/4">ชื่อหมวดหมู่</th>
+              )}
               <th className="py-3 px-4 w-1/6">สร้างเมื่อ</th>
               <th className="py-3 px-4 ">แก้ไขล่าสุด</th>
               <th className="py-3 px-4 w-1/12">Actions</th>
@@ -145,6 +161,7 @@ const TableOfContents = () => {
           <tbody>
             {items.map((item, index) => (
               <TableRow
+                service={service}
                 key={item.id}
                 item={item}
                 index={index}
@@ -158,24 +175,11 @@ const TableOfContents = () => {
           </tbody>
         </table>
         {showDeleteConfirmation && (
-          <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="flex flex-col items-center bg-white text-black text-center px-10 py-9 rounded-2xl shadow-md">
-              <BsFillExclamationCircleFill className="text-red scale-150 mb-4" />
-              <h1 className="text-xl font-medium">ยืนยันการลบรายการ?</h1>
-              <p className="text-gray-700 font-light py-4">
-                คุณต้องการลบรายการ "{itemToDelete.title}" <br />
-                ใช่หรือไม่
-              </p>
-              <div className="flex justify-center gap-4">
-                <button className="btn-primary" onClick={confirmDelete}>
-                  ลบรายการ
-                </button>
-                <button className="btn-secondary" onClick={cancelDelete}>
-                  ยกเลิก
-                </button>
-              </div>
-            </div>
-          </div>
+          <AlertConfirmation
+            itemToDelete={itemToDelete}
+            confirmDelete={confirmDelete}
+            cancelDelete={cancelDelete}
+          />
         )}
       </div>
     </div>
