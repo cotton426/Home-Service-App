@@ -21,12 +21,12 @@ const SidebarItem = ({ to, icon: Icon, text }) => {
 
 export const AdminSidebar = () => {
   return (
-    <div className="flex flex-col h-screen pb-16 w-[100%] bg-blue-950 text-white">
+    <div className="fixed flex flex-col h-screen pb-16 w-[280px] bg-blue-950 text-white">
       <div className="flex flex-col flex-grow justify-between">
         <div id="top">
           <div id="button-app-logo" className="pt-8 pb-11 px-7">
             <Link
-              to="/service"
+              to="/categories"
               className="flex items-center justify-center rounded-2xl bg-blue-100 text-blue-600 hover:text-blue-800 hover:bg-white cursor-pointer w-[100%] h-[46px]"
             >
               <img

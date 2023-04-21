@@ -11,6 +11,7 @@ import {
 import { Routes, Route } from "react-router-dom";
 import AddService from "../components/AddService";
 import TableOfContents from "../components/TableOfContents";
+import { AddCategory,SubCategory,EditSubCategory } from "../components/AdminCategory";
 
 const AdminHomepage = () => {
   return (
@@ -42,11 +43,29 @@ const AdminHomepage = () => {
             }
           />
           <Route
-            path="/category"
+            path="/add-category"
             element={
               <>
-                <ServiceNavbar />
-                <TableOfContents />
+                <AddCategoryNavbar />
+                <AddCategory />
+              </>
+            }
+          />
+          <Route
+            path="/sub-category"
+            element={
+              <>
+                <SubCategoryNavbar />
+                <SubCategory />
+              </>
+            }
+          />
+          <Route
+            path="/edit-category"
+            element={
+              <>
+                <EditSubCategoryNavbar />
+                <EditSubCategory />
               </>
             }
           />

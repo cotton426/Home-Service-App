@@ -13,7 +13,7 @@ const Navbar = ({
 }) => {
   return (
     <>
-      <header className="bg-white h-[80px] px-10 py-3 border border-gray-300">
+      <header className="bg-white h-[80px] px-[5%] py-3 border border-gray-300">
         <nav className="flex items-center justify-between h-full">
           <div className="flex flex-row">
             {backLink && (
@@ -29,7 +29,7 @@ const Navbar = ({
               )}
               <div
                 id="left-container"
-                className="font-medium text-xl text-black"
+                className="font-medium text-xl text-black w-[200px]"
               >
                 {title}
               </div>
@@ -56,19 +56,27 @@ const Navbar = ({
   );
 };
 
-export const CategoryNavbar = () => (
-  <Navbar
-    title="หมวดหมู่"
-    inputPlaceholder="ค้นหาบริการ..."
-    rightButton={<button className="btn-primary">เพิ่มบริการ +</button>}
-  />
-);
-
 export const ServiceNavbar = () => (
   <Navbar
     title="บริการ"
     inputPlaceholder="ค้นหาบริการ..."
-    rightButton={<button className="btn-primary">เพิ่มบริการ +</button>}
+    rightButton={
+      <Link to="/add-category">
+        <button className="btn-primary">เพิ่มบริการ +</button>
+      </Link>
+    }
+  />
+);
+
+export const CategoryNavbar = () => (
+  <Navbar
+    title="หมวดหมู่"
+    inputPlaceholder="ค้นหาบริการ..."
+    rightButton={
+      <Link to="/add-category">
+        <button className="btn-primary">เพิ่มหมวดหมู่ +</button>
+      </Link>
+    }
   />
 );
 
@@ -76,8 +84,12 @@ export const SubCategoryNavbar = () => (
   <Navbar
     title="หมวดหมู่ย่อย"
     subTitle="หมวดหมู่"
-    backLink="/service"
-    leftButton={<button className="btn-primary">ยกเลิก</button>}
+    backLink="/categories"
+    leftButton={
+      <Link to="/categories">
+        <button className="btn-primary">ยกเลิก</button>
+      </Link>
+    }
     rightButton={<button className="btn-primary">ยืนยัน</button>}
   />
 );
@@ -85,7 +97,11 @@ export const SubCategoryNavbar = () => (
 export const AddCategoryNavbar = () => (
   <Navbar
     title="เพิ่มหมวดหมู่"
-    leftButton={<button className="btn-primary">ยกเลิก</button>}
+    leftButton={
+      <Link to="/categories">
+        <button className="btn-primary">ยกเลิก</button>
+      </Link>
+    }
     rightButton={<button className="btn-primary">ยืนยัน</button>}
   />
 );
@@ -93,7 +109,11 @@ export const AddCategoryNavbar = () => (
 export const AddServiceNavbar = () => (
   <Navbar
     title="เพิ่มบริการ"
-    leftButton={<button className="btn-primary">ยกเลิก</button>}
+    leftButton={
+      <Link to="/categories">
+        <button className="btn-primary">ยกเลิก</button>
+      </Link>
+    }
     rightButton={<button className="btn-primary">ยืนยัน</button>}
   />
 );
@@ -103,7 +123,11 @@ export const SubServiceNavbar = () => (
     title="บริการย่อย"
     subTitle="บริการ"
     backLink="/service"
-    leftButton={<button className="btn-primary">ยกเลิก</button>}
+    leftButton={
+      <Link to="/categories">
+        <button className="btn-primary">ยกเลิก</button>
+      </Link>
+    }
     rightButton={<button className="btn-primary">ยืนยัน</button>}
   />
 );
@@ -112,6 +136,15 @@ export const EditSubCategoryNavbar = () => (
   <Navbar
     title="แก้ไขหมวดหมู่ย่อย"
     subTitle="หมวดหมู่"
+    backLink="/categories"
+    rightButton={<button className="btn-primary">แก้ไข</button>}
+  />
+);
+
+export const EditSubServiceNavbar = () => (
+  <Navbar
+    title="แก้ไขบริการย่อย"
+    subTitle="บริการ"
     backLink="/service"
     rightButton={<button className="btn-primary">แก้ไข</button>}
   />
