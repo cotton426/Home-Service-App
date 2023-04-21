@@ -3,7 +3,14 @@ import { Link } from "react-router-dom";
 import { GoSearch } from "react-icons/go";
 import { IoIosArrowBack } from "react-icons/io";
 
-const Navbar = ({ title, subTitle, backLink, inputPlaceholder, leftButton, rightButton }) => {
+const Navbar = ({
+  title,
+  subTitle,
+  backLink,
+  inputPlaceholder,
+  leftButton,
+  rightButton,
+}) => {
   return (
     <>
       <header className="bg-white h-[80px] px-10 py-3 border border-gray-300">
@@ -20,7 +27,10 @@ const Navbar = ({ title, subTitle, backLink, inputPlaceholder, leftButton, right
                   {subTitle}
                 </span>
               )}
-              <div id="left-container" className="font-medium text-xl text-black">
+              <div
+                id="left-container"
+                className="font-medium text-xl text-black"
+              >
                 {title}
               </div>
             </div>

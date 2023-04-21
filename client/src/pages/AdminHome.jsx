@@ -41,7 +41,7 @@ const AdminHomepage = () => {
               </>
             }
           />
-          {/* <Route
+          <Route
             path="/category"
             element={
               <>
@@ -49,7 +49,7 @@ const AdminHomepage = () => {
                 <TableOfContents />
               </>
             }
-          /> */}
+          />
         </Routes>
       </div>
     </div>

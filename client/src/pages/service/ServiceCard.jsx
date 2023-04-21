@@ -68,12 +68,12 @@ function ServiceMore() {
 
   return (
     <div className="flex justify-center">
-      <div className="flex flex-wrap w-[60%] justify-center items-center">
+      <div className="grid grid-cols-3 gap-10">
         {serviceData.map((item, index) => {
           return (
             <div key={index}>
-              <div className="flex justify-center items-center  ">
-                <div className="bg-white rounded-lg relative overflow-hidden shadow-md w-[95%] mt-3 mb-5">
+              <div className="flex justify-center">
+                <div className="bg-white rounded-lg relative overflow-hidden shadow-md mt-3 mb-5 ">
                   <div className="service-preview">
                     <img src={item.Image} alt="service" />
                   </div>
