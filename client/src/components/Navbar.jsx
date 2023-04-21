@@ -93,7 +93,6 @@ export const NavbarLogout = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("userData");
     logout();
   };
 

@@ -14,7 +14,7 @@ function App() {
     </div>
   ) : (
     <div>
-      {/* <NavbarLogin /> */}
+      <NavbarLogin />
       <UnauthenticatedApp />
       {/* <AdminHomepage /> */}
     </div>
