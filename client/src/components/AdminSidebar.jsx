@@ -4,6 +4,7 @@ import logoHomeService from "/icons/logoHomeService.png";
 import { TbCategory2 } from "react-icons/tb";
 import { HiOutlineLogout } from "react-icons/hi";
 import { HiOutlineDocumentDuplicate, HiOutlineTicket } from "react-icons/hi";
+import { useAuth } from "../contexts/auth";
 
 const SidebarItem = ({ to, icon: Icon, text }) => {
   return (
@@ -20,6 +21,7 @@ const SidebarItem = ({ to, icon: Icon, text }) => {
 };
 
 export const AdminSidebar = () => {
+  const { logout } = useAuth();
   return (
     <div className="fixed flex flex-col h-screen pb-16 w-[280px] bg-blue-950 text-white">
       <div className="flex flex-col flex-grow justify-between">
@@ -52,7 +54,13 @@ export const AdminSidebar = () => {
           </div>
         </div>
         <div id="bottom" className="hover:bg-blue-900">
-          <div className="flex items-center py-5 px-7 w-full cursor-pointer justify-start">
+          <div
+            className="flex items-center py-5 px-7 w-full cursor-pointer justify-start"
+            onClick={() => {
+              logout();
+              localStorage.removeItem("userData");
+            }}
+          >
             <HiOutlineLogout className="text-xl" />
             <span className="ml-2">ออกจากระบบ</span>
           </div>
