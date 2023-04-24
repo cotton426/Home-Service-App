@@ -1,5 +1,6 @@
 import express from "express";
 import authRouter from "./routes/auth.js";
+import dataRouter from "./routes/data.js";
 import cors from "cors";
 
 const init = async () => {
@@ -14,6 +15,7 @@ const init = async () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use("/auth", authRouter);
+  app.use("/data", dataRouter);
 
   app.listen(port, () => {
     console.log(`Server is running on port ${port}.`);

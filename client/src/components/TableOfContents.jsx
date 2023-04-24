@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { TbGripVertical } from "react-icons/tb";
 import { HiOutlineTrash } from "react-icons/hi";
 import AlertConfirmation from "./AlertConfirmation";
+// import { useQuery, useMutation, useQueryClient } from "react-query";
+// import { useData } from "../contexts/data";
+import useData from "../hooks/useData";
 
-const formatTime = (date) => {
+const formatTime = (dateString) => {
+  const date = new Date(dateString);
   const day = String(date.getDate()).padStart(2, "0");
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const year = date.getFullYear();
@@ -28,7 +32,7 @@ const TableRow = ({
 }) => {
   return (
     <tr
-      key={item.id}
+      key={item.category_id}
       className="bg-white w-full h-20 text-black border-t border-gray-200 hover:bg-gray-100 transition-all duration-200 ease-in"
       draggable
       onDragStart={(e) => handleDragStart(e, index)}
@@ -41,11 +45,11 @@ const TableRow = ({
       <td className="py-3 px-4 text-center">{index + 1}</td>
       {service ? (
         <>
-          <td className="py-3 px-4">{item.title}</td>
+          <td className="py-3 px-4">{item.name}</td>
           <td className="py-3 px-4">{item.category}</td>
         </>
       ) : (
-        <td className="py-3 px-4">{item.title}</td>
+        <td className="py-3 px-4">{item.name}</td>
       )}
 
       <td className="py-3 px-4">{formatTime(item.created_at)}</td>
@@ -71,46 +75,58 @@ const TableRow = ({
 const TableOfContents = ({ service }) => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  const [items, setItems] = useState([
-    {
-      id: 1,
-      title: "Introduction",
-      created_at: new Date(),
-      updated_at: new Date(),
-    },
-    {
-      id: 2,
-      title: "Methodology",
-      created_at: new Date(),
-      updated_at: new Date(),
-    },
-    { id: 3, title: "Results", created_at: new Date(), updated_at: new Date() },
-    {
-      id: 4,
-      title: "Discussion",
-      created_at: new Date(),
-      updated_at: new Date(),
-    },
-    {
-      id: 5,
-      title: "Conclusion",
-      created_at: new Date(),
-      updated_at: new Date(),
-    },
-  ]);
+  
+  const { items, getCategories } = useData();
+  
+  useEffect(()=>{
+    getCategories()
+  },[])
+  
+  
+  // const queryClient = useQueryClient();
+
+  // const fetchItems = async () => {
+  //   const response = await fetch("http://localhost:4000/data/categories"); // Replace with your actual API endpoint
+  //   const data = await response.json();
+  //   return data;
+  // };
+
+  // const {
+  //   data: items,
+  //   isLoading,
+  //   isError,
+  // } = useQuery("categories", getCategories);
 
   const handleDragStart = (e, index) => {
     e.dataTransfer.setData("index", index);
   };
 
-  const handleDrop = (e, index) => {
+  const handleDrop = async (e, index) => {
     e.preventDefault();
     const sourceIndex = e.dataTransfer.getData("index");
     const updatedItems = [...items];
+    console.log(updatedItems);
     const [removed] = updatedItems.splice(sourceIndex, 1);
+    console.log(removed);
     updatedItems.splice(index, 0, removed);
-    setItems(updatedItems);
+    console.log(updatedItems);
+    // Update the server/database with the updatedItems array using React Query
+    // try {
+    //   const mutation = useMutation("/api/items", {
+    //     method: "PUT",
+    //     body: JSON.stringify({ items: updatedItems }),
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   });
+    //   await mutation.mutateAsync(); // Trigger the mutation and wait for it to complete
+    //   console.log("Items updated successfully");
+    // } catch (error) {
+    //   console.error(error); // Handle any errors that may occur
+    // }
   };
+
+  
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -159,10 +175,10 @@ const TableOfContents = ({ service }) => {
             </tr>
           </thead>
           <tbody>
-            {items.map((item, index) => (
+            {items?.map((item, index) => (
               <TableRow
                 service={service}
-                key={item.id}
+                key={index}
                 item={item}
                 index={index}
                 handleDragStart={handleDragStart}

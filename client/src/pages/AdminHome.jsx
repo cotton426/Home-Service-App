@@ -47,7 +47,7 @@ const AdminHomepage = () => {
             path="/add-category"
             element={
               <>
-                <AddCategoryNavbar />
+                {/* <AddCategoryNavbar /> */}
                 <AddCategory />
               </>
             }
