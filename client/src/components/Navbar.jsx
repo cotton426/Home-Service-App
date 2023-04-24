@@ -51,42 +51,24 @@ export const NavbarLogin = () => {
 };
 
 // dropdown component for user-afmin profile
-export const DropdownItem = ({ href, text, IconComponent }) => {
+const DropdownItem = ({ IconComponent, text, to, toggleDropdown }) => {
   return (
     <li>
-      <a
-        href={href}
-        className="px-4 py-2 text-gray-600 hover:text-black hover:bg-gray-100 flex items-center"
+      <Link
+        to={to}
+        className="block px-4 py-2 text-gray-600 hover:text-gray-950 hover:bg-gray-100"
+        onClick={toggleDropdown}
       >
-        {IconComponent && (
-          <IconComponent className="inline-block mr-2 icon-dropdown" />
-        )}
-        <span className="text-dropdown">{text}</span>
-      </a>
+        <IconComponent className="inline-block mr-2 icon-dropdown" />
+        {text}
+      </Link>
     </li>
   );
 };
 
-export const NavbarLogout = () => {
+const Navbar = ({ menuItems }) => {
   const { logout, user } = useAuth();
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const menuItems = [
-    {
-      label: "ข้อมูลผู้ใช้งาน",
-      IconComponent: BiUser,
-      href: "#",
-    },
-    {
-      label: "รายการคำสั่งซ่อม",
-      IconComponent: TiClipboard,
-      href: "#",
-    },
-    {
-      label: "ประวัติการซ่อม",
-      IconComponent: MdHistory,
-      href: "#",
-    },
-  ];
 
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
@@ -96,7 +78,6 @@ export const NavbarLogout = () => {
     localStorage.removeItem("userData");
     logout();
   };
-
   return (
     <nav className="relative bg-white py-4 w-screen h-[80px] drop-shadow-[2px_2px_24px_rgba(23,51,106,0.12)] z-10">
       <div className="w-[80%] mx-auto flex justify-between items-center">
@@ -111,7 +92,6 @@ export const NavbarLogout = () => {
                 id="user-name"
                 className="text-black pt-1 text-[16px] mx-2 flex text-right"
               >
-                {console.log(user)}
                 {user?.profiles[0].full_name}
               </span>
             </div>
@@ -137,9 +117,11 @@ export const NavbarLogout = () => {
                         key={index}
                         IconComponent={item.IconComponent}
                         text={item.label}
-                        href={item.href}
+                        to={item.to}
+                        toggleDropdown={toggleDropdown}
                       />
                     ))}
+
                     <li className="my-1 bg-gray-300 h-[1px] "></li>
                     <li>
                       <a
@@ -164,4 +146,59 @@ export const NavbarLogout = () => {
       </div>
     </nav>
   );
+};
+
+export const NavbarLogout = ({ isAdmin }) => {
+  const menuItems = [
+    {
+      label: "ข้อมูลผู้ใช้งาน",
+      IconComponent: BiUser,
+      to: "/user",
+    },
+    {
+      label: "รายการคำสั่งซ่อม",
+      IconComponent: TiClipboard,
+      to: "/orders",
+    },
+    {
+      label: "ประวัติการซ่อม",
+      IconComponent: MdHistory,
+      to: "/history",
+    },
+    {
+      label: "Admin Dashbroad",
+      IconComponent: MdHistory,
+      to: "/admin-dashboard",
+    },
+  ];
+  if (isAdmin) menuItems[3] = null;
+
+  return <Navbar menuItems={menuItems} />;
+};
+
+export const AdminNavbarLogout = () => {
+  const menuItems = [
+    {
+      label: "ข้อมูลผู้ใช้งาน",
+      IconComponent: BiUser,
+      to: "/user",
+    },
+    {
+      label: "รายการคำสั่งซ่อม",
+      IconComponent: TiClipboard,
+      to: "/orders",
+    },
+    {
+      label: "ประวัติการซ่อม",
+      IconComponent: MdHistory,
+      to: "/history",
+    },
+    {
+      label: "Admin Dashbroad",
+      IconComponent: MdHistory,
+      to: "/admin-dashboard",
+    },
+  ];
+
+  return <Navbar menuItems={menuItems} />;
 };

@@ -11,5 +11,13 @@ dataRouter.get("/categories", async (req, res) => {
   return res.json(categories);
 });
 
+dataRouter.post("/categories", async (req, res) => {
+  const { name } = req.body;
+  const { data: categories, error } = await supabase
+    .from("categories")
+    .insert([{ name: name }]);
+  console.log(categories);
+  return res.json(categories);
+});
 
 export default dataRouter;

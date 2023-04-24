@@ -4,6 +4,7 @@ import { TbGripVertical } from "react-icons/tb";
 import { HiOutlineTrash } from "react-icons/hi";
 import AlertConfirmation from "./AlertConfirmation";
 import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useData } from "../contexts/data";
 
 const formatTime = (dateString) => {
   const date = new Date(dateString);
@@ -73,20 +74,21 @@ const TableRow = ({
 const TableOfContents = ({ service }) => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
+  const { getCategories } = useData();
 
   const queryClient = useQueryClient();
 
-  const fetchItems = async () => {
-    const response = await fetch("http://localhost:4000/data/categories"); // Replace with your actual API endpoint
-    const data = await response.json();
-    return data;
-  };
+  // const fetchItems = async () => {
+  //   const response = await fetch("http://localhost:4000/data/categories"); // Replace with your actual API endpoint
+  //   const data = await response.json();
+  //   return data;
+  // };
 
   const {
     data: items,
     isLoading,
     isError,
-  } = useQuery("categories", fetchItems);
+  } = useQuery("categories", getCategories);
 
   const handleDragStart = (e, index) => {
     e.dataTransfer.setData("index", index);
@@ -102,19 +104,19 @@ const TableOfContents = ({ service }) => {
     updatedItems.splice(index, 0, removed);
     console.log(updatedItems);
     // Update the server/database with the updatedItems array using React Query
-    try {
-      const mutation = useMutation("/api/items", {
-        method: "PUT",
-        body: JSON.stringify({ items: updatedItems }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      await mutation.mutateAsync(); // Trigger the mutation and wait for it to complete
-      console.log("Items updated successfully");
-    } catch (error) {
-      console.error(error); // Handle any errors that may occur
-    }
+    // try {
+    //   const mutation = useMutation("/api/items", {
+    //     method: "PUT",
+    //     body: JSON.stringify({ items: updatedItems }),
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   });
+    //   await mutation.mutateAsync(); // Trigger the mutation and wait for it to complete
+    //   console.log("Items updated successfully");
+    // } catch (error) {
+    //   console.error(error); // Handle any errors that may occur
+    // }
   };
 
   const handleDragOver = (e) => {
