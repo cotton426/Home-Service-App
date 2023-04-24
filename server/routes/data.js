@@ -13,6 +13,8 @@ dataRouter.get("/categories", async (req, res) => {
 
 dataRouter.post("/categories", async (req, res) => {
   const { name } = req.body;
+  console.log(req);
+  console.log(name);
   const { data: categories, error } = await supabase
     .from("categories")
     .insert([{ name: name }]);

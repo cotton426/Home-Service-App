@@ -8,6 +8,7 @@ import { MdHistory } from "react-icons/md";
 import { HiOutlineLogout } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/auth";
+// import useData from "../hooks/useData";
 
 // Navbar Left Container component
 const NavbarLeftContainer = () => {
@@ -52,12 +53,17 @@ export const NavbarLogin = () => {
 
 // dropdown component for user-afmin profile
 const DropdownItem = ({ IconComponent, text, to, toggleDropdown }) => {
+  const {setDash} = useAuth();
+  
   return (
     <li>
       <Link
         to={to}
         className="block px-4 py-2 text-gray-600 hover:text-gray-950 hover:bg-gray-100"
-        onClick={toggleDropdown}
+        onClick={() => {
+          toggleDropdown();
+          text === "Admin Dashboard" ? setDash(true) : null;
+        }}
       >
         <IconComponent className="inline-block mr-2 icon-dropdown" />
         {text}
@@ -166,12 +172,12 @@ export const NavbarLogout = ({ isAdmin }) => {
       to: "/history",
     },
     {
-      label: "Admin Dashbroad",
+      label: "Admin Dashboard",
       IconComponent: MdHistory,
       to: "/admin-dashboard",
     },
   ];
-  if (isAdmin) menuItems[3] = null;
+  if (!isAdmin) menuItems.pop();
 
   return <Navbar menuItems={menuItems} />;
 };

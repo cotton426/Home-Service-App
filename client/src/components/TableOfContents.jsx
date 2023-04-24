@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { TbGripVertical } from "react-icons/tb";
 import { HiOutlineTrash } from "react-icons/hi";
 import AlertConfirmation from "./AlertConfirmation";
-import { useQuery, useMutation, useQueryClient } from "react-query";
-import { useData } from "../contexts/data";
+// import { useQuery, useMutation, useQueryClient } from "react-query";
+// import { useData } from "../contexts/data";
+import useData from "../hooks/useData";
 
 const formatTime = (dateString) => {
   const date = new Date(dateString);
@@ -74,9 +75,15 @@ const TableRow = ({
 const TableOfContents = ({ service }) => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  const { getCategories } = useData();
-
-  const queryClient = useQueryClient();
+  
+  const { items, getCategories } = useData();
+  
+  useEffect(()=>{
+    getCategories()
+  },[])
+  
+  
+  // const queryClient = useQueryClient();
 
   // const fetchItems = async () => {
   //   const response = await fetch("http://localhost:4000/data/categories"); // Replace with your actual API endpoint
@@ -84,11 +91,11 @@ const TableOfContents = ({ service }) => {
   //   return data;
   // };
 
-  const {
-    data: items,
-    isLoading,
-    isError,
-  } = useQuery("categories", getCategories);
+  // const {
+  //   data: items,
+  //   isLoading,
+  //   isError,
+  // } = useQuery("categories", getCategories);
 
   const handleDragStart = (e, index) => {
     e.dataTransfer.setData("index", index);
@@ -118,6 +125,8 @@ const TableOfContents = ({ service }) => {
     //   console.error(error); // Handle any errors that may occur
     // }
   };
+
+  
 
   const handleDragOver = (e) => {
     e.preventDefault();
