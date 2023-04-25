@@ -53,8 +53,8 @@ export const NavbarLogin = () => {
 
 // dropdown component for user-afmin profile
 const DropdownItem = ({ IconComponent, text, to, toggleDropdown }) => {
-  const {setDash} = useAuth();
-  
+  const { toDash } = useAuth();
+
   return (
     <li>
       <Link
@@ -62,7 +62,7 @@ const DropdownItem = ({ IconComponent, text, to, toggleDropdown }) => {
         className="block px-4 py-2 text-gray-600 hover:text-gray-950 hover:bg-gray-100"
         onClick={() => {
           toggleDropdown();
-          text === "Admin Dashboard" ? setDash(true) : null;
+          text === "Admin Dashboard" ? toDash() : null;
         }}
       >
         <IconComponent className="inline-block mr-2 icon-dropdown" />

@@ -10,7 +10,7 @@ import { useAuth } from "../contexts/auth.jsx";
 // import ProfilePage from "./pages/ProfilePage";
 
 function AuthenticatedApp({ isAdmin }) {
-  const {dash} = useAuth()
+  const dash = sessionStorage.getItem("dash");
   return isAdmin && dash ? (
     <AdminHomepage />
   ) : (
