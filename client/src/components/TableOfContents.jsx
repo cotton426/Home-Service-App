@@ -46,7 +46,7 @@ const TableRow = ({
       {service ? (
         <>
           <td className="py-3 px-4">{item.name}</td>
-          <td className="py-3 px-4">{item.category}</td>
+          <td className="py-3 px-4">{item.categories.name}</td>
         </>
       ) : (
         <td className="py-3 px-4">{item.name}</td>
@@ -76,10 +76,10 @@ const TableOfContents = ({ service }) => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
   
-  const { items, getCategories } = useData();
+  const { items, getCategories, getServices } = useData();
   
-  useEffect(()=>{
-    getCategories()
+  useEffect(()=>{ 
+    service? getServices() : getCategories()
   },[])
   
   

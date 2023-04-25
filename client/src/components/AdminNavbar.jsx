@@ -61,7 +61,7 @@ export const ServiceNavbar = () => (
     title="บริการ"
     inputPlaceholder="ค้นหาบริการ..."
     rightButton={
-      <Link to="/add-category">
+      <Link to="/add-service">
         <button className="btn-primary">เพิ่มบริการ +</button>
       </Link>
     }
@@ -71,7 +71,7 @@ export const ServiceNavbar = () => (
 export const CategoryNavbar = () => (
   <Navbar
     title="หมวดหมู่"
-    inputPlaceholder="ค้นหาบริการ..."
+    inputPlaceholder="ค้นหาหมวดหมู่..."
     rightButton={
       <Link to="/add-category">
         <button className="btn-primary">เพิ่มหมวดหมู่ +</button>
@@ -94,7 +94,7 @@ export const SubCategoryNavbar = () => (
   />
 );
 
-export const AddCategoryNavbar = () => (
+export const AddCategoryNavbar = ({ handleSubmit }) => (
   <Navbar
     title="เพิ่มหมวดหมู่"
     leftButton={
@@ -102,7 +102,17 @@ export const AddCategoryNavbar = () => (
         <button className="btn-primary">ยกเลิก</button>
       </Link>
     }
-    rightButton={<button className="btn-primary">ยืนยัน</button>}
+    rightButton={
+      <button
+        className="btn-primary"
+        onClick={() => {
+          console.log("work");
+          handleSubmit();
+        }}
+      >
+        ยืนยัน
+      </button>
+    }
   />
 );
 

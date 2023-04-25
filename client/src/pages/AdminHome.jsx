@@ -39,7 +39,7 @@ const AdminHomepage = () => {
             element={
               <>
                 <ServiceNavbar />
-                <AddService />
+                <ServiceTable />
               </>
             }
           />
@@ -47,8 +47,15 @@ const AdminHomepage = () => {
             path="/add-category"
             element={
               <>
-                {/* <AddCategoryNavbar /> */}
                 <AddCategory />
+              </>
+            }
+          />
+          <Route
+            path="/add-service"
+            element={
+              <>
+                <AddService />
               </>
             }
           />

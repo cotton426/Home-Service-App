@@ -14,31 +14,40 @@ const useData = () => {
       setItems(response.data);
     } catch (error) {
       console.error(error);
-      navigate("/error");
     }
   };
 
-  const addCategories = async (data) => {
+  const addCategory = async (data) => {
     try {
       const response = await axios.post("http://localhost:4000/data/categories",data);
+      navigate("/categories")
     } catch (error) {
       console.error(error);
-      navigate("/error");
+      return error
     }
   };
 
   const getServices = async () => {
     try {
       const response = await axios.get("http://localhost:4000/data/services");
-      return response.data;
+      setItems(response.data);
     } catch (error) {
       console.error(error);
-      navigate("/error");
+    }
+  };
+
+  const addService = async (data) => {
+    try {
+      const response = await axios.post("http://localhost:4000/data/services",data);
+    } catch (error) {
+      console.error(error);
     }
   };
 
 
-  return { items, getCategories, addCategories, getServices};
+
+
+  return { items, getCategories, addCategory, getServices, addService};
 };
 
 export default useData;
