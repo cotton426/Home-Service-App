@@ -88,6 +88,19 @@ dataRouter.get("/services", async (req, res) => {
   categories ( name )
 `);
 
+dataRouter.post("/services", async (req, res) => {
+  const { serviceName, category, image, subServiceList } = req.body;
+  const { data: categories, error } = await supabase
+    .from("categories")
+    .insert([{ name: name }]);
+  console.log(error?.message);
+  if (error) {
+    return res.status(400).json({ error: error.message });
+  }
+  return res.json(categories);
+});
+
+
   // Check for errors
   if (error) {
     console.error("Error executing SQL query:", error);
