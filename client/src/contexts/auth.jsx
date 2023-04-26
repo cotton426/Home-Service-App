@@ -17,8 +17,12 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(loadUserDataFromLocalStorage());
   const navigate = useNavigate();
 
-  const [dash, setDash] = useState(false);
-  
+  const toDash = () => {
+    sessionStorage.setItem("dash", true);
+  };
+  const quitDash = () => {
+    sessionStorage.removeItem("dash");
+  };
 
   const updateUserData = (userData) => {
     setUser(userData);
@@ -65,7 +69,15 @@ const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, loggedIn: !!user, register, login, logout, dash, setDash }}
+      value={{
+        user,
+        loggedIn: !!user,
+        register,
+        login,
+        logout,
+        toDash,
+        quitDash,
+      }}
     >
       {children}
     </AuthContext.Provider>

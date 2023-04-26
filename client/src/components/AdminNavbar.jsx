@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GoSearch } from "react-icons/go";
 import { IoIosArrowBack } from "react-icons/io";
 
@@ -61,7 +61,7 @@ export const ServiceNavbar = () => (
     title="บริการ"
     inputPlaceholder="ค้นหาบริการ..."
     rightButton={
-      <Link to="/add-category">
+      <Link to="/add-service">
         <button className="btn-primary">เพิ่มบริการ +</button>
       </Link>
     }
@@ -71,7 +71,7 @@ export const ServiceNavbar = () => (
 export const CategoryNavbar = () => (
   <Navbar
     title="หมวดหมู่"
-    inputPlaceholder="ค้นหาบริการ..."
+    inputPlaceholder="ค้นหาหมวดหมู่..."
     rightButton={
       <Link to="/add-category">
         <button className="btn-primary">เพิ่มหมวดหมู่ +</button>
@@ -94,7 +94,7 @@ export const SubCategoryNavbar = () => (
   />
 );
 
-export const AddCategoryNavbar = () => (
+export const AddCategoryNavbar = ({ handleSubmit }) => (
   <Navbar
     title="เพิ่มหมวดหมู่"
     leftButton={
@@ -102,7 +102,17 @@ export const AddCategoryNavbar = () => (
         <button className="btn-primary">ยกเลิก</button>
       </Link>
     }
-    rightButton={<button className="btn-primary">ยืนยัน</button>}
+    rightButton={
+      <button
+        className="btn-primary"
+        onClick={() => {
+          console.log("work");
+          handleSubmit();
+        }}
+      >
+        ยืนยัน
+      </button>
+    }
   />
 );
 
@@ -118,7 +128,7 @@ export const AddServiceNavbar = () => (
   />
 );
 
-export const SubServiceNavbar = () => (
+export const EditServiceNavbar = () => (
   <Navbar
     title="บริการย่อย"
     subTitle="บริการ"
@@ -132,7 +142,32 @@ export const SubServiceNavbar = () => (
   />
 );
 
-export const EditSubCategoryNavbar = () => (
+export const EditCategoryNavbar = ({ onConfirm }) => {
+  const navigate = useNavigate();
+  return (
+    <Navbar
+      title="บริการย่อย"
+      subTitle="หมวดหมู่"
+      backLink="/service"
+      leftButton={
+        <button
+          className="btn-primary"
+          onClick={() => {
+            navigate("/categories");
+          }}
+        >
+          ยกเลิก
+        </button>
+      }
+      rightButton={
+        <button className="btn-primary" onClick={onConfirm}  type="submit">
+          ยืนยัน
+        </button>
+      }
+    />
+  );
+};
+export const DetailCategoryNavbar = () => (
   <Navbar
     title="แก้ไขหมวดหมู่ย่อย"
     subTitle="หมวดหมู่"
@@ -141,7 +176,7 @@ export const EditSubCategoryNavbar = () => (
   />
 );
 
-export const EditSubServiceNavbar = () => (
+export const DetailServiceNavbar = () => (
   <Navbar
     title="แก้ไขบริการย่อย"
     subTitle="บริการ"

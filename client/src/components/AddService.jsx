@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Formik,
   Field,
@@ -11,6 +11,8 @@ import * as Yup from "yup";
 import { RxDragHandleDots2 } from "react-icons/rx";
 import SelectCategory from "./SelectCategory";
 import UploadImage from "./UploadImage";
+import useData from "../hooks/useData";
+import { AddServiceNavbar } from "./AdminNavbar";
 
 function AddService() {
 
@@ -30,20 +32,44 @@ function AddService() {
   });
 
 
+
+  const [serviceName, setServiceName] = useState("")
+
+  const {addService} = useData()
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    addService({
+      serviceName,
+
+    });
+    console.log(serviceName);
+  };
+
+  const onSubmit = async (values, { setSubmitting, setErrors }) => {
+    try {
+      const result = await login(values);
+      if (result?.message) {
+        setErrors({ password: "Incorrect email or password" });
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
+    <>
+    <AddServiceNavbar/>
     <div className=" bg-BG h-full w-full p-[5%]">
-      <div className="flex flex-col justify-start border border-gray-300 rounded-lg bg-white ">
+      <div className="flex flex-col justify-start border border-gray-300 rounded-lg bg-white w-full">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={async (values) => {
-          await new Promise((res) => setTimeout(res, 500));
-          alert(JSON.stringify(values, null, 2));
-          console.log(values);
-        }}
       >
         {({ values, setFieldValue }) => (
-          <Form className="ml-5 flex flex-col justify-center">
+          <div className="ml-5 flex flex-col justify-center">
             <div className="h-[450px] flex flex-col justify-start items-start mt-6 border-b-2 border-gray-300 ">
               <div className=" flex flex-row justify-center space-x-40 ">
                 <label htmlFor="serviceName" className="w-[100px] text-gray-700">
@@ -54,6 +80,10 @@ function AddService() {
                   className="input-default w-[450px] text-gray-950"
                   id="serviceName"
                   name="serviceName"
+                  value={serviceName}
+                  onChange={(event) => 
+                    {setServiceName(event.target.value)}
+                  }
                 />
               </div>
               
@@ -74,10 +104,10 @@ function AddService() {
               </h1>
               <FieldArray name="subServiceList">
                 {({ remove, push }) => (
-                  <div className="flex flex-col justify-start items-start mt-6 gap-5 text-gray-950">
+                  <div className="flex flex-col justify-start items-start mt-6 gap-5 text-gray-950 w-full ">
                     {values.subServiceList.map((item, index) => (
                       <div
-                        className="flex flex-row justify-center items-center gap-5 "
+                        className="flex flex-row justify-center items-center gap-5 w-full "
                         key={index}
                       >
                         <RxDragHandleDots2 className="text-gray-500 mt-4 scale-150" />
@@ -148,11 +178,12 @@ function AddService() {
                 )}
               </FieldArray>
             </div>
-          </Form>
+          </div>
         )}
       </Formik>
       </div>
     </div>
+    </>
   );
 }
 

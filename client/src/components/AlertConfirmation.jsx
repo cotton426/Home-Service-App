@@ -7,7 +7,7 @@ const AlertConfirmation = ({ itemToDelete, confirmDelete, cancelDelete }) => {
         <BsFillExclamationCircleFill className="text-red scale-150 mb-4" />
         <h1 className="text-xl font-medium">ยืนยันการลบรายการ?</h1>
         <p className="text-gray-700 font-light py-4">
-          คุณต้องการลบรายการ "{itemToDelete.title}" <br />
+          คุณต้องการลบรายการ "{itemToDelete.name}" <br />
           ใช่หรือไม่
         </p>
         <div className="flex justify-center gap-4">

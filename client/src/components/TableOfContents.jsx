@@ -6,19 +6,8 @@ import AlertConfirmation from "./AlertConfirmation";
 // import { useQuery, useMutation, useQueryClient } from "react-query";
 // import { useData } from "../contexts/data";
 import useData from "../hooks/useData";
-
-const formatTime = (dateString) => {
-  const date = new Date(dateString);
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = date.getFullYear();
-  const hours = date.getHours();
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  const ampm = hours >= 12 ? "PM" : "AM";
-  const formattedHours = hours % 12 || 12;
-
-  return `${day}/${month}/${year} ${formattedHours}:${minutes}${ampm}`;
-};
+import { useNavigate } from "react-router-dom";
+import { formatTime } from "../utils/timeUtils";
 
 const TableRow = ({
   service,
@@ -46,7 +35,7 @@ const TableRow = ({
       {service ? (
         <>
           <td className="py-3 px-4">{item.name}</td>
-          <td className="py-3 px-4">{item.category}</td>
+          <td className="py-3 px-4">{item.categories.name}</td>
         </>
       ) : (
         <td className="py-3 px-4">{item.name}</td>
@@ -61,6 +50,7 @@ const TableRow = ({
         >
           <HiOutlineTrash className="scale-110" />
         </button>
+
         <button
           className="text-blue-500 hover:text-blue-700"
           onClick={() => handleEdit(item)}
@@ -75,14 +65,13 @@ const TableRow = ({
 const TableOfContents = ({ service }) => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  
-  const { items, getCategories } = useData();
-  
-  useEffect(()=>{
-    getCategories()
-  },[])
-  
-  
+  const { items, getCategories, getServices, deleteCategory } = useData();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    service ? getServices() : getCategories();
+  }, [items]);
+
   // const queryClient = useQueryClient();
 
   // const fetchItems = async () => {
@@ -126,14 +115,13 @@ const TableOfContents = ({ service }) => {
     // }
   };
 
-  
-
   const handleDragOver = (e) => {
     e.preventDefault();
   };
 
   const handleEdit = (item) => {
     // Handle edit logic here
+    navigate("/edit-category/" + item.category_id);
     console.log("Edit item", item);
   };
 
@@ -146,6 +134,7 @@ const TableOfContents = ({ service }) => {
     console.log("Delete item", itemToDelete);
     setShowDeleteConfirmation(false);
     setItemToDelete(null);
+    deleteCategory(itemToDelete.category_id);
   };
 
   const cancelDelete = () => {
