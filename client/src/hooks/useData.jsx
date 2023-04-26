@@ -4,9 +4,8 @@ import axios from "axios";
 
 const useData = () => {
   const navigate = useNavigate();
-  const [items, setItems] = useState([])
-
-
+  const [items, setItems] = useState([]);
+  const [itemObjects, setItemObjects] = useState({});
 
   const getCategories = async () => {
     try {
@@ -17,13 +16,51 @@ const useData = () => {
     }
   };
 
-  const addCategory = async (data) => {
+  const getCategory = async (param) => {
     try {
-      const response = await axios.post("http://localhost:4000/data/categories",data);
-      navigate("/categories")
+      const response = await axios.get(
+        "http://localhost:4000/data/categories/" + param
+      );
+      setItemObjects(response.data);
     } catch (error) {
       console.error(error);
-      return error
+    }
+  };
+
+  const addCategory = async (data) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/data/categories",
+        data
+      );
+      navigate("/categories");
+    } catch (error) {
+      console.error(error);
+      return error;
+    }
+  };
+
+  const editCategory = async (param, data) => {
+    try {
+      const response = await axios.put(
+        "http://localhost:4000/data/categories/" + param,
+        data
+      );
+      navigate("/categories");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const deleteCategory = async (param) => {
+    try {
+      const response = await axios.delete(
+        "http://localhost:4000/data/categories/" + param
+      );
+     
+      console.log(param);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -38,16 +75,26 @@ const useData = () => {
 
   const addService = async (data) => {
     try {
-      const response = await axios.post("http://localhost:4000/data/services",data);
+      const response = await axios.post(
+        "http://localhost:4000/data/services",
+        data
+      );
     } catch (error) {
       console.error(error);
     }
   };
 
-
-
-
-  return { items, getCategories, addCategory, getServices, addService};
+  return {
+    items,
+    getCategories,
+    addCategory,
+    getServices,
+    addService,
+    getCategory,
+    itemObjects,
+    editCategory,
+    deleteCategory,
+  };
 };
 
 export default useData;

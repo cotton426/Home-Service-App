@@ -1,17 +1,9 @@
 import { AdminSidebar } from "../components/AdminSidebar";
-import {
-  CategoryNavbar,
-  ServiceNavbar,
-  SubCategoryNavbar,
-  AddCategoryNavbar,
-  AddServiceNavbar,
-  SubServiceNavbar,
-  EditSubCategoryNavbar,
-} from "../components/AdminNavbar";
+import { CategoryNavbar, ServiceNavbar } from "../components/AdminNavbar";
 import { Routes, Route } from "react-router-dom";
 import AddService from "../components/AddService";
 import TableOfContents from "../components/TableOfContents";
-import { AddCategory,SubCategory,EditSubCategory } from "../components/AdminCategory";
+import { AddCategory, EditCategory } from "../components/AdminCategory";
 import ServiceTable from "../components/ServicesTable";
 
 const AdminHomepage = () => {
@@ -60,20 +52,10 @@ const AdminHomepage = () => {
             }
           />
           <Route
-            path="/sub-category"
+            path="/edit-category/:category_id"
             element={
               <>
-                <SubCategoryNavbar />
-                <SubCategory />
-              </>
-            }
-          />
-          <Route
-            path="/edit-category"
-            element={
-              <>
-                <EditSubCategoryNavbar />
-                <EditSubCategory />
+                <EditCategory />
               </>
             }
           />

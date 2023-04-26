@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GoSearch } from "react-icons/go";
 import { IoIosArrowBack } from "react-icons/io";
 
@@ -128,7 +128,7 @@ export const AddServiceNavbar = () => (
   />
 );
 
-export const SubServiceNavbar = () => (
+export const EditServiceNavbar = () => (
   <Navbar
     title="บริการย่อย"
     subTitle="บริการ"
@@ -142,7 +142,32 @@ export const SubServiceNavbar = () => (
   />
 );
 
-export const EditSubCategoryNavbar = () => (
+export const EditCategoryNavbar = ({ onConfirm }) => {
+  const navigate = useNavigate();
+  return (
+    <Navbar
+      title="บริการย่อย"
+      subTitle="หมวดหมู่"
+      backLink="/service"
+      leftButton={
+        <button
+          className="btn-primary"
+          onClick={() => {
+            navigate("/categories");
+          }}
+        >
+          ยกเลิก
+        </button>
+      }
+      rightButton={
+        <button className="btn-primary" onClick={onConfirm}  type="submit">
+          ยืนยัน
+        </button>
+      }
+    />
+  );
+};
+export const DetailCategoryNavbar = () => (
   <Navbar
     title="แก้ไขหมวดหมู่ย่อย"
     subTitle="หมวดหมู่"
@@ -151,7 +176,7 @@ export const EditSubCategoryNavbar = () => (
   />
 );
 
-export const EditSubServiceNavbar = () => (
+export const DetailServiceNavbar = () => (
   <Navbar
     title="แก้ไขบริการย่อย"
     subTitle="บริการ"
