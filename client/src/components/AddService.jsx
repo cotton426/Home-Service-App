@@ -17,7 +17,7 @@ import { AddServiceNavbar } from "./AdminNavbar";
 function AddService() {
   const initialValues = {
     serviceName: "",
-    category:"",
+    category: "",
     image: "",
     subServiceList: [
       {
@@ -29,23 +29,43 @@ function AddService() {
   };
 
   const validationSchema = Yup.object().shape({});
- 
+
   const { addService } = useData();
 
+  const onSubmit = async (values, { setSubmitting, setErrors }) => {
+    const formData = new FormData();
+    formData.append("serviceName", values.serviceName);
+    formData.append("category_id", values.category);
+    formData.append("image", values.image);
+    values.subServiceList.forEach((subService, index) => {
+      formData.append(
+        `subServiceList[${index}][subServiceName]`,
+        subService.subServiceName
+      );
+      formData.append(
+        `subServiceList[${index}][serviceCharge]`,
+        subService.serviceCharge
+      );
+      formData.append(
+        `subServiceList[${index}][serviceUnit]`,
+        subService.serviceUnit
+      );
+    });
+    console.log(serviceName);
 
-
-  const onSubmit = async (values, { setSubmitting, setErrors }) => {};
+    try {
+      addService(formData);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setErrors({ submit: "Error submitting form" });
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={(values, { setSubmitting }) => {
-          // addService(values);
-          console.log(values);
-          setSubmitting(false);
-        }}
-      >
+      <Formik initialValues={initialValues} onSubmit={onSubmit}>
         {({ values, setFieldValue, submitForm, handleSubmit, formikProps }) => (
           <Form onSubmit={handleSubmit}>
             <AddServiceNavbar onConfirm={submitForm} />

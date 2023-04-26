@@ -5,6 +5,7 @@ import AddService from "../components/AddService";
 import TableOfContents from "../components/TableOfContents";
 import { AddCategory, EditCategory } from "../components/AdminCategory";
 import ServiceTable from "../components/ServicesTable";
+import EditService from "../components/EditService";
 
 const AdminHomepage = () => {
   return (
@@ -56,6 +57,14 @@ const AdminHomepage = () => {
             element={
               <>
                 <EditCategory />
+              </>
+            }
+          />
+          <Route
+            path="/edit-service/:service_id"
+            element={
+              <>
+                <EditService/>
               </>
             }
           />
