@@ -127,11 +127,10 @@ dataRouter.post("/services", upload.single("image"), async (req, res) => {
     return res.status(400).json({ error: insertServiceError.message });
   }
 
-  const {service_id} = services[0]
+  const { service_id } = services[0];
   const subServiceListWithoutNullPrototype = subServiceList.map((subService) =>
-  Object.assign({}, {...subService, service_id})
+    Object.assign({}, { ...subService, service_id })
   );
-
 
   const { data: subService, error: insertSubServiceError } = await supabase
     .from("sub_services")
@@ -217,9 +216,9 @@ dataRouter.put("/services/:id", upload.single("image"), async (req, res) => {
     return res.status(400).json({ error: error.message });
   }
   console.log(subServiceList);
-  const { data : subService, error: subServiceError } = await supabase
-  .from('sub_services')
-  .upsert(subServiceList, { onConflict: 'sub_service_id' })
+  const { data: subService, error: subServiceError } = await supabase
+    .from("sub_services")
+    .upsert(subServiceList, { onConflict: "sub_service_id" });
   return res.json(service);
 });
 
