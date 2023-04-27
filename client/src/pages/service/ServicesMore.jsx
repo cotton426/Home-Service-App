@@ -4,6 +4,7 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import React, { useState, useEffect } from "react";
 import { Formik, Form, Field } from "formik";
 import useData from "../../hooks/useData";
+import useUser from "../../hooks/useUser";
 
 export const HeaderService = () => {
   return (
@@ -48,6 +49,7 @@ export const NavService = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [valueLeft, setValueLeft] = useState("0");
   const [valueRight, setValueRight] = useState("0");
+  const { userGetServices } = useUser();
 
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
@@ -65,10 +67,10 @@ export const NavService = () => {
   //   const { category_id } = items.filter((x) => x.name === item)[0];
   // };
 
-  const getCategoryName = (categoryId) => {
-    const category = items.find((item) => item.category_id === categoryId);
-    return category ? category.name : "";
-  };
+  // const getCategoryName = (categoryId) => {
+  //   const category = items.find((item) => item.category_id === categoryId);
+  //   return category ? category.name : "";
+  // };
 
   useEffect(() => {
     getCategories();
@@ -78,13 +80,14 @@ export const NavService = () => {
     <Formik
       initialValues={{
         search: "",
-        category: "",
+        category_id: "",
         priceLeft: "0",
         priceRight: "0",
         sortBy: "",
       }}
       onSubmit={(values) => {
         console.log(values);
+        userGetServices(values);
       }}
     >
       {({ values, handleChange, setFieldValue }) => (
@@ -108,32 +111,30 @@ export const NavService = () => {
                 <div className="bg-white mr-10 mb-5 flex">
                   <div className="inline-block relative mr-10 outline-none border-right w-[200px]">
                     <label
-                      htmlFor="category"
+                      htmlFor="category_id"
                       className="text-gray-700 font-normal text-xs"
                     >
                       หมวดหมู่บริการ
                     </label>
                     <div className="relative">
-                      <Field
-                        name="category"
-                        value=""
-                        id="category"
+                      <select
+                        name="category_id"
+                        id="category_id"
                         className="block appearance-none input-default w-[450px] bg-white border border-gray-400 hover:border-gray-500 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                        // onChange={(event) =>
-                        //   handleSelection(event.target.value)
-                        // }
+                        onChange={(event) =>
+                          setFieldValue("category_id", event.target.value)
+                        }
+                        value={values.category_id}
                       >
-                        <option value="" disabled hidden>
-                          บริการทั้งหมด
-                        </option>
+                        <option value="">บริการทั้งหมด</option>
                         {items.map((item, index) => {
                           return (
-                            <option key={index} value={item.name}>
+                            <option key={index} value={item.category_id}>
                               {item.name}
                             </option>
                           );
                         })}
-                      </Field>
+                      </select>
 
                       <div className="pointer-events-none absolute inset-y-0 right-5 flex items-center px-2 text-gray-700">
                         <IoMdArrowDropdown />

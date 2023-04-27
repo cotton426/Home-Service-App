@@ -6,11 +6,11 @@ const userRouter = Router();
 userRouter.get("/services", async (req, res) => {
   const keywords = req.query.keywords;
 
-//   if (keywords === undefined) {
-//     return res.status(400).json({
-//       message: "Please send keywords parameter in the URL endpoint",
-//     });
-//   }
+  //   if (keywords === undefined) {
+  //     return res.status(400).json({
+  //       message: "Please send keywords parameter in the URL endpoint",
+  //     });
+  //   }
   const { data, error } = await supabase.from("services").select(
     `
     name,

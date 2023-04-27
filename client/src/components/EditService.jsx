@@ -31,20 +31,19 @@ function EditService() {
       },
     ],
   });
-  
+
   const validationSchema = Yup.object().shape({});
 
   const { getService, itemObjects, editService, items } = useData();
 
-  
   useEffect(() => {
     getService(param.service_id);
   }, []);
-  
+
   useEffect(() => {
     setInitialValues(itemObjects);
   }, [itemObjects]);
-  
+
   console.log(itemObjects);
   const onSubmit = async (values, { setSubmitting, setErrors }) => {
     const formData = new FormData();
@@ -52,19 +51,19 @@ function EditService() {
     formData.append("category_id", values.category_id);
     formData.append("image", values?.image);
     values.subServiceList.forEach((subService, index) => {
-      formData.append(`subServiceList[${index}][service_id]`, initialValues.service_id );
-      if(initialValues.subServiceList[index]?.sub_service_id) {
-        formData.append(`subServiceList[${index}][sub_service_id]`, initialValues.subServiceList[index]?.sub_service_id);
+      formData.append(
+        `subServiceList[${index}][service_id]`,
+        initialValues.service_id
+      );
+      if (initialValues.subServiceList[index]?.sub_service_id) {
+        formData.append(
+          `subServiceList[${index}][sub_service_id]`,
+          initialValues.subServiceList[index]?.sub_service_id
+        );
       }
       formData.append(`subServiceList[${index}][name]`, subService.name);
-      formData.append(
-        `subServiceList[${index}][unit]`,
-        subService.unit
-      );
-      formData.append(
-        `subServiceList[${index}][price]`,
-        subService.price
-      );
+      formData.append(`subServiceList[${index}][unit]`, subService.unit);
+      formData.append(`subServiceList[${index}][price]`, subService.price);
     });
 
     try {
@@ -201,9 +200,9 @@ function EditService() {
                               className="btn-secondary w-48 mb-5"
                               onClick={() =>
                                 push({
-                                  subname: "",
-                                  serviceCharge: "",
-                                  serviceUnit: "",
+                                  name: "",
+                                  unit: "",
+                                  price: "",
                                 })
                               }
                             >

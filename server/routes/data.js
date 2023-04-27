@@ -84,10 +84,15 @@ dataRouter.delete("/categories/:id", async (req, res) => {
 });
 
 dataRouter.get("/services", async (req, res) => {
-  const { data, error } = await supabase.from("services").select(`
+  const { data, error } = await supabase
+    .from("services")
+    .select(
+      `
   *,
   categories ( name )
-`);
+`
+    )
+    .order("category_id", "service_id");
   // Check for errors
   if (error) {
     console.error("Error executing SQL query:", error);
