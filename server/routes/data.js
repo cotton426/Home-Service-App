@@ -102,7 +102,7 @@ dataRouter.post("/services", upload.single("image"), async (req, res) => {
   // Save the image to Supabase Storage
   const file = req.file;
   const bucket = "images/";
-  const imagePath = `services-image/${decodedFileName}`;
+  const imagePath = `services-image/${category_id}/${decodedFileName}`;
 
   const { error: uploadError, data } = await supabase.storage
     .from(bucket)
@@ -114,17 +114,34 @@ dataRouter.post("/services", upload.single("image"), async (req, res) => {
     console.error("Error uploading image:", uploadError);
     return res.status(500).json({ error: uploadError.message });
   }
-  const image =
-    "https://okfjffjzsmbiustwgohg.supabase.co/storage/v1/object/public/images/" +
-    imagePath;
-  // Save the service data to the database
-  const { data: services, error: insertError } = await supabase
-    .from("services")
-    .insert([{ name: serviceName, category_id, image }]);
+  const image = `https://okfjffjzsmbiustwgohg.supabase.co/storage/v1/object/public/images/${imagePath}`;
 
-  if (insertError) {
-    console.error("Error inserting data:", insertError);
-    return res.status(400).json({ error: insertError.message });
+  // Save the service data to the database
+  const { data: services, error: insertServiceError } = await supabase
+    .from("services")
+    .insert([{ name: serviceName, category_id, image }])
+    .select("*");
+
+  if (insertServiceError) {
+    console.error("Error inserting data:", insertServiceError);
+    return res.status(400).json({ error: insertServiceError.message });
+  }
+
+  const {service_id} = services[0]
+  const subServiceListWithoutNullPrototype = subServiceList.map((subService) =>
+  Object.assign({}, {...subService, service_id})
+  );
+
+
+  const { data: subService, error: insertSubServiceError } = await supabase
+    .from("sub_services")
+    .insert(subServiceListWithoutNullPrototype)
+    .select("*");
+  console.log(subService);
+
+  if (insertSubServiceError) {
+    console.error("Error inserting data:", insertSubServiceError);
+    return res.status(400).json({ error: insertSubServiceError.message });
   }
 
   return res.json(services);
@@ -133,13 +150,8 @@ dataRouter.post("/services", upload.single("image"), async (req, res) => {
 dataRouter.get("/services/:id", async (req, res) => {
   const serviceId = req.params.id;
   const { data: services, error } = await supabase
-    .from("services")
-    .select(
-      `
-  *,
-  categories ( name ) as category_name
-`
-    )
+    .from("sub_services")
+    .select(`*,services(*)`)
     .eq("service_id", serviceId);
 
   if (error) {
@@ -154,11 +166,11 @@ dataRouter.get("/services/:id", async (req, res) => {
     // Handle the case when no data is found for the given serviceId
     return res.status(404).json({ message: "service not found" });
   }
-  const service = services[0];
-  service.category_name = service.categories.name;
-  delete service.categories;
+  // const service = services[0];
+  // service.category_name = service.categories.name;
+  // delete service.categories;
 
-  return res.json(service);
+  return res.json(services);
 });
 
 dataRouter.put("/services/:id", upload.single("image"), async (req, res) => {
@@ -204,7 +216,10 @@ dataRouter.put("/services/:id", upload.single("image"), async (req, res) => {
   if (error) {
     return res.status(400).json({ error: error.message });
   }
-
+  console.log(subServiceList);
+  const { data : subService, error: subServiceError } = await supabase
+  .from('sub_services')
+  .upsert(subServiceList, { onConflict: 'sub_service_id' })
   return res.json(service);
 });
 

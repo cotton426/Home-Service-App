@@ -25,39 +25,47 @@ function EditService() {
     category_name: "",
     subServiceList: [
       {
-        subname: "",
-        serviceCharge: "",
-        serviceUnit: "",
+        name: "",
+        unit: "",
+        price: "",
       },
     ],
   });
-
+  
   const validationSchema = Yup.object().shape({});
 
-  const { getService, itemObjects, editService } = useData();
+  const { getService, itemObjects, editService, items } = useData();
 
+  
   useEffect(() => {
     getService(param.service_id);
   }, []);
-
+  
   useEffect(() => {
     setInitialValues(itemObjects);
   }, [itemObjects]);
-
+  
+  console.log(itemObjects);
   const onSubmit = async (values, { setSubmitting, setErrors }) => {
+    console.log(values);
+    console.log(initialValues);
     const formData = new FormData();
     formData.append("name", values.name);
     formData.append("category_id", values.category_id);
     formData.append("image", values?.image);
     values.subServiceList.forEach((subService, index) => {
-      formData.append(`subServiceList[${index}][subname]`, subService.subname);
+      formData.append(`subServiceList[${index}][service_id]`, initialValues.service_id );
+      if(initialValues.subServiceList[index]?.sub_service_id) {
+        formData.append(`subServiceList[${index}][sub_service_id]`, initialValues.subServiceList[index]?.sub_service_id);
+      }
+      formData.append(`subServiceList[${index}][name]`, subService.name);
       formData.append(
-        `subServiceList[${index}][serviceCharge]`,
-        subService.serviceCharge
+        `subServiceList[${index}][unit]`,
+        subService.unit
       );
       formData.append(
-        `subServiceList[${index}][serviceUnit]`,
-        subService.serviceUnit
+        `subServiceList[${index}][price]`,
+        subService.price
       );
     });
 
@@ -134,35 +142,35 @@ function EditService() {
                                 <RxDragHandleDots2 className="text-gray-500 mt-4 scale-150" />
                                 <div className="flex flex-col ">
                                   <label
-                                    htmlFor={`subServiceList.${index}.subname`}
+                                    htmlFor={`subServiceList.${index}.name`}
                                     className="text-gray-700"
                                   >
                                     ชื่อรายการ
                                   </label>
                                   <Field
                                     className="input-default w-72"
-                                    name={`subServiceList.${index}.subname`}
+                                    name={`subServiceList.${index}.name`}
                                     type="text"
                                   />
                                 </div>
 
                                 <div className="flex flex-col">
                                   <label
-                                    htmlFor={`subServiceList.${index}.serviceUnit`}
+                                    htmlFor={`subServiceList.${index}.unit`}
                                     className="text-gray-700"
                                   >
                                     หน่วยการบริการ
                                   </label>
                                   <Field
                                     className="input-default w-72"
-                                    name={`subServiceList.${index}.serviceUnit`}
-                                    type="number"
+                                    name={`subServiceList.${index}.unit`}
+                                    type="text"
                                   />
                                 </div>
 
                                 <div className="flex flex-col">
                                   <label
-                                    htmlFor={`subServiceList.${index}.serviceCharge`}
+                                    htmlFor={`subServiceList.${index}.price`}
                                     className="text-gray-700"
                                   >
                                     ค่าบริการ / 1 หน่วย
@@ -170,7 +178,7 @@ function EditService() {
                                   <div className="relative">
                                     <Field
                                       className="relative input-default w-72"
-                                      name={`subServiceList.${index}.serviceCharge`}
+                                      name={`subServiceList.${index}.price`}
                                       type="text"
                                     />
                                     <span className="absolute right-0 pr-3 pt-2.5 after:bg-transparent text-gray-500">

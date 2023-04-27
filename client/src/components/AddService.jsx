@@ -21,9 +21,9 @@ function AddService() {
     image: "",
     subServiceList: [
       {
-        subServiceName: "",
-        serviceCharge: "",
-        serviceUnit: "",
+        name: "",
+        unit: "",
+        price: "",
       },
     ],
   };
@@ -39,19 +39,19 @@ function AddService() {
     formData.append("image", values.image);
     values.subServiceList.forEach((subService, index) => {
       formData.append(
-        `subServiceList[${index}][subServiceName]`,
-        subService.subServiceName
+        `subServiceList[${index}][name]`,
+        subService.name
       );
       formData.append(
-        `subServiceList[${index}][serviceCharge]`,
-        subService.serviceCharge
+        `subServiceList[${index}][unit]`,
+        subService.unit
       );
       formData.append(
-        `subServiceList[${index}][serviceUnit]`,
-        subService.serviceUnit
+        `subServiceList[${index}][price]`,
+        subService.price
       );
     });
-    console.log(serviceName);
+  
 
     try {
       addService(formData);
@@ -119,35 +119,35 @@ function AddService() {
                               <RxDragHandleDots2 className="text-gray-500 mt-4 scale-150" />
                               <div className="flex flex-col ">
                                 <label
-                                  htmlFor={`subServiceList.${index}.subServiceName`}
+                                  htmlFor={`subServiceList.${index}.name`}
                                   className="text-gray-700"
                                 >
                                   ชื่อรายการ
                                 </label>
                                 <Field
                                   className="input-default w-72"
-                                  name={`subServiceList.${index}.subServiceName`}
+                                  name={`subServiceList.${index}.name`}
                                   type="text"
                                 />
                               </div>
 
                               <div className="flex flex-col">
                                 <label
-                                  htmlFor={`subServiceList.${index}.serviceUnit`}
+                                  htmlFor={`subServiceList.${index}.unit`}
                                   className="text-gray-700"
                                 >
                                   หน่วยการบริการ
                                 </label>
                                 <Field
                                   className="input-default w-72"
-                                  name={`subServiceList.${index}.serviceUnit`}
-                                  type="number"
+                                  name={`subServiceList.${index}.unit`}
+                                  type="text"
                                 />
                               </div>
 
                               <div className="flex flex-col">
                                 <label
-                                  htmlFor={`subServiceList.${index}.serviceCharge`}
+                                  htmlFor={`subServiceList.${index}.price`}
                                   className="text-gray-700"
                                 >
                                   ค่าบริการ / 1 หน่วย
@@ -155,7 +155,7 @@ function AddService() {
                                 <div className="relative">
                                   <Field
                                     className="relative input-default w-72"
-                                    name={`subServiceList.${index}.serviceCharge`}
+                                    name={`subServiceList.${index}.price`}
                                     type="text"
                                   />
                                   <span className="absolute right-0 pr-3 pt-2.5 after:bg-transparent text-gray-500">
