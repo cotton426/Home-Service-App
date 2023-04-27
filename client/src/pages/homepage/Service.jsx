@@ -1,5 +1,6 @@
 import React from "react";
 import ServiceList from "../../components/ServiceList";
+import { Link } from "react-router-dom";
 
 function Service() {
   return (
@@ -10,7 +11,9 @@ function Service() {
       <div className="content flex flex-row justify-center space-x-11 mt-6 ">
         <ServiceList />
       </div>
-      <button className="btn-primary mt-6">ดูบริการท้ังหมด</button>
+      <Link to="/service">
+        <button className="btn-primary mt-6">ดูบริการท้ังหมด</button>
+      </Link>
     </div>
   );
 }

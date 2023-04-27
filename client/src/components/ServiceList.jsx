@@ -1,30 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { FiTag } from "react-icons/fi";
+import { Link } from "react-router-dom";
+import useUser from "../hooks/useUser";
 
 function ServiceList() {
-  const [servicePost, setServicePost] = useState("");
-  const serviceData = [
-    {
-      Image: "/images/cleaner.png",
-      topic: "ทำความสะอาดทั่วไป",
-      detail: "ค่าบริการประมาณ 500.00 - 1,000.00 ฿",
-    },
-    {
-      Image: "/images/air.png",
-      topic: "ล้างแอร์",
-      detail: "ค่าบริการประมาณ 500.00 - 1,000.00 ฿",
-    },
-    {
-      Image: "/images/fix.png",
-      topic: "ซ่อมเครื่องซักผ้า",
-      detail: "ค่าบริการประมาณ 500.00 ฿",
-    },
-  ];
+  const { items, itemObjects } = useUser();
+
+  useEffect(() => {
+    
+  }, []);
 
   return (
     <div className="flex flex-row space-x-11">
-      {serviceData.map((item, index) => {
+      {items.map((item, index) => {
         return (
           <div
             key={index}

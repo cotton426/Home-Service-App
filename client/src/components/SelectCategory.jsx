@@ -20,7 +20,7 @@ function SelectCategory({ field, form }) {
     const category = items.find((item) => item.category_id === categoryId);
     return category ? category.name : "";
   };
-
+  
   return (
     <div>
       <div className="relative flex flex-row justify-center space-x-40 text-gray-950 mt-10">

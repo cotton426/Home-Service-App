@@ -47,8 +47,6 @@ function EditService() {
   
   console.log(itemObjects);
   const onSubmit = async (values, { setSubmitting, setErrors }) => {
-    console.log(values);
-    console.log(initialValues);
     const formData = new FormData();
     formData.append("name", values.name);
     formData.append("category_id", values.category_id);
