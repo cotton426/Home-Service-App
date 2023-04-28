@@ -9,7 +9,7 @@ dataRouter.get("/categories", async (req, res) => {
   const { data: categories, error } = await supabase
     .from("categories")
     .select("*")
-    .order("category_id");
+    .order("updated_at", { ascending: false });
   return res.json(categories);
 });
 
@@ -92,7 +92,7 @@ dataRouter.get("/services", async (req, res) => {
   categories ( name )
 `
     )
-    .order("category_id", "service_id");
+    .order("updated_at", { ascending: false });
   // Check for errors
   if (error) {
     console.error("Error executing SQL query:", error);
