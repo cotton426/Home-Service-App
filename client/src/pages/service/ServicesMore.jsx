@@ -56,12 +56,12 @@ export const NavService = ({ filter, setFilter }) => {
     setDropdownVisible(!dropdownVisible);
   };
 
-  const handleSliderChangeLeft = (event) => {
-    setValueLeft(event.target.value);
-  };
-  const handleSliderChangeRight = (event) => {
-    setValueRight(event.target.value);
-  };
+  // const handleSliderChangeLeft = (event) => {
+  //   setValueLeft(event.target.value);
+  // };
+  // const handleSliderChangeRight = (event) => {
+  //   setValueRight(event.target.value);
+  // };
 
   // const handleSelection = (item) => {
   //   // setSelect(item)
@@ -86,13 +86,12 @@ export const NavService = ({ filter, setFilter }) => {
         initialValues={{
           search: "",
           category_id: "",
-          priceLeft: "0",
-          priceRight: "0",
+          minPrice: "0",
+          maxPrice: "0",
           sortBy: "",
         }}
         onSubmit={(values) => {
           console.log(values);
-          // setFilter(true);
           userGetServices(values);
         }}
       >
