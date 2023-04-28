@@ -8,7 +8,7 @@ function Service() {
       <h1 className="text-3xl text-blue-950 font-sans font-bold">
         บริการยอดฮิตของเรา
       </h1>
-      <div className="content flex flex-row justify-center space-x-11 mt-6 ">
+      <div className="content flex flex-row justify-center space-x-11 mt-6 w-[65%]">
         <ServiceList />
       </div>
       <Link to="/service">
