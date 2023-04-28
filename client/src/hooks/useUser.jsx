@@ -7,6 +7,17 @@ const useUser = () => {
   const [items, setItems] = useState([]);
   const [itemObjects, setItemObjects] = useState({});
 
+  const homepageGetServices = async (query) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:4000/user`
+      );
+      setItems(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const userGetServices = async (query) => {
     try {
       let queryParams = "";
@@ -28,6 +39,7 @@ const useUser = () => {
     items,
     itemObjects,
     userGetServices,
+    homepageGetServices,
   };
 };
 
