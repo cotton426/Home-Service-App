@@ -227,4 +227,51 @@ dataRouter.put("/services/:id", upload.single("image"), async (req, res) => {
   return res.json(service);
 });
 
+dataRouter.delete("/services/:id", async (req, res) => {
+  const serviceId = req.params.id;
+
+  // Delete the service data from the database
+  const { data: service, error: deleteServiceError } = await supabase
+    .from("services")
+    .delete()
+    .eq("service_id", serviceId)
+    .select("image", "category_id");
+
+  if (deleteServiceError) {
+    console.error("Error deleting data:", deleteServiceError);
+    return res.status(400).json({ error: deleteServiceError.message });
+  }
+
+  if (service && service.length > 0) {
+    const category_id = service[0].category_id;
+    // continue with rest of the code
+  } else {
+    console.error("No service data found");
+    return res.status(404).json({ error: "No service data found" });
+  }
+  // Delete the image from Supabase Storage
+  const bucket = "images/";
+  const imagePath = `services-image/${
+    service[0].category_id
+  }/${encodeURIComponent(
+    service[0].image.replace(
+      "https://okfjffjzsmbiustwgohg.supabase.co/storage/v1/object/public/",
+      ""
+    )
+  )}`;
+
+  const { error: deleteImageError } = await supabase.storage
+    .from(bucket)
+    .remove(
+      "public/images/services-image/Screenshot 2566-04-09 at 14.41.30.png"
+    );
+
+  if (deleteImageError) {
+    console.error("Error deleting image:", deleteImageError);
+    return res.status(400).json({ error: deleteImageError.message });
+  }
+
+  return res.json(service);
+});
+
 export default dataRouter;

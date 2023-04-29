@@ -123,6 +123,18 @@ const useData = () => {
     }
   };
 
+  const deleteService = async (id) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:4000/data/services/${id}`
+      );
+      navigate("/services");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
   return {
     items,
     getCategories,
@@ -135,6 +147,7 @@ const useData = () => {
     deleteCategory,
     getService,
     editService,
+    deleteService,
   };
 };
 
