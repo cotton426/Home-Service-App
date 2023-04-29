@@ -48,20 +48,20 @@ export const Footerservice = () => {
 export const NavService = ({ filter, setFilter }) => {
   const { items: list, getCategories } = useData();
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const [valueLeft, setValueLeft] = useState("0");
-  const [valueRight, setValueRight] = useState("0");
+  const [valueLeft, setvalueLeft] = useState("0");
+  const [valueRight, setvalueRight] = useState("0");
   const { userGetServices, items } = useUser();
 
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
 
-  const handleSliderChangeLeft = (event) => {
-    setValueLeft(event.target.value);
-  };
-  const handleSliderChangeRight = (event) => {
-    setValueRight(event.target.value);
-  };
+  // const handleSliderChangeLeft = (event) => {
+  //   setValueLeft(event.target.value);
+  // };
+  // const handleSliderChangeRight = (event) => {
+  //   setValueRight(event.target.value);
+  // };
 
   // const handleSelection = (item) => {
   //   // setSelect(item)
@@ -86,13 +86,12 @@ export const NavService = ({ filter, setFilter }) => {
         initialValues={{
           search: "",
           category_id: "",
-          priceLeft: "0",
-          priceRight: "0",
+          minPrice: "0",
+          maxPrice: "0",
           sortBy: "",
         }}
         onSubmit={(values) => {
           console.log(values);
-          // setFilter(true);
           userGetServices(values);
         }}
       >
@@ -114,7 +113,7 @@ export const NavService = ({ filter, setFilter }) => {
                       />
                     </div>
                   </div>
-                  <div className="bg-white mr-10 mb-5 flex">
+                  {/* <div className="bg-white mr-10 mb-5 flex">
                     <div className="inline-block relative mr-10 outline-none border-right w-[200px]">
                       <label
                         htmlFor="category_id"
@@ -246,7 +245,7 @@ export const NavService = ({ filter, setFilter }) => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <button
                     className="btn-primary font-medium w-[100px] h-[45px] mt-2 ml-2"
                     type="submit"

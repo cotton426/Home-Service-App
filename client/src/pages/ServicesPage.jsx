@@ -11,7 +11,6 @@ const ServicesPage = () => {
     <>
       <HeaderService />
       <NavService />
-      <ServiceMore />
       <Footerservice />
     </>
   );

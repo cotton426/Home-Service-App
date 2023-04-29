@@ -36,9 +36,7 @@ function ServiceList() {
                           ? "general"
                           : item.categories.name === "บริการห้องน้ำ"
                           ? "toilet"
-                          : item.categories.name === "บริการจัดสวน"
-                          ? "garden"
-                          : ""
+                          : "garden"
                       }`}
                     >
                       {item.categories.name}
@@ -48,8 +46,15 @@ function ServiceList() {
                     </h2>
                     <div className="flex flex-row justify-center items-center">
                       <FiTag className="w-3.5 mr-2 text-gray-700" />
-                      <span className=" text-gray-700 text-sm">
-                        ค่าบริการประมาณ {item.sub_services[0]?.price} ฿
+                      <span className="text-gray-700 text-sm">
+                        ค่าบริการประมาณ{" "}
+                        {item.sub_services.length > 1
+                          ? `${Math.min(
+                              ...item.sub_services.map((s) => s.price)
+                            )} ฿ - ${Math.max(
+                              ...item.sub_services.map((s) => s.price)
+                            )} ฿`
+                          : item.sub_services[0]?.price + " ฿"}
                       </span>
                     </div>
                   </div>
