@@ -20,7 +20,6 @@ function AuthenticatedApp({ isAdmin }) {
         <Route path="/" element={<Homepage />} />
         <Route path="/service" element={<ServicesPage />} />
         <Route path="*" element={<Homepage />} />
-
         {/* <Route path="/profile" component={ProfilePage} /> */}
       </Routes>
     </div>

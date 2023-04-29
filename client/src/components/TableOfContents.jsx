@@ -23,19 +23,35 @@ const TableRow = ({
     <tr
       key={item.category_id}
       className="bg-white w-full h-20 text-black border-t border-gray-200 hover:bg-gray-100 transition-all duration-200 ease-in"
-      draggable
-      onDragStart={(e) => handleDragStart(e, index)}
-      onDragOver={handleDragOver}
-      onDrop={(e) => handleDrop(e, index)}
+      // draggable
+      // onDragStart={(e) => handleDragStart(e, index)}
+      // onDragOver={handleDragOver}
+      // onDrop={(e) => handleDrop(e, index)}
     >
-      <td className="py-3 px-4 text-gray-300">
+      {/* <td className="py-3 px-4 text-gray-300">
         <TbGripVertical className="w-full" />
-      </td>
+      </td> */}
       <td className="py-3 px-4 text-center">{index + 1}</td>
       {service ? (
         <>
           <td className="py-3 px-4">{item.name}</td>
-          <td className="py-3 px-4">{item.categories.name}</td>
+          <td className="py-3 px-4">
+            <div>
+              <h1
+                className={`inline-block text-center ${
+                  item.categories.name === "บริการห้องครัว"
+                    ? "kitchen"
+                    : item.categories.name === "บริการทั่วไป"
+                    ? "general"
+                    : item.categories.name === "บริการห้องน้ำ"
+                    ? "toilet"
+                    : "garden"
+                }`}
+              >
+                {item.categories.name}
+              </h1>
+            </div>
+          </td>
         </>
       ) : (
         <td className="py-3 px-4">{item.name}</td>
@@ -65,7 +81,8 @@ const TableRow = ({
 const TableOfContents = ({ service }) => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  const { items, getCategories, getServices, deleteCategory } = useData();
+  const { items, getCategories, getServices, deleteCategory, deleteService } =
+    useData();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -86,42 +103,44 @@ const TableOfContents = ({ service }) => {
   //   isError,
   // } = useQuery("categories", getCategories);
 
-  const handleDragStart = (e, index) => {
-    e.dataTransfer.setData("index", index);
-  };
+  // const handleDragStart = (e, index) => {
+  //   e.dataTransfer.setData("index", index);
+  // };
 
-  const handleDrop = async (e, index) => {
-    e.preventDefault();
-    const sourceIndex = e.dataTransfer.getData("index");
-    const updatedItems = [...items];
-    console.log(updatedItems);
-    const [removed] = updatedItems.splice(sourceIndex, 1);
-    console.log(removed);
-    updatedItems.splice(index, 0, removed);
-    console.log(updatedItems);
-    // Update the server/database with the updatedItems array using React Query
-    // try {
-    //   const mutation = useMutation("/api/items", {
-    //     method: "PUT",
-    //     body: JSON.stringify({ items: updatedItems }),
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
-    //   await mutation.mutateAsync(); // Trigger the mutation and wait for it to complete
-    //   console.log("Items updated successfully");
-    // } catch (error) {
-    //   console.error(error); // Handle any errors that may occur
-    // }
-  };
+  // const handleDrop = async (e, index) => {
+  //   e.preventDefault();
+  //   const sourceIndex = e.dataTransfer.getData("index");
+  //   const updatedItems = [...items];
+  //   console.log(updatedItems);
+  //   const [removed] = updatedItems.splice(sourceIndex, 1);
+  //   console.log(removed);
+  //   updatedItems.splice(index, 0, removed);
+  //   console.log(updatedItems);
+  // Update the server/database with the updatedItems array using React Query
+  // try {
+  //   const mutation = useMutation("/api/items", {
+  //     method: "PUT",
+  //     body: JSON.stringify({ items: updatedItems }),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   });
+  //   await mutation.mutateAsync(); // Trigger the mutation and wait for it to complete
+  //   console.log("Items updated successfully");
+  // } catch (error) {
+  //   console.error(error); // Handle any errors that may occur
+  // }
+  // };
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
+  // const handleDragOver = (e) => {
+  //   e.preventDefault();
+  // };
 
   const handleEdit = (item) => {
     // Handle edit logic here
-    navigate("/edit-category/" + item.category_id);
+    service
+      ? navigate("/edit-service/" + item.service_id)
+      : navigate("/edit-category/" + item.category_id);
     console.log("Edit item", item);
   };
 
@@ -134,7 +153,9 @@ const TableOfContents = ({ service }) => {
     console.log("Delete item", itemToDelete);
     setShowDeleteConfirmation(false);
     setItemToDelete(null);
-    deleteCategory(itemToDelete.category_id);
+    service
+      ? deleteService(itemToDelete.service_id)
+      : deleteCategory(itemToDelete.category_id);
   };
 
   const cancelDelete = () => {
@@ -148,7 +169,7 @@ const TableOfContents = ({ service }) => {
         <table className="w-full text-left text-gray-700 border-collapse">
           <thead className="bg-gray-100">
             <tr>
-              <th className="py-3 px-4 w-[5%]"></th>
+              {/* <th className="py-3 px-4 w-[5%]"></th> */}
               <th className="py-3 px-4 text-center w-1/12">ลำดับ</th>
               {service ? (
                 <>
@@ -170,9 +191,9 @@ const TableOfContents = ({ service }) => {
                 key={index}
                 item={item}
                 index={index}
-                handleDragStart={handleDragStart}
-                handleDrop={handleDrop}
-                handleDragOver={handleDragOver}
+                // handleDragStart={handleDragStart}
+                // handleDrop={handleDrop}
+                // handleDragOver={handleDragOver}
                 handleEdit={handleEdit}
                 handleDelete={handleDelete}
               />

@@ -3,8 +3,14 @@ import { CategoryNavbar, ServiceNavbar } from "../components/AdminNavbar";
 import { Routes, Route } from "react-router-dom";
 import AddService from "../components/AddService";
 import TableOfContents from "../components/TableOfContents";
-import { AddCategory, EditCategory } from "../components/AdminCategory";
+import {
+  AddCategory,
+  EditCategory,
+  ViewCategory,
+} from "../components/AdminCategory";
 import ServiceTable from "../components/ServicesTable";
+import EditService from "../components/EditService";
+import DetailService from "../components/DetailService";
 
 const AdminHomepage = () => {
   return (
@@ -48,6 +54,7 @@ const AdminHomepage = () => {
             element={
               <>
                 <AddService />
+                {/* <DetailService/> */}
               </>
             }
           />
@@ -59,6 +66,23 @@ const AdminHomepage = () => {
               </>
             }
           />
+          <Route
+            path="/edit-service/:service_id"
+            element={
+              <>
+                <EditService />
+              </>
+            }
+          />
+          <Route
+            path="/view-category/:category_id"
+            element={
+              <>
+                <ViewCategory />
+              </>
+            }
+          />
+          
         </Routes>
       </div>
     </div>

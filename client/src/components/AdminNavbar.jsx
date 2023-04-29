@@ -124,7 +124,11 @@ export const AddServiceNavbar = () => (
         <button className="btn-primary">ยกเลิก</button>
       </Link>
     }
-    rightButton={<button className="btn-primary">ยืนยัน</button>}
+    rightButton={
+      <button className="btn-primary" type="submit">
+        ยืนยัน
+      </button>
+    }
   />
 );
 
@@ -134,11 +138,15 @@ export const EditServiceNavbar = () => (
     subTitle="บริการ"
     backLink="/service"
     leftButton={
-      <Link to="/categories">
+      <Link to="/services">
         <button className="btn-primary">ยกเลิก</button>
       </Link>
     }
-    rightButton={<button className="btn-primary">ยืนยัน</button>}
+    rightButton={
+      <button className="btn-primary" type="submit">
+        ยืนยัน
+      </button>
+    }
   />
 );
 
@@ -160,7 +168,7 @@ export const EditCategoryNavbar = ({ onConfirm }) => {
         </button>
       }
       rightButton={
-        <button className="btn-primary" onClick={onConfirm}  type="submit">
+        <button className="btn-primary" onClick={onConfirm} type="submit">
           ยืนยัน
         </button>
       }

@@ -57,8 +57,7 @@ const useData = () => {
       const response = await axios.delete(
         "http://localhost:4000/data/categories/" + param
       );
-     
-      console.log(param);
+      navigate("/categories");
     } catch (error) {
       console.error(error);
     }
@@ -73,16 +72,71 @@ const useData = () => {
     }
   };
 
-  const addService = async (data) => {
+  const addService = async (formData) => {
     try {
       const response = await axios.post(
         "http://localhost:4000/data/services",
-        data
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
+      navigate("/services");
+    } catch (error) {
+      console.error(error);
+      return error.response.data.error
+    }
+    
+  };
+
+  const getService = async (param) => {
+    try {
+      const response = await axios.get(
+        "http://localhost:4000/data/services/" + param
+      );
+      const { services } = response.data[0];
+      const result = response.data.map((item) => {
+        delete item.services;
+        return item;
+      });
+      services.subServiceList = result;
+      setItemObjects(services);
     } catch (error) {
       console.error(error);
     }
   };
+
+  const editService = async (param, formData) => {
+    try {
+      const response = await axios.put(
+        "http://localhost:4000/data/services/" + param,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      navigate("/services");
+    } catch (error) {
+      console.error(error);
+      return error.response.data.error
+    }
+  };
+
+  const deleteService = async (id) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:4000/data/services/${id}`
+      );
+      navigate("/services");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 
   return {
     items,
@@ -94,6 +148,9 @@ const useData = () => {
     itemObjects,
     editCategory,
     deleteCategory,
+    getService,
+    editService,
+    deleteService,
   };
 };
 
