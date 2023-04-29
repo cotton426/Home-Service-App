@@ -1,14 +1,13 @@
-
 import Header from "./homepage/Header";
 import Service from "./homepage/Service";
-import Footer from "./homepage/Footer";
+import FooterHomepage from "./homepage/FooterHomepage";
 
 const Homepage = () => {
   return (
     <>
       <Header />
       <Service />
-      <Footer />
+      <FooterHomepage />
     </>
   );
 };
