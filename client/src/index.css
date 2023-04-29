@@ -86,3 +86,11 @@ td {
 .garden {
   @apply bg-yellow-100 text-yellow-900 rounded-lg py-1.5 px-2 my-2 text-sm;
 }
+
+.box {
+  @apply border border-gray-300 bg-white rounded-lg;
+}
+
+.shadow {
+  @apply shadow-[8px_8px_24px_0px_rgba(23,51,106,0.12)] rounded-lg;
+}

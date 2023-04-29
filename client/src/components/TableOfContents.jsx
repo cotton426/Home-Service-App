@@ -38,7 +38,7 @@ const TableRow = ({
           <td className="py-3 px-4">
             <div>
               <h1
-                className={`w-1/2 text-center ${
+                className={`inline-block text-center ${
                   item.categories.name === "บริการห้องครัว"
                     ? "kitchen"
                     : item.categories.name === "บริการทั่วไป"

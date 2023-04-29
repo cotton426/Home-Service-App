@@ -10,12 +10,12 @@ function ServiceMore({ items }) {
       {!items ? (
         <h1>ไม่พบบริการที่ค้นหา</h1>
       ) : (
-        <div className="grid grid-cols-3 gap-10 ">
+        <div className="grid grid-cols-3 gap-10 w-[80%]">
           {items.map((item, index) => {
             return (
               <div key={index}>
                 <div className="flex justify-center">
-                  <div className="bg-white rounded-lg relative overflow-hidden shadow-md mt-3 mb-5 w-[90%] g ">
+                  <div className="bg-white rounded-lg relative overflow-hidden shadow-md mt-3 mb-5 w-[90%]">
                     <div className="service-preview">
                       <img
                         src={item.image}
