@@ -103,10 +103,25 @@ dataRouter.get("/services", async (req, res) => {
 dataRouter.post("/services", upload.single("image"), async (req, res) => {
   const decodedFileName = decodeURIComponent(req.file.originalname);
   const { serviceName, category_id, subServiceList } = req.body;
+console.log({ serviceName, category_id, subServiceList });
+  const { data: service, error: alreadyExist } = await supabase
+    .from("services")
+    .select("*")
+    .eq( "name", serviceName) 
+    .eq( "category_id", category_id) 
+    
+// console.log(alreadyExist);
+  if (service[0]!==undefined) {
+    console.error("Error inserting data:", alreadyExist);
+    return res.status(400).json({ error: "This Service is already exist"});
+  }
+console.log(decodedFileName);
 
   // Save the image to Supabase Storage
   const file = req.file;
   const bucket = "images/";
+  const uniqueID = Date.now().toString();
+  console.log(uniqueID);
   const imagePath = `services-image/${category_id}/${decodedFileName}`;
 
   const { error: uploadError, data } = await supabase.storage
@@ -141,13 +156,11 @@ dataRouter.post("/services", upload.single("image"), async (req, res) => {
     .from("sub_services")
     .insert(subServiceListWithoutNullPrototype)
     .select("*");
-  console.log(subService);
 
   if (insertSubServiceError) {
     console.error("Error inserting data:", insertSubServiceError);
     return res.status(400).json({ error: insertSubServiceError.message });
   }
-
   return res.json(services);
 });
 
@@ -178,10 +191,24 @@ dataRouter.get("/services/:id", async (req, res) => {
 });
 
 dataRouter.put("/services/:id", upload.single("image"), async (req, res) => {
-  const decodedFileName = decodeURIComponent(req.file?.originalname);
-  const serviceId = req.params.id;
 
+  const serviceId = req.params.id;
   const { name, category_id, subServiceList } = req.body;
+
+
+  
+  // const { data: editService, error: alreadyExist } = await supabase
+  //   .from("services")
+  //   .select("*")
+  //   .eq( "name", name) 
+  //   .eq( "category_id", category_id) 
+    
+  // if (editService[0]!==undefined) {
+  //   console.error("Error inserting data:", alreadyExist);
+  //   return res.status(400).json({ error: "This Service is already exist"});
+  // }
+
+  const decodedFileName = decodeURIComponent(req.file?.originalname);
 
   const fieldsToUpdate = {
     name: name,

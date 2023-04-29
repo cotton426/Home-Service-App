@@ -6,6 +6,7 @@ import TableOfContents from "../components/TableOfContents";
 import { AddCategory, EditCategory } from "../components/AdminCategory";
 import ServiceTable from "../components/ServicesTable";
 import EditService from "../components/EditService";
+import DetailService from "../components/DetailService";
 
 const AdminHomepage = () => {
   return (
@@ -49,6 +50,7 @@ const AdminHomepage = () => {
             element={
               <>
                 <AddService />
+                {/* <DetailService/> */}
               </>
             }
           />
@@ -65,9 +67,11 @@ const AdminHomepage = () => {
             element={
               <>
                 <EditService/>
+                {/* <DetailService/> */}
               </>
             }
           />
+          
         </Routes>
       </div>
     </div>

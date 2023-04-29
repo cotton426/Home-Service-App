@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Formik,
-  Field,
-  Form,
-  ErrorMessage,
-  FieldArray,
-  useFormik,
-} from "formik";
+import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
 import * as Yup from "yup";
 import { RxDragHandleDots2 } from "react-icons/rx";
 import SelectCategory from "./SelectCategory";
@@ -18,6 +11,7 @@ import { useParams } from "react-router-dom";
 
 function EditService() {
   const param = useParams();
+
   const [initialValues, setInitialValues] = useState({
     name: "",
     category_id: "",
@@ -32,7 +26,40 @@ function EditService() {
     ],
   });
 
-  const validationSchema = Yup.object().shape({});
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required("กรุณาใส่ชื่อบริการ"),
+    category_id: Yup.string().required("กรุณาเลือกหมวดหมู่"),
+    image: Yup.mixed()
+    .nullable()
+    .notRequired()
+      .test(
+        "fileSize",
+        "The file is too large",
+        (value) => { console.log(value)
+         return value.size <= 5*1024*1024 || typeof value === "string"}
+      )
+      .test(
+        "fileType",
+        "Unsupported file type",
+        (value) =>
+          value && ["image/jpeg", "image/png", "image/jpg"].includes(value.type) || typeof value === "string"
+      ),
+    subServiceList: Yup.array()
+      .of(
+        Yup.object().shape({
+          name: Yup.string().required("กรุณาใส่ชื่อบริการย่อย"),
+          unit: Yup.string().required("กรุณาใส่หน่วยบริการ"),
+          price: Yup.string().required("กรุณาใส่ราคาบริการ"),
+        })
+      )
+      .min(1, "กรุณาเพิ่มรายการบริการย่อยอย่างน้อย 1 รายการ")
+      .required("กรุณาใส่รายการบริการย่อย")
+      .test(
+        "len",
+        "กรุณาเพิ่มรายการบริการย่อยอย่างน้อย 1 รายการ",
+        (val) => val && val.length > 0
+      ),
+  });
 
   const { getService, itemObjects, editService, items } = useData();
 
@@ -67,7 +94,7 @@ function EditService() {
     });
 
     try {
-      editService(param.service_id, formData);
+       editService(param.service_id, formData);
     } catch (error) {
       console.error("Error submitting form:", error);
       setErrors({ submit: "Error submitting form" });
@@ -79,7 +106,11 @@ function EditService() {
   return (
     <>
       {initialValues.name && (
-        <Formik initialValues={initialValues} onSubmit={onSubmit}>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          validationSchema={validationSchema}
+        >
           {({
             values,
             setFieldValue,
@@ -91,7 +122,7 @@ function EditService() {
               <EditServiceNavbar onConfirm={submitForm} />
               <div className=" bg-BG h-full w-full p-[5%]">
                 <div className="flex flex-col justify-start border border-gray-300 rounded-lg bg-white w-full">
-                  <div className="ml-5 flex flex-col justify-center">
+                  <div className="ml-5 mr-5 flex flex-col justify-center">
                     <div className="h-[450px] flex flex-col justify-start items-start mt-6 border-b-2 border-gray-300 ">
                       <div className=" flex flex-row justify-center space-x-40 ">
                         <label
@@ -101,27 +132,43 @@ function EditService() {
                           ชื่อบริการ
                           <label className="text-red">*</label>
                         </label>
-                        <Field
-                          className="input-default w-[450px] text-gray-950"
-                          id="name"
-                          name="name"
-                          type="text"
-                        />
+                        <div className="flex flex-col items-end">
+                          <Field
+                            className="input-default w-[450px] text-gray-950"
+                            id="name"
+                            name="name"
+                            type="text"
+                          />
+                          <ErrorMessage
+                            name="name"
+                            component="div"
+                            className="text-red"
+                          />
+                        </div>
                       </div>
 
+                      <div className="flex flex-col items-end">
                       <Field
                         name="category_id"
                         type="option"
                         component={SelectCategory}
                         formikProps={formikProps}
                       />
-
-                      <Field
-                        name="image"
-                        type="file"
-                        component={UploadImage}
-                        formikProps={formikProps}
+                      <ErrorMessage
+                        name="category_id"
+                        component="div"
+                        className="text-red "
                       />
+                    </div>
+
+                      <div className="flex flex-col justify-center items-end cursor-pointer">
+                        <Field
+                          name="image"
+                          type="file"
+                          component={UploadImage}
+                          formikProps={formikProps}
+                        />
+                      </div>
                     </div>
 
                     <div className="mt-5">
@@ -131,12 +178,11 @@ function EditService() {
                       <FieldArray name="subServiceList">
                         {({ remove, push }) => (
                           <div className="flex flex-col justify-start items-start mt-6 gap-5 text-gray-950 w-full ">
-                            {values.subServiceList?.map((item, index) => (
+                            {values.subServiceList.map((item, index) => (
                               <div
-                                className="flex flex-row justify-center items-center gap-5 w-full "
+                                className="flex flex-row justify-start items-start gap-5 w-full "
                                 key={index}
                               >
-                                <RxDragHandleDots2 className="text-gray-500 mt-4 scale-150" />
                                 <div className="flex flex-col ">
                                   <label
                                     htmlFor={`subServiceList.${index}.name`}
@@ -148,6 +194,11 @@ function EditService() {
                                     className="input-default w-72"
                                     name={`subServiceList.${index}.name`}
                                     type="text"
+                                  />
+                                  <ErrorMessage
+                                    name={`subServiceList.${index}.name`}
+                                    component="div"
+                                    className="text-red"
                                   />
                                 </div>
 
@@ -162,6 +213,11 @@ function EditService() {
                                     className="input-default w-72"
                                     name={`subServiceList.${index}.unit`}
                                     type="text"
+                                  />
+                                  <ErrorMessage
+                                    name={`subServiceList.${index}.unit`}
+                                    component="div"
+                                    className="text-red"
                                   />
                                 </div>
 
@@ -182,28 +238,41 @@ function EditService() {
                                       ฿
                                     </span>
                                   </div>
+                                  <ErrorMessage
+                                    name={`subServiceList.${index}.price`}
+                                    component="div"
+                                    className="text-red"
+                                  />
                                 </div>
 
                                 <div className="">
-                                  <button
-                                    type="button"
-                                    className="text-gray-400 text-base font-medium underline ml-5 mt-5"
-                                    onClick={() => remove(index)}
-                                  >
-                                    ลบรายการ
-                                  </button>
+                                  {values.subServiceList.length > 1 ? (
+                                    <button
+                                      type="button"
+                                      className="text-blue-600 text-base font-medium underline ml-5 mt-10"
+                                      onClick={() => {
+                                        if (values.subServiceList.length > 1) {
+                                          remove(index);
+                                        }
+                                      }}
+                                    >
+                                      ลบรายการ
+                                    </button>
+                                  ) : null}
                                 </div>
                               </div>
                             ))}
                             <button
                               type="button"
-                              className="btn-secondary w-48 mb-5"
+                              className="btn-secondary w-48  mt-5 mb-5"
                               onClick={() =>
-                                push({
-                                  name: "",
-                                  unit: "",
-                                  price: "",
-                                })
+                                push([
+                                  {
+                                    name: "",
+                                    unit: "",
+                                    price: "",
+                                  },
+                                ])
                               }
                             >
                               เพิ่มรายการ +
@@ -211,6 +280,23 @@ function EditService() {
                           </div>
                         )}
                       </FieldArray>
+                    </div>
+                    <div className="w-full mt-10 border-b-2 border-gray-300"></div>
+                    <div className="flex flex-row items-center w-full pb-3 mt-10 text-gray-700">
+                      <div className="flex w-[180px]">สร้างเมื่อ</div>
+                      <div className="pl-[120px] w-full">
+                        <div className="py-2 w-[433px] h-[44px] px-2">
+                          <p>{itemObjects.created_at}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-row items-center w-full mb-5 text-gray-700">
+                      <div className="flex w-[180px] ">แก้ไขล่าสุด</div>
+                      <div className="pl-[120px] w-full">
+                        <div className="py-2 w-[433px] h-[44px] px-2">
+                          <p>{itemObjects.updated_at}</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
