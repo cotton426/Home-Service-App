@@ -48,8 +48,8 @@ export const Footerservice = () => {
 export const NavService = ({ filter, setFilter }) => {
   const { items: list, getCategories } = useData();
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const [valueLeft, setValueLeft] = useState("0");
-  const [valueRight, setValueRight] = useState("0");
+  const [min, setMin] = useState("0");
+  const [max, setMax] = useState("0");
   const { userGetServices, items } = useUser();
 
   const toggleDropdown = () => {
