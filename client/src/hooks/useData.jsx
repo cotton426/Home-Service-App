@@ -57,6 +57,7 @@ const useData = () => {
       const response = await axios.delete(
         "http://localhost:4000/data/categories/" + param
       );
+      navigate("/categories");
     } catch (error) {
       console.error(error);
     }
@@ -95,10 +96,12 @@ const useData = () => {
       const response = await axios.get(
         "http://localhost:4000/data/services/" + param
       );
-      const {services} = response.data[0]
-       const result = response.data.map(item => {delete item.services
-      return item})
-      services.subServiceList = result
+      const { services } = response.data[0];
+      const result = response.data.map((item) => {
+        delete item.services;
+        return item;
+      });
+      services.subServiceList = result;
       setItemObjects(services);
     } catch (error) {
       console.error(error);
@@ -123,7 +126,16 @@ const useData = () => {
     }
   };
 
-
+  const deleteService = async (id) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:4000/data/services/${id}`
+      );
+      navigate("/services");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
 
   return {
@@ -138,6 +150,7 @@ const useData = () => {
     deleteCategory,
     getService,
     editService,
+    deleteService,
   };
 };
 

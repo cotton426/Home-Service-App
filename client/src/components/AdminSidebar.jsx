@@ -47,11 +47,11 @@ export const AdminSidebar = () => {
               icon={HiOutlineDocumentDuplicate}
               text="บริการ"
             />
-            <SidebarItem
+            {/* <SidebarItem
               to="/serviceforbee"
               icon={HiOutlineTicket}
               text="Promotion Code"
-            />
+            /> */}
           </div>
         </div>
         <div id="bottom" className="hover:bg-blue-900">
