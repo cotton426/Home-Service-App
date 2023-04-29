@@ -57,6 +57,7 @@ const useData = () => {
       const response = await axios.delete(
         "http://localhost:4000/data/categories/" + param
       );
+      navigate("/categories");
     } catch (error) {
       console.error(error);
     }
@@ -121,6 +122,7 @@ const useData = () => {
       console.error(error);
     }
   };
+
   const deleteService = async (id) => {
     try {
       const response = await axios.delete(
@@ -131,6 +133,7 @@ const useData = () => {
       console.error(error);
     }
   };
+
 
   return {
     items,
