@@ -86,7 +86,9 @@ const useData = () => {
       navigate("/services");
     } catch (error) {
       console.error(error);
+      return error.response.data.error
     }
+    
   };
 
   const getService = async (param) => {
@@ -120,6 +122,7 @@ const useData = () => {
       navigate("/services");
     } catch (error) {
       console.error(error);
+      return error.response.data.error
     }
   };
 

@@ -10,6 +10,7 @@ import {
 } from "../components/AdminCategory";
 import ServiceTable from "../components/ServicesTable";
 import EditService from "../components/EditService";
+import DetailService from "../components/DetailService";
 
 const AdminHomepage = () => {
   return (
@@ -53,6 +54,7 @@ const AdminHomepage = () => {
             element={
               <>
                 <AddService />
+                {/* <DetailService/> */}
               </>
             }
           />
@@ -80,6 +82,7 @@ const AdminHomepage = () => {
               </>
             }
           />
+          
         </Routes>
       </div>
     </div>

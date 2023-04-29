@@ -6,6 +6,13 @@ function UploadImage({ field, form }) {
   const [image, setImage] = useState("");
   const [fileName, setFileName] = useState("");
 
+
+
+  function removeImage() {
+    console.log('Image removed!');
+    setImage("");
+  }
+
   const handleChange = (event) => {
     const file = event.target.files[0];
     const encodedFileName = encodeURIComponent(file.name);
@@ -25,7 +32,7 @@ function UploadImage({ field, form }) {
         </label>
         <label
           htmlFor={field?.name}
-          className="flex flex-col justify-center items-center border-2 border-dashed border-gray-300 rounded h-[200px] w-[450px] cursor-pointer p-0"
+          className="flex flex-col justify-center items-center border-2 border-dashed border-gray-300 rounded h-[225px] w-[450px] cursor-pointer p-0"
         >
           <input
             type="file"
@@ -36,9 +43,10 @@ function UploadImage({ field, form }) {
             onChange={handleChange}
           />
           {image ? (
-            <div>
-              <img src={image} alt={fileName} className="flex w-auto h-48" />
-            </div>
+            <div className="flex flex-col justify-center items-center border-2 border-gray-300 rounded h-[225px] w-[450px] cursor-pointer p-0">
+              <img src={image} alt={fileName} className="flex w-auto h-[225px]" />
+            </div> 
+
           ) : (
             <div className="flex flex-col items-center">
               <img
@@ -55,14 +63,19 @@ function UploadImage({ field, form }) {
           )}
         </label>
       </div>
-      <span className=" text-gray-700 font-normal text-xs pl-[260px] mt-5 ">
-        ขนาดภาพที่แนะนำ: 1440 x 225 PX
-      </span>
-      <ErrorMessage
-        name={field?.name}
-        component="div"
-        className="text-red-500"
-      />
+      <div className="flex flex-row justify-between items-start  ">
+        <span className=" text-gray-700 font-normal text-xs pl-[260px] py-1.5">
+          ขนาดภาพที่แนะนำ: 1440 x 225 PX
+        </span>
+        <div className="flex flex-col items-end">
+          {image? (
+          <>
+          <p className="btn-ghost" onClick={removeImage}>ลบรูปภาพ</p>
+          <ErrorMessage name={field?.name} component="div" className="text-red" />
+          </> ): null}
+          
+        </div>
+      </div>
     </div>
   );
 }
