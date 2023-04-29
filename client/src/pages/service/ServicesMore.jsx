@@ -48,8 +48,8 @@ export const Footerservice = () => {
 export const NavService = ({ filter, setFilter }) => {
   const { items: list, getCategories } = useData();
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const [min, setMin] = useState("0");
-  const [max, setMax] = useState("0");
+  const [valueLeft, setvalueLeft] = useState("0");
+  const [valueRight, setvalueRight] = useState("0");
   const { userGetServices, items } = useUser();
 
   const toggleDropdown = () => {
@@ -113,7 +113,7 @@ export const NavService = ({ filter, setFilter }) => {
                       />
                     </div>
                   </div>
-                  <div className="bg-white mr-10 mb-5 flex">
+                  {/* <div className="bg-white mr-10 mb-5 flex">
                     <div className="inline-block relative mr-10 outline-none border-right w-[200px]">
                       <label
                         htmlFor="category_id"
@@ -245,7 +245,7 @@ export const NavService = ({ filter, setFilter }) => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <button
                     className="btn-primary font-medium w-[100px] h-[45px] mt-2 ml-2"
                     type="submit"

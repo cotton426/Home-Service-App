@@ -24,17 +24,17 @@ function ServiceMore({ items }) {
                       />
                     </div>
                     <div className="service-detail flex flex-col justify-start items-start py-2.5 px-6">
-                    <h1
-                      className={`${
-                        item.categories.name === "บริการห้องครัว"
-                          ? "kitchen"
-                          : item.categories.name === "บริการทั่วไป"
-                          ? "general"
-                          : item.categories.name === "บริการห้องน้ำ"
-                          ? "toilet"
-                          : "garden"
-                      }`}
-                    >
+                      <h1
+                        className={`${
+                          item.categories.name === "บริการห้องครัว"
+                            ? "kitchen"
+                            : item.categories.name === "บริการทั่วไป"
+                            ? "general"
+                            : item.categories.name === "บริการห้องน้ำ"
+                            ? "toilet"
+                            : "garden"
+                        }`}
+                      >
                         {item.categories.name}
                       </h1>
                       <h2 className="text-gray-950 text-xl font-bold">
@@ -43,19 +43,19 @@ function ServiceMore({ items }) {
                       <div className="flex flex-row justify-center items-center">
                         <FiTag className="w-3.5 mr-2 text-gray-700" />
                         <span className="text-gray-700 text-sm">
-                        ค่าบริการประมาณ{" "}
-                        {item.sub_services.length > 1
-                          ? `${Math.min(
-                              ...item.sub_services.map(
-                                (sub_price) => sub_price.price
-                              )
-                            )} ฿ - ${Math.max(
-                              ...item.sub_services.map(
-                                (sub_price) => sub_price.price
-                              )
-                            )} ฿`
-                          : item.sub_services[0]?.price + " ฿"}
-                      </span>
+                          ค่าบริการประมาณ{" "}
+                          {item.sub_services.length > 1
+                            ? `${Math.min(
+                                ...item.sub_services.map(
+                                  (sub_price) => sub_price.price
+                                )
+                              )} - ${Math.max(
+                                ...item.sub_services.map(
+                                  (sub_price) => sub_price.price
+                                )
+                              )} ฿`
+                            : item.sub_services[0]?.price + " ฿"}
+                        </span>
                       </div>
                     </div>
                     <button
