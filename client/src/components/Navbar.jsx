@@ -174,7 +174,7 @@ export const NavbarLogout = ({ isAdmin }) => {
     {
       label: "Admin Dashboard",
       IconComponent: MdHistory,
-      to: "/admin-dashboard",
+      to: "/categories",
     },
   ];
   if (!isAdmin) menuItems.pop();
