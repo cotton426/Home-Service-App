@@ -53,6 +53,19 @@ const useUser = () => {
     }
   };
 
+  const getOrders = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get("http://localhost:4000/user/orders");
+      setItems(response.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setError(error.message);
+      setIsLoading(false);
+    }
+  };
+
   return {
     items,
     itemObjects,
@@ -61,6 +74,7 @@ const useUser = () => {
     isLoading,
     error,
     submitBooking,
+    getOrders,
   };
 };
 

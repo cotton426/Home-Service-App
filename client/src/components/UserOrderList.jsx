@@ -3,14 +3,25 @@ import { BiUser } from "react-icons/bi";
 import { TiClipboard } from "react-icons/ti";
 import Footer from "./Footer";
 import { BiCalendarEvent, BiUserCircle } from "react-icons/bi";
+import React, { useEffect } from "react";
+import useUser from "../hooks/useUser";
 
 export function UserOrderList() {
+  const { items, getOrders } = useUser();
+
+  useEffect(() => {
+    getOrders();
+  }, []);
+
   return (
     <div
       id="viewport"
       className="flex flex-col w-screen h-screen items-center justify-between bg-BG"
     >
-      <div id="header" className="flex flex-col items-center w-screen bg-BG">
+      <div
+        id="header"
+        className="flex flex-col items-center w-screen bg-BG pb-20"
+      >
         <div
           id="box-topic"
           className="flex w-full bg-blue-600 h-[98px] justify-center items-center"
@@ -23,8 +34,8 @@ export function UserOrderList() {
           <div id="side-bar">
             <CustomerOrderSidebar />
           </div>
-          <div id="box-orders" className="pl-[5%] w-full min-w-[750px]">
-            <CustomerOrderBox />
+          <div id="box-orders" className="pl-[5%] w-full">
+            <CustomerOrderBox orders={items} />
           </div>
         </div>
       </div>
@@ -36,12 +47,30 @@ export function UserOrderList() {
   );
 }
 
-const CustomerOrderBox = () => {
+const CustomerOrderBox = ({ orders }) => {
   return (
-    <div className="flex justify-center items-center w-[100%] h-auto border py-6 px-7 border-gray-300 rounded-lg bg-white">
+    <>
+      {orders.map((order, index) => (
+        <OrderCard key={index} order={order} />
+      ))}
+    </>
+  );
+};
+
+const OrderCard = ({ order }) => {
+  const {
+    order_code,
+    booking_date,
+    booking_time,
+    total_price,
+    // Add other properties from the order object you want to display
+  } = order;
+
+  return (
+    <div className="flex justify-center items-center w-[100%] h-auto border py-6 px-7 box mb-4">
       <div id="box-1" className="flex flex-col w-[100%] h-auto">
         <div id="order-code" className="flex text-xl pb-3">
-          <p>คำสังการซ่อมรหัส : ...</p>
+          <p>คำสั่งการซ่อมรหัส : {order_code}</p>
         </div>
         <div id="box-2" className="flex flex-row">
           <div
@@ -51,7 +80,7 @@ const CustomerOrderBox = () => {
             <div id="booking">
               <span className="flex flex-row items-center pb-1">
                 <BiCalendarEvent className="mr-2 scale-150 text-gray-300" />
-                วันเวลาดำเนินการ: xx เวลา xx น.
+                วันเวลาดำเนินการ: {booking_date} เวลา {booking_time} น.
               </span>
             </div>
             <div id="staff">
@@ -61,9 +90,12 @@ const CustomerOrderBox = () => {
               </span>
             </div>
           </div>
-          <div id="total-price" className="w-[30%] flex justify-end items-center">
-            <span className="text-gray-700 text-sm">ราคารวม: </span>
-            <span className="text-gray-950 text-lg">...฿</span>
+          <div
+            id="total-price"
+            className="w-[30%] flex justify-end items-center"
+          >
+            <span className="text-gray-700 text-sm pr-5">ราคารวม : </span>
+            <span className="text-gray-950 text-lg">{total_price}฿</span>
           </div>
         </div>
         <div id="box-3" className="flex flex-row">
@@ -72,19 +104,14 @@ const CustomerOrderBox = () => {
             className="flex flex-col text-gray-700 text-sm bg-white w-[70%]"
           >
             <div id="booking">
-              <span className="flex flex-row items-center pt-6">
-              รายการ
-              </span>
+              <span className="flex flex-row items-center pt-6">รายการ</span>
             </div>
             <div id="staff">
-              <span className="flex flex-row items-center">
-                
-              • sub-services
-              </span>
+              <span className="flex flex-row items-center">• sub-services</span>
             </div>
           </div>
           <div id="total-price" className="w-[30%] flex justify-end items-end">
-           <button className="btn-primary">ดูรายละเอียด</button>
+            <button className="btn-primary">ดูรายละเอียด</button>
           </div>
         </div>
       </div>
