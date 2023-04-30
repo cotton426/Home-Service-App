@@ -10,7 +10,3 @@ export function generateOrderCode(orderCount) {
 
   return `${prefix}${count}${dateString}`;
 }
-
-
-
-

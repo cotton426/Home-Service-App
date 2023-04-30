@@ -8,6 +8,7 @@ import { NavbarLogout } from "../components/Navbar.jsx";
 import AdminHomepage from "./AdminHome.jsx";
 import { useAuth } from "../contexts/auth.jsx";
 import BookingForm from "./orderService.jsx";
+import { CustomerServiceList } from "./CustomerServiceList.jsx";
 // import ProfilePage from "./pages/ProfilePage";
 
 function AuthenticatedApp({ isAdmin }) {
@@ -20,7 +21,8 @@ function AuthenticatedApp({ isAdmin }) {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/service" element={<ServicesPage />} />
-        <Route path="/order-service" element={<BookingForm/>}/>
+        <Route path="/order-service" element={<BookingForm />} />
+        <Route path="/user-orders-list" element={<CustomerServiceList />} />
         <Route path="*" element={<Homepage />} />
         {/* <Route path="/profile" component={ProfilePage} /> */}
       </Routes>
