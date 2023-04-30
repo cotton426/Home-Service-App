@@ -120,4 +120,21 @@ userRouter.post("/orders", async (req, res) => {
   return res.json(newOrder);
 });
 
+userRouter.get("/orders", async (req, res) => {
+  try {
+    const { data, error } = await supabase.from("orders").select("*");
+
+    if (error) {
+      console.error("Error fetching orders:", error);
+      return res.status(500).json({ error: error.message });
+    }
+
+    return res.json(data);
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+
 export default userRouter;
