@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import useUser from "../hooks/useUser";
 
 const BookingForm = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +15,8 @@ const BookingForm = () => {
   });
   const [successMessage, setSuccessMessage] = useState(null);
   const [error, setError] = useState(null);
+  const { submitBooking } = useUser();
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -23,20 +26,14 @@ const BookingForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await axios.post(
-        "http://localhost:4000/user/orders",
-        formData
-      );
-      // Handle the response, e.g., show a success message or navigate to another page
-      setSuccessMessage("Booking submitted successfully!");
+    const result = await submitBooking(formData); // Call submitBooking function here
+    if (result.success) {
+      setSuccessMessage(result.message);
       setTimeout(() => {
         navigate("/service"); // Change this to the desired path after successful submission
       }, 2000);
-    } catch (error) {
-      console.error(error);
-      // Handle the error, e.g., show an error message to the user
-      setError("Failed to submit the booking. Please try again.");
+    } else {
+      setError(result.message);
     }
   };
 

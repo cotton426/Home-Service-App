@@ -37,6 +37,22 @@ const useUser = () => {
     }
   };
 
+  const submitBooking = async (formData) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/user/orders",
+        formData
+      );
+      return { success: true, message: "Booking submitted successfully!" };
+    } catch (error) {
+      console.error(error);
+      return {
+        success: false,
+        message: "Failed to submit the booking. Please try again.",
+      };
+    }
+  };
+
   return {
     items,
     itemObjects,
@@ -44,6 +60,7 @@ const useUser = () => {
     homepageGetServices,
     isLoading,
     error,
+    submitBooking,
   };
 };
 

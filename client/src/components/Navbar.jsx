@@ -164,7 +164,7 @@ export const NavbarLogout = ({ isAdmin }) => {
     {
       label: "รายการคำสั่งซ่อม",
       IconComponent: TiClipboard,
-      to: "/orders",
+      to: "/user-orders-list",
     },
     {
       label: "ประวัติการซ่อม",
@@ -192,7 +192,7 @@ export const AdminNavbarLogout = () => {
     {
       label: "รายการคำสั่งซ่อม",
       IconComponent: TiClipboard,
-      to: "/orders",
+      to: "/user-orders-list",
     },
     {
       label: "ประวัติการซ่อม",
