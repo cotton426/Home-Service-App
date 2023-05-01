@@ -31,7 +31,6 @@ const useUser = () => {
       const response = await axios.get(
         `http://localhost:4000/user/services?keywords=${keywords}`
       );
-      console.log(response.data);
       setItems(response.data);
     } catch (error) {
       console.error(error);
