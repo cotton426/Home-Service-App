@@ -56,7 +56,7 @@ userRouter.get("/services", async (req, res) => {
     name,
     image,
     categories(name),
-    sub_services (price,name),
+    sub_services (price)
     `
       )
       .ilike("name", `%${keywords}%`);

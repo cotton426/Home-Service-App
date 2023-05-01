@@ -2,9 +2,9 @@ import { BsCardText } from "react-icons/bs";
 import { MdOutlineModeEditOutline, MdOutlineCreditScore } from "react-icons/md";
 
 const ProgressBar = ({ page }) => {
-//   page = "payment-page";
+  //   page = "payment-page";
   return (
-    <div className="w-full h-[20%] flex flex-col justify-center items-center gap-3 box my-[3%] px-[15%] pt-4">
+    <div className="w-full flex flex-col justify-center items-center gap-3 box mt-[3%] px-[15%] py-4">
       <div className="w-full flex justify-between relative z-20 px-1">
         <div
           className={`absolute w-1/2 h-1/2 border-b-[3px] -z-10 ${
@@ -28,7 +28,11 @@ const ProgressBar = ({ page }) => {
           </div>
           <div
             className={`progress-icon ${
-              page === "select-page" ? "future-stage" : page === 'address-page' ? "present-stage" : 'past-stage'
+              page === "select-page"
+                ? "future-stage"
+                : page === "address-page"
+                ? "present-stage"
+                : "past-stage"
             }`}
           >
             <MdOutlineModeEditOutline className="scale-150" />

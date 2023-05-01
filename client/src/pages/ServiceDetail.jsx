@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import useData from "../hooks/useData";
 import { useNavigate, useParams } from "react-router-dom";
 import ProgressBar from "../components/ProgressBar";
+import AddOnList from "../components/AddOnList";
+import DetailInformation from "../components/DetailInformation";
+import ServicePayment from "../components/ServicePayment";
 
 const ServiceDetail = () => {
   const params = useParams();
@@ -35,15 +38,15 @@ const ServiceDetail = () => {
   };
   return (
     <>
-      <div className="bg-BG relative w-full h-screen -z-20">
+      <div className="bg-BG relative w-full -z-20">
         <img
           src={itemObjects.image}
           alt={itemObjects.name}
           className="absolute w-full object-cover aspect-[6/1] -z-10 "
         />
         {/* real div for show data */}
-        <div className="bg-none w-full h-full px-[10%] py-[5%]">
-          <header className="shadow bg-white inline-block px-8 py-2.5">
+        <div className="bg-none w-full px-[10%] pt-[5%] pb-[1%] z-10">
+          <header className="shadow bg-white inline-block px-8 py-2.5 mb-8">
             <div className="flex items-center">
               <span className="text-gray-700">บริการของเรา</span>
               <span className="text-gray-400 px-2">{"  >  "}</span>
@@ -53,9 +56,13 @@ const ServiceDetail = () => {
             </div>
           </header>
           <ProgressBar page={page} />
-          <div className="w-full">For Teammate Component</div>
         </div>
         {/* real div for show data */}
+      </div>
+      <div className="w-full px-[10%] pt-[1%] pb-[5%] bg-BG">
+        {page === "select-page" ? <AddOnList /> : null}
+        {page === "address-page" ? <DetailInformation /> : null}
+        {page === "payment-page" ? <ServicePayment /> : null}
       </div>
       <footer className="w-full bg-white px-[10%] py-4 flex justify-between">
         <button className="btn-secondary" onClick={handleClickBack}>

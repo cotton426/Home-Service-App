@@ -63,7 +63,6 @@ export const NavService = ({ filter, setFilter }) => {
   //   setValueRight(event.target.value);
   // };
 
-
   useEffect(() => {
     getCategories();
     userGetServices({

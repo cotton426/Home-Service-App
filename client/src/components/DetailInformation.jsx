@@ -86,8 +86,8 @@ const DetailInformation = () => {
   ];
 
   return (
-    <div className="w-screen flex">
-      <h1 className="w-[735px] h-[568px] ml-40 pt-6 pl-6">
+    <div className="w-3/5 flex box">
+      <h1 className="w-[735px] h-[568px]  pt-6 pl-6">
         <p className="pb-9">กรอกข้อมูล</p>
         <Formik
           initialValues={inputValues}
