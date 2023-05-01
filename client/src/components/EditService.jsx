@@ -8,6 +8,7 @@ import useData from "../hooks/useData";
 import { EditServiceNavbar } from "./AdminNavbar";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { formatTime } from "../utils/timeUtils";
 
 function EditService() {
   const param = useParams();
@@ -123,7 +124,7 @@ function EditService() {
               <div className=" bg-BG h-full w-full p-[5%]">
                 <div className="flex flex-col justify-start border border-gray-300 rounded-lg bg-white w-full">
                   <div className="ml-5 mr-5 flex flex-col justify-center">
-                    <div className="h-[450px] flex flex-col justify-start items-start mt-6 border-b-2 border-gray-300 ">
+                    <div className="h-[450px] flex flex-col justify-start items-start mt-6 border-b-[1px] border-gray-300 ">
                       <div className=" flex flex-row justify-center space-x-40 ">
                         <label
                           htmlFor="name"
@@ -281,12 +282,12 @@ function EditService() {
                         )}
                       </FieldArray>
                     </div>
-                    <div className="w-full mt-10 border-b-2 border-gray-300"></div>
+                    <div className="w-full mt-10 border-b-[1px] border-gray-300"></div>
                     <div className="flex flex-row items-center w-full pb-3 mt-10 text-gray-700">
                       <div className="flex w-[180px]">สร้างเมื่อ</div>
                       <div className="pl-[120px] w-full">
                         <div className="py-2 w-[433px] h-[44px] px-2">
-                          <p>{itemObjects.created_at}</p>
+                          {formatTime(itemObjects.created_at)}
                         </div>
                       </div>
                     </div>
@@ -294,7 +295,7 @@ function EditService() {
                       <div className="flex w-[180px] ">แก้ไขล่าสุด</div>
                       <div className="pl-[120px] w-full">
                         <div className="py-2 w-[433px] h-[44px] px-2">
-                          <p>{itemObjects.updated_at}</p>
+                          {formatTime(itemObjects.updated_at)}
                         </div>
                       </div>
                     </div>

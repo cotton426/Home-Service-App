@@ -67,6 +67,7 @@ const useData = () => {
     try {
       const response = await axios.get("http://localhost:4000/data/services");
       setItems(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error(error);
     }
