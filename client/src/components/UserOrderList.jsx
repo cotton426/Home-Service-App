@@ -5,13 +5,20 @@ import Footer from "./Footer";
 import { BiCalendarEvent, BiUserCircle } from "react-icons/bi";
 import React, { useEffect } from "react";
 import useUser from "../hooks/useUser";
+import { useAuth } from "../contexts/auth";
+import { formatTimeBooking, formatDateBooking } from "../utils/timeUtils";
 
 export function UserOrderList() {
   const { items, getOrders } = useUser();
+  const { user } = useAuth();
+
+  const profile_id = user.profiles.length > 0 ? user.profiles[0].id : null;
 
   useEffect(() => {
-    getOrders();
-  }, []);
+    if (profile_id) {
+      getOrders(profile_id);
+    }
+  }, [profile_id, getOrders]);
 
   return (
     <div
@@ -48,6 +55,10 @@ export function UserOrderList() {
 }
 
 const CustomerOrderBox = ({ orders }) => {
+  if (orders.length === 0) {
+    return <div>No orders found.</div>;
+  }
+
   return (
     <>
       {orders.map((order, index) => (
@@ -80,7 +91,8 @@ const OrderCard = ({ order }) => {
             <div id="booking">
               <span className="flex flex-row items-center pb-1">
                 <BiCalendarEvent className="mr-2 scale-150 text-gray-300" />
-                วันเวลาดำเนินการ: {booking_date} เวลา {booking_time} น.
+                วันเวลาดำเนินการ: {formatDateBooking(booking_date)} เวลา{" "}
+                {formatTimeBooking(booking_time)} น.
               </span>
             </div>
             <div id="staff">
@@ -121,7 +133,7 @@ const OrderCard = ({ order }) => {
 
 const CustomerOrderSidebar = () => {
   return (
-    <div id="sidebar" className="flex w-[253px] h-auto box fix ">
+    <div id="sidebar" className="flex w-[253px] h-auto box">
       <div
         id="sidebar-orders"
         className="w-full flex justify-center items-start"

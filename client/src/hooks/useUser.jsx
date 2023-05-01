@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -53,18 +53,19 @@ const useUser = () => {
     }
   };
 
-  const getOrders = async () => {
-    try {
-      setIsLoading(true);
-      const response = await axios.get("http://localhost:4000/user/orders");
-      setItems(response.data);
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-      setError(error.message);
-      setIsLoading(false);
-    }
-  };
+  const getOrders = useCallback(
+    async (profile_id) => {
+      try {
+        const response = await axios.get(
+          `http://localhost:4000/user/orders?profile_id=${profile_id}`
+        );
+        setItems(response.data);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    },
+    [setItems, axios]
+  );
 
   return {
     items,

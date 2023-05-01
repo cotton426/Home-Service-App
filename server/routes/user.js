@@ -123,20 +123,22 @@ userRouter.post("/orders", async (req, res) => {
 });
 
 userRouter.get("/orders", async (req, res) => {
-  try {
-    const { data, error } = await supabase.from("orders").select("*");
+  const profile_id = req.query.profile_id;
+  if (!profile_id) {
+    return res.status(400).json({ message: "Please provide a profile_id." });
+  }
 
-    if (error) {
-      console.error("Error fetching orders:", error);
-      return res.status(500).json({ error: error.message });
-    }
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*")
+    .filter("profile_id", "eq", profile_id);
 
-    return res.json(data);
-  } catch (error) {
-    console.error("Error fetching orders:", error);
+  if (error) {
+    console.error("Error fetching user orders:", error);
     return res.status(500).json({ error: error.message });
   }
-});
 
+  return res.json(data);
+});
 
 export default userRouter;
