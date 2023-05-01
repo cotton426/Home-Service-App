@@ -33,6 +33,7 @@ userRouter.get("/services", async (req, res) => {
   if (keywords === undefined) {
     let { data, error } = await supabase.from("services").select(
       `
+      service_id,
     name,
     image,
     categories(name),
@@ -51,10 +52,11 @@ userRouter.get("/services", async (req, res) => {
       .from("services")
       .select(
         `
+        service_id,
     name,
     image,
     categories(name),
-    sub_services (price,name),
+    sub_services (price)
     `
       )
       .ilike("name", `%${keywords}%`);

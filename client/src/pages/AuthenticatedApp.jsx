@@ -7,6 +7,7 @@ import ServicesPage from "./ServicesPage.jsx";
 import { NavbarLogout } from "../components/Navbar.jsx";
 import AdminHomepage from "./AdminHome.jsx";
 import { useAuth } from "../contexts/auth.jsx";
+import ServiceDetail from "./ServiceDetail.jsx";
 // import ProfilePage from "./pages/ProfilePage";
 
 function AuthenticatedApp({ isAdmin }) {
@@ -20,6 +21,7 @@ function AuthenticatedApp({ isAdmin }) {
         <Route path="/" element={<Homepage />} />
         <Route path="/service" element={<ServicesPage />} />
         <Route path="*" element={<Homepage />} />
+        <Route path="/select-service/:service_id" element={<ServiceDetail />} />
         {/* <Route path="/profile" component={ProfilePage} /> */}
       </Routes>
     </div>
