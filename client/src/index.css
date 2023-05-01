@@ -94,3 +94,26 @@ td {
 .shadow {
   @apply shadow-[8px_8px_24px_0px_rgba(23,51,106,0.12)] rounded-lg;
 }
+
+.present-stage {
+  @apply text-blue-500 font-medium border-blue-500 bg-white;
+}
+
+.future-stage {
+  @apply font-medium border-gray-300 bg-white;
+}
+
+div ~ .future-stage {
+  @apply text-gray-300;
+}
+p ~ .future-stage {
+  @apply text-gray-700;
+}
+
+.past-stage {
+  @apply bg-blue-500 text-white border-2 border-blue-500
+}
+
+.progress-icon {
+  @apply border-2 rounded-full w-10 h-10 flex justify-center items-center;
+}

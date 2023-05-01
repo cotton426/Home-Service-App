@@ -93,6 +93,7 @@ const useData = () => {
 
   const getService = async (param) => {
     try {
+      console.log(param);
       const response = await axios.get(
         "http://localhost:4000/data/services/" + param
       );

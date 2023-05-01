@@ -102,20 +102,21 @@ dataRouter.get("/services", async (req, res) => {
 
 dataRouter.post("/services", upload.single("image"), async (req, res) => {
   const decodedFileName = decodeURIComponent(req.file.originalname);
+  log;
   const { serviceName, category_id, subServiceList } = req.body;
-console.log({ serviceName, category_id, subServiceList });
+  console.log({ serviceName, category_id, subServiceList });
   const { data: service, error: alreadyExist } = await supabase
     .from("services")
     .select("*")
-    .eq( "name", serviceName) 
-    .eq( "category_id", category_id) 
-    
-// console.log(alreadyExist);
-  if (service[0]!==undefined) {
+    .eq("name", serviceName)
+    .eq("category_id", category_id);
+
+  // console.log(alreadyExist);
+  if (service[0] !== undefined) {
     console.error("Error inserting data:", alreadyExist);
-    return res.status(400).json({ error: "This Service is already exist"});
+    return res.status(400).json({ error: "This Service is already exist" });
   }
-console.log(decodedFileName);
+  console.log(decodedFileName);
 
   // Save the image to Supabase Storage
   const file = req.file;
@@ -166,6 +167,7 @@ console.log(decodedFileName);
 
 dataRouter.get("/services/:id", async (req, res) => {
   const serviceId = req.params.id;
+  console.log(serviceId);
   const { data: services, error } = await supabase
     .from("sub_services")
     .select(`*,services(*)`)
@@ -191,18 +193,15 @@ dataRouter.get("/services/:id", async (req, res) => {
 });
 
 dataRouter.put("/services/:id", upload.single("image"), async (req, res) => {
-
   const serviceId = req.params.id;
   const { name, category_id, subServiceList } = req.body;
 
-
-  
   // const { data: editService, error: alreadyExist } = await supabase
   //   .from("services")
   //   .select("*")
-  //   .eq( "name", name) 
-  //   .eq( "category_id", category_id) 
-    
+  //   .eq( "name", name)
+  //   .eq( "category_id", category_id)
+
   // if (editService[0]!==undefined) {
   //   console.error("Error inserting data:", alreadyExist);
   //   return res.status(400).json({ error: "This Service is already exist"});
