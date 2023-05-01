@@ -11,6 +11,7 @@ import {
 import ServiceTable from "../components/ServicesTable";
 import EditService from "../components/EditService";
 import DetailService from "../components/DetailService";
+import AddOnList from "../components/AddOnList";
 
 const AdminHomepage = () => {
   return (

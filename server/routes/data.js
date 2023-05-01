@@ -170,6 +170,7 @@ dataRouter.get("/services/:id", async (req, res) => {
     .from("sub_services")
     .select(`*,services(*)`)
     .eq("service_id", serviceId);
+    
 
   if (error) {
     // Handle the error

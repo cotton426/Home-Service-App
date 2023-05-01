@@ -139,7 +139,7 @@ function AddService() {
                       formikProps={formikProps}
                     />
                   </div>
-                  <div className="w-full mt-10 border-b-2 border-gray-300"></div>
+                  <div className="w-full mt-10 border-b-[1px] border-gray-300"></div>
                   <div className="mt-5">
                     <h1 className="text-gray-700 text-base font-medium">
                       รายการบริการย่อย
