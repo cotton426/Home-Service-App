@@ -63,15 +63,6 @@ export const NavService = ({ filter, setFilter }) => {
   //   setValueRight(event.target.value);
   // };
 
-  // const handleSelection = (item) => {
-  //   // setSelect(item)
-  //   const { category_id } = items.filter((x) => x.name === item)[0];
-  // };
-
-  // const getCategoryName = (categoryId) => {
-  //   const category = items.find((item) => item.category_id === categoryId);
-  //   return category ? category.name : "";
-  // };
 
   useEffect(() => {
     getCategories();

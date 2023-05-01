@@ -20,7 +20,7 @@ const NavbarLeftContainer = () => {
           src={logoHomeService}
           alt="HomeServices Logo"
         />
-        <a href="/" className=" text-blue-600 font-bold text-[24px] mx-[5%]">
+        <a href="/" className=" text-blue-600 font-medium text-[24px] mx-[5%]">
           HomeServices
         </a>
       </div>
