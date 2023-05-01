@@ -5,6 +5,7 @@ import {
 } from "./service/ServicesMore";
 import ServiceMore from "./service/ServiceCard";
 import { useState } from "react";
+import DetailInformation from "../components/DetailInformation";
 
 const ServicesPage = () => {
   return (
@@ -12,6 +13,7 @@ const ServicesPage = () => {
       <HeaderService />
       <NavService />
       <Footerservice />
+      <DetailInformation />
     </>
   );
 };
