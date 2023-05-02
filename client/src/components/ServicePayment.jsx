@@ -50,8 +50,8 @@ function ServicePayment() {
         onSubmit={handleSubmit}
       >
         {({ isSubmitting, handleChange, }) => (
-          <Form>
-            <div className="box w-3/5 h-[500px] flex flex-col p-8 gap-4">
+          <Form className="w-3/5">
+            <div className="box  h-[500px] flex flex-col p-8 gap-4">
               <h1 className="text-gray-700 font-normal text-xl">ชำระเงิน</h1>
               <div className="flex flex-row justify-between">
                 <button
