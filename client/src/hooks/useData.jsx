@@ -139,6 +139,26 @@ const useData = () => {
     }
   };
 
+  const addPayment = async (formData) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/data/services",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(response);
+      navigate("/services");
+    } catch (error) {
+      console.error(error);
+      return error.response.data.error
+    }
+    
+  };
+
 
   return {
     items,
@@ -153,6 +173,7 @@ const useData = () => {
     getService,
     editService,
     deleteService,
+    addPayment,
   };
 };
 
