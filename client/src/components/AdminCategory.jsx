@@ -90,9 +90,8 @@ export const AddCategory = () => {
   );
 };
 
-export const EditCategory = ({ view = false }) => {
-  const { getCategory, itemObjects, editCategory } = useData(); //for editing
-  const { items, getCategories, getServices, deleteCategory } = useData(); //for deleting
+export const EditCategory = ({ view }) => {
+  const { getCategory, itemObjects, editCategory, deleteCategory } = useData(); //for editing
 
   const param = useParams();
 
@@ -201,7 +200,7 @@ export const EditCategory = ({ view = false }) => {
                       className="flex items-center hover:cursor-pointer"
                       onClick={handleDelete}
                     >
-                      <HiOutlineTrash className="scale-110 mr-3"/>
+                      <HiOutlineTrash className="scale-110 mr-3" />
                       <span className="underline font-medium">ลบหมวดหมู่</span>
                     </div>
                   </div>

@@ -2,14 +2,12 @@ import { useEffect, useState } from "react";
 import { BiImageAdd } from "react-icons/bi";
 import { Field, ErrorMessage } from "formik";
 
-function UploadImage({ field, form }) {
+function UploadImage({ field, form, view }) {
   const [image, setImage] = useState("");
   const [fileName, setFileName] = useState("");
 
-
-
   function removeImage() {
-    console.log('Image removed!');
+    console.log("Image removed!");
     setImage("");
   }
 
@@ -44,9 +42,12 @@ function UploadImage({ field, form }) {
           />
           {image ? (
             <div className="flex flex-col justify-center items-center border-2 border-gray-300 rounded h-[225px] w-[450px] cursor-pointer p-0">
-              <img src={image} alt={fileName} className="flex w-auto h-[225px]" />
-            </div> 
-
+              <img
+                src={image}
+                alt={fileName}
+                className="flex w-auto h-[225px]"
+              />
+            </div>
           ) : (
             <div className="flex flex-col items-center">
               <img
@@ -68,12 +69,20 @@ function UploadImage({ field, form }) {
           ขนาดภาพที่แนะนำ: 1440 x 225 PX
         </span>
         <div className="flex flex-col items-end">
-          {image? (
-          <>
-          <p className="btn-ghost" onClick={removeImage}>ลบรูปภาพ</p>
-          <ErrorMessage name={field?.name} component="div" className="text-red" />
-          </> ): null}
-          
+          {image ? (
+            <>
+              {!view && (
+                <p className="btn-ghost" onClick={removeImage}>
+                  ลบรูปภาพ
+                </p>
+              )}
+              <ErrorMessage
+                name={field?.name}
+                component="div"
+                className="text-red"
+              />
+            </>
+          ) : null}
         </div>
       </div>
     </div>

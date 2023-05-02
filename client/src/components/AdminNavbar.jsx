@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { GoSearch } from "react-icons/go";
 import { IoIosArrowBack } from "react-icons/io";
 
@@ -136,7 +136,7 @@ export const EditServiceNavbar = () => (
   <Navbar
     title="บริการย่อย"
     subTitle="บริการ"
-    backLink="/service"
+    backLink="/services"
     leftButton={
       <Link to="/services">
         <button className="btn-primary">ยกเลิก</button>
@@ -156,7 +156,7 @@ export const EditCategoryNavbar = ({ onConfirm }) => {
     <Navbar
       title="บริการย่อย"
       subTitle="หมวดหมู่"
-      backLink="/service"
+      backLink="/categories"
       leftButton={
         <button
           className="btn-primary"
@@ -175,20 +175,34 @@ export const EditCategoryNavbar = ({ onConfirm }) => {
     />
   );
 };
-export const DetailCategoryNavbar = () => (
-  <Navbar
-    title="แก้ไขหมวดหมู่ย่อย"
-    subTitle="หมวดหมู่"
-    backLink="/categories"
-    rightButton={<button className="btn-primary">แก้ไข</button>}
-  />
-);
+export const DetailCategoryNavbar = () => {
+  const param = useParams();
+  return (
+    <Navbar
+      title="แก้ไขหมวดหมู่ย่อย"
+      subTitle="หมวดหมู่"
+      backLink="/categories"
+      rightButton={
+        <Link to={`/edit-category/${param.category_id}`}>
+          <button className="btn-primary">แก้ไข</button>
+        </Link>
+      }
+    />
+  );
+};
 
-export const DetailServiceNavbar = () => (
-  <Navbar
-    title="แก้ไขบริการย่อย"
-    subTitle="บริการ"
-    backLink="/service"
-    rightButton={<button className="btn-primary">แก้ไข</button>}
-  />
-);
+export const DetailServiceNavbar = () => {
+  const param = useParams();
+  return (
+    <Navbar
+      title="แก้ไขบริการย่อย"
+      subTitle="บริการ"
+      backLink="/services"
+      rightButton={
+        <Link to={`/edit-service/${param.service_id}`}>
+          <button className="btn-primary">แก้ไข</button>
+        </Link>
+      }
+    />
+  );
+};
