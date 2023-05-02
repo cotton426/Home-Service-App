@@ -4,32 +4,44 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { MdOutlineQrCode2 } from "react-icons/md";
 import { MdCreditCard } from "react-icons/md";
+import { useState } from "react";
 
 function ServicePayment() {
-  const initialValues = {
+  const [initialValues, setInitialValues] = useState({
     creditNumber: "",
     creditName: "",
     dateOfExpiry: "",
     code: "",
+  });
+  
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setInitialValues((prev) => {
+  //     return { ...prev, [name]: value };
+  //   });
+  // };
+
+  const handleSubmit = (values) => {
+    console.log(values);
   };
+
+  console.log(initialValues);
 
   const validationSchema = Yup.object().shape({
-    creditNumber: Yup.string().required("กรุณากรอกหมายเลขบัตรเครดิต"),
+    creditNumber: Yup.string()
+      .matches(/^[0-9]{13}$/, "หมายเลขบัตรเครดิตต้องเป็นตัวเลข 13 หลัก")
+      .required("กรุณากรอกหมายเลขบัตรเครดิต"),
     creditName: Yup.string().required("กรุณากรอกชื่อบนบัตร"),
-    dateOfExpiry: Yup.string().required("กรุณากรอกวันหมดอายุ"),
+    dateOfExpiry: Yup.string()
+    .matches(
+      /^(0[1-9]|1[0-2])\/([0-9]{2})$/,
+      "กรุณากรอกวันหมดอายุในรูปแบบ MM/YY"
+    )
+    .required("กรุณากรอกวันหมดอายุ"),
     code: Yup.string().required("กรุณากรอกรหัส CVC / CVV*"),
   });
+  
 
-  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
-    const result = await addCategory({
-      name: values.name,
-    });
-    const errorMessage = result.response.data.error;
-    if (errorMessage.includes("unique")) {
-      setErrors({ name: "" });
-    }
-    setSubmitting(false);
-  };
   return (
     <>
       <Formik
@@ -37,34 +49,43 @@ function ServicePayment() {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ isSubmitting }) => (
-          <Form>
-            <div className="box w-3/5 h-[500px] flex flex-col p-8 gap-4">
-              <h1 className="text-gray-500 font-normal text-xl">ชำระเงิน</h1>
+        {({ isSubmitting, handleChange, }) => (
+          <Form className="w-3/5">
+            <div className="box  h-[500px] flex flex-col p-8 gap-4">
+              <h1 className="text-gray-700 font-normal text-xl">ชำระเงิน</h1>
               <div className="flex flex-row justify-between">
-                <button className="select-box flex flex-col justify-center items-center text-center gap-2 ">
+                <button
+                  className="select-box flex flex-col justify-center items-center text-center gap-2"
+                  type="checkbox"
+                >
                   <MdOutlineQrCode2
                     id="MdOutlineQrCode2"
                     className="text-3xl"
                   />
-                  <div className="font-semibold text-sm">พร้อมเพ</div>
+                  <div className="font-semibold text-sm">พร้อมเพย์</div>
                 </button>
-                <button className="select-box flex flex-col justify-center items-center text-center gap-2">
+                <button
+                  className="select-box flex flex-col justify-center items-center text-center gap-2"
+                  type="checkbox"
+                >
                   <MdCreditCard className="text-3xl" />
                   <div className="font-semibold text-sm">บัตรเครดิต</div>
                 </button>
               </div>
-              <div className="w-full flex flex-col justify-center items-start">
-                <div className="flex text-gray-900">
+              <div className="w-full flex flex-col justify-center items-start gap-1">
+                <div className="flex text-gray-900 font-medium">
                   หมายเลขบัตรเครดิต<span className="text-red">*</span>
                 </div>
                 <div className="w-full">
                   <Field
                     type="text"
                     name="creditNumber"
+                    maxLength="13"
                     placeholder="กรุณากรอกหมายเลขบัตรเครดิต"
                     className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
+                    onChange={handleChange}
                   />
+
                   <ErrorMessage
                     name="creditNumber"
                     component="div"
@@ -72,8 +93,8 @@ function ServicePayment() {
                   />
                 </div>
               </div>
-              <div className="w-full flex flex-col justify-center items-start">
-                <div className="flex text-gray-900">
+              <div className="w-full flex flex-col justify-center items-start gap-1">
+                <div className="flex text-gray-900 font-medium">
                   ชื่อบนบัตร<span className="text-red">*</span>
                 </div>
                 <div className="w-full">
@@ -82,6 +103,7 @@ function ServicePayment() {
                     name="creditName"
                     placeholder="กรุณากรอกชื่อบนบัตร"
                     className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
+                    onChange={handleChange}
                   />
                   <ErrorMessage
                     name="creditName"
@@ -90,9 +112,9 @@ function ServicePayment() {
                   />
                 </div>
               </div>
-              <div className="w-full flex flex-row justify-between items-start ">
+              <div className="w-full flex flex-row justify-between items-start gap-1">
                 <div className="w-[48%] flex flex-col justify-center items-start">
-                  <div className="flex text-gray-900">
+                  <div className="flex text-gray-900 font-medium">
                     วันหมดอายุ<span className="text-red">*</span>
                   </div>
                   <div className="w-full">
@@ -100,7 +122,9 @@ function ServicePayment() {
                       type="text"
                       name="dateOfExpiry"
                       placeholder="MM/YY"
+                      maxLength="5"
                       className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
+                      onChange={handleChange}
                     />
                     <ErrorMessage
                       name="dateOfExpiry"
@@ -109,8 +133,8 @@ function ServicePayment() {
                     />
                   </div>
                 </div>
-                <div className="w-[48%] flex flex-col justify-center items-start">
-                  <div className="flex text-gray-900">
+                <div className="w-[48%] flex flex-col justify-center items-startgap-1">
+                  <div className="flex text-gray-900 font-medium">
                     รหัส CVC / CVV<span className="text-red">*</span>
                   </div>
                   <div className="w-full">
@@ -120,6 +144,7 @@ function ServicePayment() {
                       placeholder="xxx"
                       maxLength="3"
                       className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
+                      onChange={handleChange}
                     />
                     <ErrorMessage
                       name="code"
@@ -129,11 +154,7 @@ function ServicePayment() {
                   </div>
                 </div>
               </div>
-              <button
-                type="submit"
-                className="btn-primary mt-6"
-                disabled={isSubmitting}
-              >
+              <button type="submit" className="btn-primary mt-6">
                 ลงทะเบียน
               </button>
             </div>
@@ -141,6 +162,18 @@ function ServicePayment() {
         )}
       </Formik>
     </>
+    // <>
+    // <form onSubmit={handleSubmit}>
+    //   <h1>Name</h1>
+    //   <input type="text" name="creditNumber" onChange={handleChange}/>
+    //   <h1>creditName</h1>
+    //   <input type="text" name="creditName" onChange={handleChange}/>
+    //   <h1>dateOfExpiry</h1>
+    //   <input type="text" name="dateOfExpiry" onChange={handleChange}/>
+    //   <button type="submit">submit</button>
+
+    // </form>
+    // </>
   );
 }
 
