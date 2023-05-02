@@ -37,7 +37,7 @@ export const ServiceSummary = ({ counters, subServiceList }) => {
 const ServiceDetail = () => {
   const params = useParams();
   const { itemObjects, getService } = useData();
-  const [page, setPage] = useState("payment-page");
+  const [page, setPage] = useState("select-page");
   const [cart, setCart] = useState([]);
   const [counters, setCounters] = useState([]);
   console.log(counters);
