@@ -20,8 +20,7 @@ function SelectCategory({ field, form, view }) {
     const category = items.find((item) => item.category_id === categoryId);
     return category ? category.name : "";
   };
-  console.log(field.value);
-  console.log(view);
+  
   return (
     <div>
       <div className="relative flex flex-row justify-center space-x-40 text-gray-950 mt-10">
@@ -36,7 +35,7 @@ function SelectCategory({ field, form, view }) {
             <select
               value={getCategoryName(field.value)}
               id="category"
-              className="block appearance-none input-default w-[450px] bg-white border border-gray-400 hover:border-gray-500 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+              className="block appearance-none input-default w-[450px] bg-white border border-gray-400 hover:border-gray-500 rounded leading-tight focus:outline-none focus:shadow-outline"
               onChange={(event) => handleSelection(event.target.value)}
             >
               <option value="" disabled hidden>

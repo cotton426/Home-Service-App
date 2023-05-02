@@ -166,11 +166,11 @@ export const NavbarLogout = ({ isAdmin }) => {
       IconComponent: TiClipboard,
       to: "/user-orders-list",
     },
-    {
-      label: "ประวัติการซ่อม",
-      IconComponent: MdHistory,
-      to: "/history",
-    },
+    // {
+    //   label: "ประวัติการซ่อม",
+    //   IconComponent: MdHistory,
+    //   to: "/history",
+    // },
     {
       label: "Admin Dashboard",
       IconComponent: MdHistory,
@@ -194,11 +194,11 @@ export const AdminNavbarLogout = () => {
       IconComponent: TiClipboard,
       to: "/user-orders-list",
     },
-    {
-      label: "ประวัติการซ่อม",
-      IconComponent: MdHistory,
-      to: "/history",
-    },
+    // {
+    //   label: "ประวัติการซ่อม",
+    //   IconComponent: MdHistory,
+    //   to: "/history",
+    // },
     {
       label: "Admin Dashbroad",
       IconComponent: MdHistory,

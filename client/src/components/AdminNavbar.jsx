@@ -120,7 +120,7 @@ export const AddServiceNavbar = () => (
   <Navbar
     title="เพิ่มบริการ"
     leftButton={
-      <Link to="/categories">
+      <Link to="/services">
         <button className="btn-primary">ยกเลิก</button>
       </Link>
     }
