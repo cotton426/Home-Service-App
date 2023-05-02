@@ -87,14 +87,12 @@ const useData = () => {
       navigate("/services");
     } catch (error) {
       console.error(error);
-      return error.response.data.error
+      return error.response.data.error;
     }
-    
   };
 
   const getService = async (param) => {
     try {
-      console.log(param);
       const response = await axios.get(
         "http://localhost:4000/data/services/" + param
       );
@@ -124,7 +122,7 @@ const useData = () => {
       navigate("/services");
     } catch (error) {
       console.error(error);
-      return error.response.data.error
+      return error.response.data.error;
     }
   };
 

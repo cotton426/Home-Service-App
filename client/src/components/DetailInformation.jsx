@@ -1,44 +1,32 @@
 import { useEffect, useState } from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, useFormikContext } from "formik";
 import * as Yup from "yup";
 import { TimePicker } from "antd";
 
-const DetailInformation = () => {
-  const [inputValues, setInputValues] = useState({
-    date: "",
-    time: new Date().toLocaleTimeString("th-TH", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    }),
-    address: "",
-    subdistrict: "",
-    district: "",
-    province: "",
-    note: "",
-  });
+const AutoSubmit = () => {
+  // Grab values and submitForm from context
+  const { values, submitForm } = useFormikContext();
+  useEffect(() => {
+    // Submit the form imperatively as an effect as soon as form values.token are 6 digits long
+    // console.log(Object.values(values).includes(""));
+    // console.log(Object.values(values));
+    if (
+      values.date !== "" &&
+      values.time !== "" &&
+      values.address !== "" &&
+      values.subdistrict !== "" &&
+      values.district !== "" &&
+      values.province !== ""
+    ) {
+      submitForm();
+      console.log(values);
+    }
+    if (values.note !== "") submitForm();
+  }, [values]);
+  return null;
+};
 
-  console.log(setInputValues);
-
-  const DetailForm = ({ label, id, name, type, placeholder }) => {
-    return (
-      <div className="flex flex-col">
-        <label htmlFor={id}>
-          {label}
-          <label className="text-red">*</label>
-        </label>
-        <Field
-          type={type}
-          id={id}
-          name={name}
-          className="input-default"
-          placeholder={placeholder}
-        />
-        <ErrorMessage name={name} component="p" className="error-massage" />
-      </div>
-    );
-  };
-
+const DetailInformation = ({ inputValues, setInputValues, handleChange }) => {
   const today = new Date();
   const tomorrow = new Date();
   tomorrow.setDate(today.getDate() + 1);
@@ -99,10 +87,18 @@ const DetailInformation = () => {
   ];
 
   return (
-    <div className="w-3/5 flex box">
-      <h1 className="w-[735px] h-[568px]  pt-6 pl-6">
-        <p className="pb-9">กรอกข้อมูล</p>
-        <Formik initialValues={inputValues} validationSchema={validationSchema}>
+    <div className="w-3/5 flex box p-4">
+      <p className="pb-9">กรอกข้อมูล</p>
+      <Formik
+        initialValues={inputValues}
+        validationSchema={validationSchema}
+        onSubmit={(values) => {
+          console.log("work");
+          console.log(values);
+          setInputValues(values);
+        }}
+      >
+        {({ values, setFieldValue }) => (
           <Form className="grid grid-cols-2 gap-4 mt-8">
             {formFields.map((field, errors, touched) => (
               <div key={field.name} className="flex flex-col">
@@ -114,18 +110,19 @@ const DetailInformation = () => {
                   <Field
                     format="HH:mm"
                     type="text"
-                    required
-                    component={TimePicker}
+                    value={inputValues.time}
                     name={field.name}
                     className="box h-11"
-                    onChange={(time) => {
-                      setInputValues((prevValues) => ({
-                        ...prevValues,
-                        [field.name]: time ? time.format("HH:mm") : "",
-                      }));
-                    }}
+                    component={TimePicker}
                     placeholder={field.placeholder}
                     hideDisabledOptions={true}
+                    allowClear={false}
+                    clearIcon={false}
+                    onChange={(time) => {
+                      setInputValues({ ...inputValues, time: time });
+                      setFieldValue("time", time);
+                      setFieldValue("useTime", time.format("HH:mm"));
+                    }}
                     disabledHours={() => {
                       const disabledHours = [];
                       for (let i = 0; i < 9; i++) {
@@ -156,12 +153,6 @@ const DetailInformation = () => {
                       min: tomorrow.toISOString().slice(0, 10),
                       onFocus: (e) => (e.target.type = "date"),
                     })}
-                    // onChange={(e) => {
-                    //   setInputValues({
-                    //     ...values,
-                    //     [field.name]: e.target.value,
-                    //   });
-                    // }}
                   />
                 )}
                 <ErrorMessage
@@ -171,11 +162,10 @@ const DetailInformation = () => {
                 />
               </div>
             ))}
+            <AutoSubmit />
           </Form>
-        </Formik>
-      </h1>
-      <h2 className="w-[349px] h-[349px] mr-40 pt-4 pl-6">สรุปรายการ</h2>
-      <p></p>
+        )}
+      </Formik>
     </div>
   );
 };
