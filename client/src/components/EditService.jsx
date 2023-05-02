@@ -8,9 +8,10 @@ import useData from "../hooks/useData";
 import { EditServiceNavbar } from "./AdminNavbar";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { DetailServiceNavbar } from "./AdminNavbar";
 import { formatTime } from "../utils/timeUtils";
 
-function EditService() {
+function EditService({ view }) {
   const param = useParams();
 
   const [initialValues, setInitialValues] = useState({
@@ -31,19 +32,19 @@ function EditService() {
     name: Yup.string().required("กรุณาใส่ชื่อบริการ"),
     category_id: Yup.string().required("กรุณาเลือกหมวดหมู่"),
     image: Yup.mixed()
-    .nullable()
-    .notRequired()
-      .test(
-        "fileSize",
-        "The file is too large",
-        (value) => { console.log(value)
-         return value.size <= 5*1024*1024 || typeof value === "string"}
-      )
+      .nullable()
+      .notRequired()
+      .test("fileSize", "The file is too large", (value) => {
+        console.log(value);
+        return value.size <= 5 * 1024 * 1024 || typeof value === "string";
+      })
       .test(
         "fileType",
         "Unsupported file type",
         (value) =>
-          value && ["image/jpeg", "image/png", "image/jpg"].includes(value.type) || typeof value === "string"
+          (value &&
+            ["image/jpeg", "image/png", "image/jpg"].includes(value.type)) ||
+          typeof value === "string"
       ),
     subServiceList: Yup.array()
       .of(
@@ -95,7 +96,7 @@ function EditService() {
     });
 
     try {
-       editService(param.service_id, formData);
+      editService(param.service_id, formData);
     } catch (error) {
       console.error("Error submitting form:", error);
       setErrors({ submit: "Error submitting form" });
@@ -120,7 +121,11 @@ function EditService() {
             formikProps,
           }) => (
             <Form onSubmit={handleSubmit}>
-              <EditServiceNavbar onConfirm={submitForm} />
+              {view ? (
+                <DetailServiceNavbar />
+              ) : (
+                <EditServiceNavbar onConfirm={submitForm} />
+              )}
               <div className=" bg-BG h-full w-full p-[5%]">
                 <div className="flex flex-col justify-start border border-gray-300 rounded-lg bg-white w-full">
                   <div className="ml-5 mr-5 flex flex-col justify-center">
@@ -133,34 +138,43 @@ function EditService() {
                           ชื่อบริการ
                           <label className="text-red">*</label>
                         </label>
-                        <div className="flex flex-col items-end">
-                          <Field
-                            className="input-default w-[450px] text-gray-950"
-                            id="name"
-                            name="name"
-                            type="text"
-                          />
-                          <ErrorMessage
-                            name="name"
-                            component="div"
-                            className="text-red"
-                          />
+                        <div className="flex flex-col items-end justify-end">
+                          {view ? (
+                            <div className="w-[450px] text-gray-950 ">
+                              {itemObjects.name}
+                            </div>
+                          ) : (
+                            <>
+                              <Field
+                                className="input-default w-[450px] text-gray-950"
+                                id="name"
+                                name="name"
+                                type="text"
+                              />
+                              <ErrorMessage
+                                name="name"
+                                component="div"
+                                className="text-red"
+                              />
+                            </>
+                          )}
                         </div>
                       </div>
 
                       <div className="flex flex-col items-end">
-                      <Field
-                        name="category_id"
-                        type="option"
-                        component={SelectCategory}
-                        formikProps={formikProps}
-                      />
-                      <ErrorMessage
-                        name="category_id"
-                        component="div"
-                        className="text-red "
-                      />
-                    </div>
+                        <Field
+                          name="category_id"
+                          type="option"
+                          component={SelectCategory}
+                          formikProps={formikProps}
+                          view={view}
+                        />
+                        <ErrorMessage
+                          name="category_id"
+                          component="div"
+                          className="text-red "
+                        />
+                      </div>
 
                       <div className="flex flex-col justify-center items-end cursor-pointer">
                         <Field
@@ -168,6 +182,7 @@ function EditService() {
                           type="file"
                           component={UploadImage}
                           formikProps={formikProps}
+                          view={view}
                         />
                       </div>
                     </div>
@@ -191,16 +206,24 @@ function EditService() {
                                   >
                                     ชื่อรายการ
                                   </label>
-                                  <Field
-                                    className="input-default w-72"
-                                    name={`subServiceList.${index}.name`}
-                                    type="text"
-                                  />
-                                  <ErrorMessage
-                                    name={`subServiceList.${index}.name`}
-                                    component="div"
-                                    className="text-red"
-                                  />
+                                  {view ? (
+                                    <div className="px-4 py-2.5 w-80">
+                                      {values.subServiceList[index].name}
+                                    </div>
+                                  ) : (
+                                    <>
+                                      <Field
+                                        className="input-default w-72"
+                                        name={`subServiceList.${index}.name`}
+                                        type="text"
+                                      />
+                                      <ErrorMessage
+                                        name={`subServiceList.${index}.name`}
+                                        component="div"
+                                        className="text-red"
+                                      />
+                                    </>
+                                  )}
                                 </div>
 
                                 <div className="flex flex-col">
@@ -210,16 +233,25 @@ function EditService() {
                                   >
                                     หน่วยการบริการ
                                   </label>
-                                  <Field
-                                    className="input-default w-72"
-                                    name={`subServiceList.${index}.unit`}
-                                    type="text"
-                                  />
-                                  <ErrorMessage
-                                    name={`subServiceList.${index}.unit`}
-                                    component="div"
-                                    className="text-red"
-                                  />
+
+                                  {view ? (
+                                    <div className="px-4 py-2.5 w-72">
+                                      {values.subServiceList[index].unit}
+                                    </div>
+                                  ) : (
+                                    <>
+                                      <Field
+                                        className="input-default w-72"
+                                        name={`subServiceList.${index}.unit`}
+                                        type="text"
+                                      />
+                                      <ErrorMessage
+                                        name={`subServiceList.${index}.unit`}
+                                        component="div"
+                                        className="text-red"
+                                      />
+                                    </>
+                                  )}
                                 </div>
 
                                 <div className="flex flex-col">
@@ -229,25 +261,33 @@ function EditService() {
                                   >
                                     ค่าบริการ / 1 หน่วย
                                   </label>
-                                  <div className="relative">
-                                    <Field
-                                      className="relative input-default w-72"
-                                      name={`subServiceList.${index}.price`}
-                                      type="text"
-                                    />
-                                    <span className="absolute right-0 pr-3 pt-2.5 after:bg-transparent text-gray-500">
-                                      ฿
-                                    </span>
-                                  </div>
-                                  <ErrorMessage
-                                    name={`subServiceList.${index}.price`}
-                                    component="div"
-                                    className="text-red"
-                                  />
+                                  {view ? (
+                                    <div className="px-4 py-2.5 w-72">
+                                      {values.subServiceList[index].price} ฿
+                                    </div>
+                                  ) : (
+                                    <>
+                                      <div className="relative">
+                                        <Field
+                                          className="relative input-default w-72"
+                                          name={`subServiceList.${index}.price`}
+                                          type="text"
+                                        />
+                                        <span className="absolute right-0 pr-3 pt-2.5 after:bg-transparent text-gray-500">
+                                          ฿
+                                        </span>
+                                      </div>
+                                      <ErrorMessage
+                                        name={`subServiceList.${index}.price`}
+                                        component="div"
+                                        className="text-red"
+                                      />
+                                    </>
+                                  )}
                                 </div>
 
                                 <div className="">
-                                  {values.subServiceList.length > 1 ? (
+                                  {!view && values.subServiceList.length > 1 && (
                                     <button
                                       type="button"
                                       className="text-blue-600 text-base font-medium underline ml-5 mt-10"
@@ -259,25 +299,27 @@ function EditService() {
                                     >
                                       ลบรายการ
                                     </button>
-                                  ) : null}
+                                  )}
                                 </div>
                               </div>
                             ))}
-                            <button
-                              type="button"
-                              className="btn-secondary w-48  mt-5 mb-5"
-                              onClick={() =>
-                                push([
-                                  {
-                                    name: "",
-                                    unit: "",
-                                    price: "",
-                                  },
-                                ])
-                              }
-                            >
-                              เพิ่มรายการ +
-                            </button>
+                            {!view && (
+                              <button
+                                type="button"
+                                className="btn-secondary w-48  mt-5 mb-5"
+                                onClick={() =>
+                                  push([
+                                    {
+                                      name: "",
+                                      unit: "",
+                                      price: "",
+                                    },
+                                  ])
+                                }
+                              >
+                                เพิ่มรายการ +
+                              </button>
+                            )}
                           </div>
                         )}
                       </FieldArray>
@@ -311,3 +353,7 @@ function EditService() {
 }
 
 export default EditService;
+
+export const ViewService = () => {
+  return <EditService view={true} />;
+};

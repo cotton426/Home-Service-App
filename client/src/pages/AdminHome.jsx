@@ -9,8 +9,8 @@ import {
   ViewCategory,
 } from "../components/AdminCategory";
 import ServiceTable from "../components/ServicesTable";
-import EditService from "../components/EditService";
-import DetailService from "../components/DetailService";
+import EditService,{ViewService} from "../components/EditService";
+// import ViewService from "../components/ViewService";
 import AddOnList from "../components/AddOnList";
 
 const AdminHomepage = () => {
@@ -83,7 +83,14 @@ const AdminHomepage = () => {
               </>
             }
           />
-          
+          <Route
+            path="/view-service/:service_id"
+            element={
+              <>
+                <ViewService />
+              </>
+            }
+          />
         </Routes>
       </div>
     </div>

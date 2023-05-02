@@ -19,10 +19,21 @@ const TableRow = ({
   handleEdit,
   handleDelete,
 }) => {
+  const navigate = useNavigate();
+
+  const navigateToItem = () => {
+    navigate(
+      service
+        ? `/view-service/${item.service_id}`
+        : `/view-category/${item.category_id}`
+    );
+  };
+
   return (
     <tr
       key={item.category_id}
       className="bg-white w-full h-20 text-black border-t border-gray-200 hover:bg-gray-100 transition-all duration-200 ease-in"
+      onClick={navigateToItem}
       // draggable
       // onDragStart={(e) => handleDragStart(e, index)}
       // onDragOver={handleDragOver}
@@ -59,20 +70,24 @@ const TableRow = ({
 
       <td className="py-3 px-4">{formatTime(item.created_at)}</td>
       <td className="py-3 px-4">{formatTime(item.updated_at)}</td>
-      <td className="py-3 px-4">
+      <td className="py-7 px-4 flex">
         <button
-          className="text-gray-500 hover:text-red-700  mr-2"
-          onClick={() => handleDelete(item)}
+          className="text-gray-500 hover:text-red-700 mr-2"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDelete(item);
+          }}
         >
           <HiOutlineTrash className="scale-110" />
         </button>
 
-        <button
-          className="text-blue-500 hover:text-blue-700"
-          onClick={() => handleEdit(item)}
-        >
-          <FiEdit />
-        </button>
+        <FiEdit
+          className="text-blue-500 hover:text-blue-700 cursor-pointer"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleEdit(item);
+          }}
+        />
       </td>
     </tr>
   );
@@ -81,8 +96,13 @@ const TableRow = ({
 const TableOfContents = ({ service }) => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  const { items, getCategories, getServices, deleteCategory, deleteService } =
-    useData();
+  const {
+    items,
+    getCategories,
+    getServices,
+    deleteCategory,
+    deleteService,
+  } = useData();
   const navigate = useNavigate();
 
   useEffect(() => {

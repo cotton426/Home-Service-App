@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -37,6 +37,36 @@ const useUser = () => {
     }
   };
 
+  const submitBooking = async (formData) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/user/orders",
+        formData
+      );
+      return { success: true, message: "Booking submitted successfully!" };
+    } catch (error) {
+      console.error(error);
+      return {
+        success: false,
+        message: "Failed to submit the booking. Please try again.",
+      };
+    }
+  };
+
+  const getOrders = useCallback(
+    async (profile_id) => {
+      try {
+        const response = await axios.get(
+          `http://localhost:4000/user/orders?profile_id=${profile_id}`
+        );
+        setItems(response.data);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    },
+    [setItems, axios]
+  );
+
   return {
     items,
     itemObjects,
@@ -44,6 +74,8 @@ const useUser = () => {
     homepageGetServices,
     isLoading,
     error,
+    submitBooking,
+    getOrders,
   };
 };
 
