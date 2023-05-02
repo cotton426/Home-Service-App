@@ -6,17 +6,45 @@ import AddOnList from "../components/AddOnList";
 import DetailInformation from "../components/DetailInformation";
 import ServicePayment from "../components/ServicePayment";
 
+export const ServiceSummary = ({ counters, subServiceList }) => {
+  let totalPrice = 0;
+  return (
+    <>
+      <div className="box flex flex-col justify-between w-1/3 h-1/3 px-4">
+        <div className="flex flex-col border-b border-gray-300 py-4">
+          <h1 className="text-gray-700 text-xl pb-4">สรุปรายการ</h1>
+          {counters.map((item, index) => {
+            if (item > 0) {
+              totalPrice += subServiceList[index].price * counters[index];
+              return (
+                <div className="flex justify-between text-sm" key={index}>
+                  <p className="font-light">{subServiceList[index].name}</p>
+                  <p className="font-medium">{counters[index]} รายการ</p>
+                </div>
+              );
+            }
+          })}
+        </div>
+        <div className="flex justify-between py-4">
+          <p className="text-gray-700">รวม</p>
+          <p className="font-semibold">{totalPrice} ฿</p>
+        </div>
+      </div>
+    </>
+  );
+};
+
 const ServiceDetail = () => {
   const params = useParams();
   const { itemObjects, getService } = useData();
   const [page, setPage] = useState("select-page");
   const [cart, setCart] = useState([]);
+  const [counters, setCounters] = useState([]);
+  console.log(counters);
   const navigate = useNavigate();
   useEffect(() => {
     getService(params.service_id);
   }, []);
-  console.log(itemObjects);
-
   const handleClickNext = () => {
     if (page === "select-page") {
       setPage("address-page");
@@ -59,16 +87,30 @@ const ServiceDetail = () => {
         </div>
         {/* real div for show data */}
       </div>
-      <div className="w-full px-[10%] pt-[1%] pb-[5%] bg-BG">
-        {page === "select-page" ? <AddOnList /> : null}
+      <div className="w-full px-[10%] pt-[1%] pb-[5%] bg-BG flex justify-between">
+        {page === "select-page" ? (
+          <AddOnList
+            itemObjects={itemObjects}
+            counters={counters}
+            setCounters={setCounters}
+          />
+        ) : null}
         {page === "address-page" ? <DetailInformation /> : null}
         {page === "payment-page" ? <ServicePayment /> : null}
+        <ServiceSummary
+          subServiceList={itemObjects.subServiceList}
+          counters={counters}
+        />
       </div>
       <footer className="w-full bg-white px-[10%] py-4 flex justify-between">
-        <button className="btn-secondary" onClick={handleClickBack}>
+        <button className={`btn-secondary`} onClick={handleClickBack}>
           {"< "} <span className="ml-2"> ย้อนกลับ</span>
         </button>
-        <button className="btn-primary" onClick={handleClickNext}>
+        <button
+          className="btn-primary"
+          disabled={counters.filter((item) => item > 0).length === 0}
+          onClick={handleClickNext}
+        >
           <span className="mr-2">ดำเนินการต่อ </span> {" >"}
         </button>
       </footer>
