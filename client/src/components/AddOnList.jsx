@@ -59,7 +59,7 @@ function AddOnList({ itemObjects, counters, setCounters }) {
                 <h2 className="text-black font-medium text-lg mt-5">
                   {item.name}
                 </h2>
-                <div className="flex flex-row">
+                <div className="flex flex-row items-center">
                   <FiTag className="w-3.5 mr-2 text-gray-700" />
                   <p className="text-gray-700">
                     {item.price} ฿ / {item.unit}
