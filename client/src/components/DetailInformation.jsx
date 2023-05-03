@@ -6,21 +6,22 @@ import { TimePicker } from "antd";
 const AutoSubmit = ({ inputValues, setInputValues }) => {
   const { values, submitForm } = useFormikContext();
   useEffect(() => {
-    setInputValues(values);
-
-    if (
-      values.date !== "" &&
-      values.time !== "" &&
-      values.address !== "" &&
-      values.subdistrict !== "" &&
-      values.district !== "" &&
-      values.province !== ""
-    ) {
-      submitForm();
-      console.log(values);
-    }
-    if (values.note !== "") submitForm();
-  }, [values]);
+    const timer = setTimeout(() => {
+      setInputValues(values);
+      if (
+        values.date !== "" &&
+        values.time !== "" &&
+        values.address !== "" &&
+        values.subdistrict !== "" &&
+        values.district !== "" &&
+        values.province !== ""
+      ) {
+        submitForm();
+      }
+      if (values.note !== "") submitForm();
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [values, submitForm]);
   return null;
 };
 
@@ -28,9 +29,13 @@ const DetailInformation = ({ inputValues, setInputValues, handleChange }) => {
   const today = new Date();
   const tomorrow = new Date();
   tomorrow.setDate(today.getDate() + 1);
+  tomorrow.setHours(today.getHours());
+  tomorrow.setMinutes(today.getMinutes());
 
   const validationSchema = Yup.object().shape({
-    date: Yup.date().min(tomorrow).required("กรุณากรอกวันที่"),
+    date: Yup.date()
+      .min(tomorrow, "กรุณาเลือกวันถัดไป")
+      .required("กรุณากรอกวันที่"),
     time: Yup.string().required("กรุณากรอกเวลา"),
     address: Yup.string().required("กรุณากรอกที่อยู่"),
     subdistrict: Yup.string().required("กรุณากรอกแขวง/ตำบล"),
@@ -151,7 +156,7 @@ const DetailInformation = ({ inputValues, setInputValues, handleChange }) => {
                     className="input-default"
                     placeholder={field.placeholder}
                     {...(field.type === "date" && {
-                      type: "text",
+                      type: "date",
                       min: tomorrow.toISOString().slice(0, 10),
                       onFocus: (e) => (e.target.type = "date"),
                     })}

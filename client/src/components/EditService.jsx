@@ -37,23 +37,25 @@ function EditService({ view }) {
       .nullable()
       .notRequired()
       .test("fileSize", "The file is too large", (value) => {
-        console.log(value);
         return value.size <= 5 * 1024 * 1024 || typeof value === "string";
       })
-      .test(
-        "fileType",
-        "Unsupported file type",
-        (value) =>
-          (value &&
-            ["image/jpeg", "image/png", "image/jpg"].includes(value.type)) ||
+      .test("fileType", "Unsupported file type", (value) => {
+        return (
+          ["image/jpeg", "image/png", "image/jpg"].includes(value.type) ||
           typeof value === "string"
-      ),
+        );
+      }),
     subServiceList: Yup.array()
       .of(
         Yup.object().shape({
           name: Yup.string().required("กรุณาใส่ชื่อบริการย่อย"),
           unit: Yup.string().required("กรุณาใส่หน่วยบริการ"),
-          price: Yup.string().required("กรุณาใส่ราคาบริการ"),
+          price: Yup.string()
+            .matches(/^[0-9]+$/, {
+              message: "กรุณากรอกตัวเลขเท่านั้น",
+              excludeEmptyString: true,
+            })
+            .required("กรุณาใส่ราคาบริการ"),
         })
       )
       .min(1, "กรุณาเพิ่มรายการบริการย่อยอย่างน้อย 1 รายการ")
@@ -110,12 +112,12 @@ function EditService({ view }) {
         `subServiceList[${index}][service_id]`,
         initialValues.service_id
       );
-      if (initialValues.subServiceList[index]?.sub_service_id) {
-        formData.append(
-          `subServiceList[${index}][sub_service_id]`,
-          initialValues.subServiceList[index]?.sub_service_id
-        );
-      }
+      // if (initialValues.subServiceList[index]?.sub_service_id) {
+      //   formData.append(
+      //     `subServiceList[${index}][sub_service_id]`,
+      //     initialValues.subServiceList[index]?.sub_service_id
+      //   );
+      // }
       formData.append(`subServiceList[${index}][name]`, subService.name);
       formData.append(`subServiceList[${index}][unit]`, subService.unit);
       formData.append(`subServiceList[${index}][price]`, subService.price);
@@ -125,7 +127,9 @@ function EditService({ view }) {
       editService(param.service_id, formData);
     } catch (error) {
       console.error("Error submitting form:", error);
-      setErrors({ submit: "Error submitting form" });
+      setErrors({
+        submit: "Error submitting form",
+      });
     } finally {
       setSubmitting(false);
     }
@@ -136,16 +140,10 @@ function EditService({ view }) {
       {initialValues.name && (
         <Formik
           initialValues={initialValues}
-          onSubmit={onSubmit}
           validationSchema={validationSchema}
+          onSubmit={onSubmit}
         >
-          {({
-            values,
-            setFieldValue,
-            submitForm,
-            handleSubmit,
-            formikProps,
-          }) => (
+          {({ values, submitForm, handleSubmit, formikProps }) => (
             <Form onSubmit={handleSubmit}>
               {view ? (
                 <DetailServiceNavbar />
@@ -217,26 +215,68 @@ function EditService({ view }) {
                       <h1 className="text-gray-700 text-base font-medium">
                         รายการบริการย่อย
                       </h1>
-                      <FieldArray name="subServiceList">
-                        {({ remove, push }) => (
-                          <div className="flex flex-col justify-start items-start mt-6 gap-5 text-gray-950 w-full ">
-                            {values.subServiceList.map((item, index) => (
-                              <div
-                                className="flex flex-row justify-start items-start gap-5 w-full "
-                                key={index}
-                              >
-                                <div className="flex flex-col ">
-                                  <label
-                                    htmlFor={`subServiceList.${index}.name`}
-                                    className="text-gray-700"
-                                  >
-                                    ชื่อรายการ
-                                  </label>
-                                  {view ? (
-                                    <div className="px-4 py-2.5 w-80">
-                                      {values.subServiceList[index].name}
-                                    </div>
-                                  ) : (
+
+                      {view ? (
+                        <div className="flex flex-col justify-start items-start mt-6 gap-5 text-gray-950 w-full ">
+                          {values.subServiceList.map((item, index) => (
+                            <div
+                              className="flex flex-row justify-start items-start gap-5 w-full "
+                              key={index}
+                            >
+                              <div className="flex flex-col ">
+                                <label
+                                  htmlFor={`subServiceList.${index}.name`}
+                                  className="text-gray-700"
+                                >
+                                  ชื่อรายการ
+                                </label>
+                                <div className="px-4 py-2.5 w-80">
+                                  {values.subServiceList[index].name}
+                                </div>
+                              </div>
+                              <div className="flex flex-col">
+                                <label
+                                  htmlFor={`subServiceList.${index}.unit`}
+                                  className="text-gray-700"
+                                >
+                                  หน่วยการบริการ
+                                </label>
+                                <div className="px-4 py-2.5 w-72">
+                                  {values.subServiceList[index].unit}
+                                </div>
+                              </div>
+                              <div className="flex flex-col">
+                                <label
+                                  htmlFor={`subServiceList.${index}.price`}
+                                  className="text-gray-700"
+                                >
+                                  ค่าบริการ / 1 หน่วย
+                                </label>{" "}
+                                <div className="px-4 py-2.5 w-72">
+                                  {values.subServiceList[index].price} ฿
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <FieldArray name="subServiceList">
+                          {({ remove, push }) => (
+                            <div className="flex flex-col justify-start items-start mt-6 gap-5 text-gray-950 w-full ">
+                              {values.subServiceList?.map((item, index) => (
+                                <div
+                                  className="flex flex-row justify-start items-start gap-5 w-full "
+                                  key={index}
+                                >
+                                  {console.log(item)}
+                                  <div className="flex flex-col ">
+                                    <label
+                                      htmlFor={`subServiceList.${index}.name`}
+                                      className="text-gray-700"
+                                    >
+                                      ชื่อรายการ
+                                    </label>
+
                                     <>
                                       <Field
                                         className="input-default w-72"
@@ -249,22 +289,16 @@ function EditService({ view }) {
                                         className="text-red"
                                       />
                                     </>
-                                  )}
-                                </div>
+                                  </div>
 
-                                <div className="flex flex-col">
-                                  <label
-                                    htmlFor={`subServiceList.${index}.unit`}
-                                    className="text-gray-700"
-                                  >
-                                    หน่วยการบริการ
-                                  </label>
+                                  <div className="flex flex-col">
+                                    <label
+                                      htmlFor={`subServiceList.${index}.unit`}
+                                      className="text-gray-700"
+                                    >
+                                      หน่วยการบริการ
+                                    </label>
 
-                                  {view ? (
-                                    <div className="px-4 py-2.5 w-72">
-                                      {values.subServiceList[index].unit}
-                                    </div>
-                                  ) : (
                                     <>
                                       <Field
                                         className="input-default w-72"
@@ -277,21 +311,16 @@ function EditService({ view }) {
                                         className="text-red"
                                       />
                                     </>
-                                  )}
-                                </div>
+                                  </div>
 
-                                <div className="flex flex-col">
-                                  <label
-                                    htmlFor={`subServiceList.${index}.price`}
-                                    className="text-gray-700"
-                                  >
-                                    ค่าบริการ / 1 หน่วย
-                                  </label>
-                                  {view ? (
-                                    <div className="px-4 py-2.5 w-72">
-                                      {values.subServiceList[index].price} ฿
-                                    </div>
-                                  ) : (
+                                  <div className="flex flex-col">
+                                    <label
+                                      htmlFor={`subServiceList.${index}.price`}
+                                      className="text-gray-700"
+                                    >
+                                      ค่าบริการ / 1 หน่วย
+                                    </label>
+
                                     <>
                                       <div className="relative">
                                         <Field
@@ -309,46 +338,47 @@ function EditService({ view }) {
                                         className="text-red"
                                       />
                                     </>
-                                  )}
-                                </div>
+                                  </div>
 
-                                <div className="">
-                                  {!view && values.subServiceList.length > 1 && (
-                                    <button
-                                      type="button"
-                                      className="text-blue-600 text-base font-medium underline ml-5 mt-10"
-                                      onClick={() => {
-                                        if (values.subServiceList.length > 1) {
-                                          remove(index);
-                                        }
-                                      }}
-                                    >
-                                      ลบรายการ
-                                    </button>
-                                  )}
+                                  <div className="">
+                                    {!view &&
+                                      values.subServiceList.length > 1 && (
+                                        <button
+                                          type="button"
+                                          className="text-blue-600 text-base font-medium underline ml-5 mt-10"
+                                          onClick={() => {
+                                            if (
+                                              values.subServiceList.length > 1
+                                            ) {
+                                              remove(index);
+                                            }
+                                          }}
+                                        >
+                                          ลบรายการ
+                                        </button>
+                                      )}
+                                  </div>
                                 </div>
-                              </div>
-                            ))}
-                            {!view && (
-                              <button
-                                type="button"
-                                className="btn-secondary w-48  mt-5 mb-5"
-                                onClick={() =>
-                                  push([
-                                    {
+                              ))}
+                              {!view && (
+                                <button
+                                  type="button"
+                                  className="btn-secondary w-48  mt-5 mb-5"
+                                  onClick={() => {
+                                    push({
                                       name: "",
                                       unit: "",
                                       price: "",
-                                    },
-                                  ])
-                                }
-                              >
-                                เพิ่มรายการ +
-                              </button>
-                            )}
-                          </div>
-                        )}
-                      </FieldArray>
+                                    });
+                                  }}
+                                >
+                                  เพิ่มรายการ +
+                                </button>
+                              )}
+                            </div>
+                          )}
+                        </FieldArray>
+                      )}
                     </div>
                     <div className="w-full mt-10 border-b-[1px] border-gray-300"></div>
                     <div className="flex flex-row items-center w-full pb-3 mt-10 text-gray-700">

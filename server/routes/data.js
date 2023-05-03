@@ -102,9 +102,13 @@ dataRouter.get("/services", async (req, res) => {
 
 dataRouter.post("/services", upload.single("image"), async (req, res) => {
   const decodedFileName = decodeURIComponent(req.file.originalname);
-
   const { serviceName, category_id, subServiceList } = req.body;
-  console.log({ serviceName, category_id, subServiceList });
+
+  console.log({
+    serviceName,
+    category_id,
+    subServiceList,
+  });
   const { data: service, error: alreadyExist } = await supabase
     .from("services")
     .select("*")
@@ -196,15 +200,20 @@ dataRouter.put("/services/:id", upload.single("image"), async (req, res) => {
   const serviceId = req.params.id;
   const { name, category_id, subServiceList } = req.body;
 
+  const { data: deleteSubservice, error: deleteError } = await supabase
+    .from("sub_services")
+    .delete()
+    .eq("service_id", serviceId);
+
   // const { data: editService, error: alreadyExist } = await supabase
   //   .from("services")
   //   .select("*")
-  //   .eq( "name", name)
-  //   .eq( "category_id", category_id)
+  //   .eq("name", name)
+  //   .eq("category_id", category_id);
 
-  // if (editService[0]!==undefined) {
+  // if (editService[0] !== undefined) {
   //   console.error("Error inserting data:", alreadyExist);
-  //   return res.status(400).json({ error: "This Service is already exist"});
+  //   return res.status(400).json({ error: "This Service is already exist" });
   // }
 
   const decodedFileName = decodeURIComponent(req.file?.originalname);
@@ -246,10 +255,20 @@ dataRouter.put("/services/:id", upload.single("image"), async (req, res) => {
   if (error) {
     return res.status(400).json({ error: error.message });
   }
-  console.log(subServiceList);
-  const { data: subService, error: subServiceError } = await supabase
+  const subServiceListWithoutNullPrototype = subServiceList.map((subService) =>
+    Object.assign({}, { ...subService })
+  );
+
+  console.log(subServiceListWithoutNullPrototype);
+  const { data: subService, error: insertSubServiceError } = await supabase
     .from("sub_services")
-    .upsert(subServiceList, { onConflict: "sub_service_id" });
+    .insert(subServiceListWithoutNullPrototype)
+    .select("*");
+
+  if (insertSubServiceError) {
+    console.log(insertSubServiceError);
+  }
+
   return res.json(service);
 });
 
@@ -286,16 +305,16 @@ dataRouter.delete("/services/:id", async (req, res) => {
     )
   )}`;
 
-  const { error: deleteImageError } = await supabase.storage
-    .from(bucket)
-    .remove(
-      "public/images/services-image/Screenshot 2566-04-09 at 14.41.30.png"
-    );
+  // const { error: deleteImageError } = await supabase.storage
+  //   .from(bucket)
+  //   .remove(
+  //     "public/images/services-image/Screenshot 2566-04-09 at 14.41.30.png"
+  //   );
 
-  if (deleteImageError) {
-    console.error("Error deleting image:", deleteImageError);
-    return res.status(400).json({ error: deleteImageError.message });
-  }
+  // if (deleteImageError) {
+  //   console.error("Error deleting image:", deleteImageError);
+  //   return res.status(400).json({ error: deleteImageError.message });
+  // }
 
   return res.json(service);
 });

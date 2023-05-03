@@ -212,8 +212,16 @@ const ServiceDetail = () => {
         </button>
         <button
           className="btn-primary"
-          disabled={counters.filter((item) => item > 0).length === 0}
-          onClick={handleClickNext}
+          disabled={
+            (page === "select-page" &&
+              counters.filter((item) => item > 0).length === 0) ||
+            (page === "address-page" &&
+              Object.values(inputValues).filter((item) => item === "").length >
+                (inputValues.note === "" ? 1 : 0))
+          }
+          onClick={() => {
+            handleClickNext();
+          }}
         >
           <span className="mr-2">ดำเนินการต่อ </span> {" >"}
         </button>
