@@ -33,7 +33,7 @@ function ServicePayment({ initialValues, handleChange, setInitialValues }) {
 
   const validationSchema = Yup.object().shape({
     creditNumber: Yup.string()
-      .matches(/^[0-9]{13}$/, "หมายเลขบัตรเครดิตต้องเป็นตัวเลข 13 หลัก")
+      .matches(/^[0-9]{16}$/, "หมายเลขบัตรเครดิตต้องเป็นตัวเลข 16 หลัก")
       .required("กรุณากรอกหมายเลขบัตรเครดิต"),
     creditName: Yup.string().required("กรุณากรอกชื่อบนบัตร"),
     dateOfExpiry: Yup.string()
