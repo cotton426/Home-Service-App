@@ -26,10 +26,41 @@ export const ServiceSummary = ({ counters, subServiceList, inputValues }) => {
             }
           })}
         </div>
-        {inputValues.date && (
-          <div>
-            <p className="text-gray-700">วันที่</p>
-            <p className="font-semibold">{inputValues.date}</p>
+        {(inputValues.date ||
+          inputValues.useTime ||
+          inputValues.address ||
+          inputValues.subdistrict ||
+          inputValues.district ||
+          inputValues.province) && (
+          <div className="h-auto flex flex-col border-b border-gray-300 py-4 text-sm">
+            {inputValues.date && (
+              <div className="flex justify-between">
+                <p className="text-gray-700 font-light">วันที่</p>
+                <p className="">{inputValues.date}</p>
+              </div>
+            )}
+            {inputValues.useTime && (
+              <div className="flex justify-between">
+                <p className="text-gray-700 font-light">เวลา</p>
+                <p className="">{inputValues.useTime}</p>
+              </div>
+            )}
+            {(inputValues.address ||
+              inputValues.subdistrict ||
+              inputValues.district ||
+              inputValues.province) && (
+              <div className="flex justify-between">
+                <p className="text-gray-700 font-light">สถานที่</p>
+                <div className="flex flex-col items-end">
+                  <p className="">
+                    {inputValues.address} {inputValues.subdistrict}
+                  </p>
+                  <p className="">
+                    {inputValues.district} {inputValues.province}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         )}
         <div className="flex justify-between py-4">

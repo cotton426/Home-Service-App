@@ -3,10 +3,11 @@ import { Formik, Form, Field, ErrorMessage, useFormikContext } from "formik";
 import * as Yup from "yup";
 import { TimePicker } from "antd";
 
-const AutoSubmit = () => {
+const AutoSubmit = ({ inputValues, setInputValues }) => {
   // Grab values and submitForm from context
   const { values, submitForm } = useFormikContext();
   useEffect(() => {
+    setInputValues(values);
     // Submit the form imperatively as an effect as soon as form values.token are 6 digits long
     // console.log(Object.values(values).includes(""));
     // console.log(Object.values(values));
@@ -93,7 +94,6 @@ const DetailInformation = ({ inputValues, setInputValues, handleChange }) => {
         initialValues={inputValues}
         validationSchema={validationSchema}
         onSubmit={(values) => {
-          console.log("work");
           console.log(values);
           setInputValues(values);
         }}
@@ -104,7 +104,9 @@ const DetailInformation = ({ inputValues, setInputValues, handleChange }) => {
               <div key={field.name} className="flex flex-col">
                 <label htmlFor={field.name}>
                   {field.label}
-                  <label className="text-red">*</label>
+                  {field.name !== "note" && (
+                    <label className="text-red">*</label>
+                  )}
                 </label>
                 {field.component === TimePicker ? (
                   <Field
@@ -116,12 +118,15 @@ const DetailInformation = ({ inputValues, setInputValues, handleChange }) => {
                     component={TimePicker}
                     placeholder={field.placeholder}
                     hideDisabledOptions={true}
-                    allowClear={false}
-                    clearIcon={false}
+                    // allowClear={false}
+                    // clearIcon={false}
                     onChange={(time) => {
                       setInputValues({ ...inputValues, time: time });
                       setFieldValue("time", time);
-                      setFieldValue("useTime", time.format("HH:mm"));
+                      setFieldValue(
+                        "useTime",
+                        time ? time.format("HH:mm") : ""
+                      );
                     }}
                     disabledHours={() => {
                       const disabledHours = [];
@@ -162,7 +167,10 @@ const DetailInformation = ({ inputValues, setInputValues, handleChange }) => {
                 />
               </div>
             ))}
-            <AutoSubmit />
+            <AutoSubmit
+              inputValues={inputValues}
+              setInputValues={setInputValues}
+            />
           </Form>
         )}
       </Formik>
