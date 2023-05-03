@@ -67,7 +67,6 @@ const useData = () => {
     try {
       const response = await axios.get("http://localhost:4000/data/services");
       setItems(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -152,11 +151,19 @@ const useData = () => {
       navigate("/services");
     } catch (error) {
       console.error(error);
-      return error.response.data.error
+      return error.response.data.error;
     }
-    
   };
 
+  const getPromotions = async () => {
+    try {
+      const response = await axios.get("http://localhost:4000/data/promotions");
+      setItems(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return {
     items,
@@ -172,6 +179,7 @@ const useData = () => {
     editService,
     deleteService,
     addPayment,
+    getPromotions,
   };
 };
 

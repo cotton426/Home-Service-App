@@ -172,7 +172,6 @@ dataRouter.get("/services/:id", async (req, res) => {
     .from("sub_services")
     .select(`*,services(*)`)
     .eq("service_id", serviceId);
-    
 
   if (error) {
     // Handle the error
@@ -299,6 +298,15 @@ dataRouter.delete("/services/:id", async (req, res) => {
   }
 
   return res.json(service);
+});
+
+dataRouter.get("/promotions", async (req, res) => {
+  const { data: promotions, error } = await supabase
+    .from("promotions")
+    .select("*")
+    .order("updated_at", { ascending: false });
+
+  return res.json(promotions);
 });
 
 export default dataRouter;
