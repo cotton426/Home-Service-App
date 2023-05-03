@@ -71,7 +71,7 @@ userRouter.get("/services", async (req, res) => {
 });
 
 userRouter.post("/orders", async (req, res) => {
-  console.log("Request body:", req.body); 
+  console.log("Request body:", req.body);  
   const {
     profile_id,
     status,
@@ -159,5 +159,6 @@ userRouter.get("/orders", async (req, res) => {
 
   return res.json(data);
 });
+
 
 export default userRouter;

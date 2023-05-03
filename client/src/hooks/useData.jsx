@@ -87,6 +87,7 @@ const useData = () => {
     } catch (error) {
       console.error(error);
       return error.response.data.error;
+      return error.response.data.error;
     }
   };
 
@@ -122,6 +123,7 @@ const useData = () => {
     } catch (error) {
       console.error(error);
       return error.response.data.error;
+      return error.response.data.error;
     }
   };
 
@@ -155,7 +157,7 @@ const useData = () => {
       return error.response.data.error;
     }
   };
-
+  
   const getPromotions = async () => {
     try {
       const response = await axios.get("http://localhost:4000/data/promotions");
@@ -164,7 +166,23 @@ const useData = () => {
       console.error(error);
     }
   };
-
+  const addPromotion = async (promotionData) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/data/promotions",
+        promotionData
+      );
+      return { success: true, message: "Promotion added successfully!" };
+    } catch (error) {
+      console.error(error);
+      return {
+        success: false,
+        message: "Failed to add the promotion. Please try again.",
+      };
+    } finally {
+      navigate("/categories");
+    }
+  };
   const deletePromotion = async (id) => {
     try {
       console.log(id);
@@ -191,6 +209,7 @@ const useData = () => {
     editService,
     deleteService,
     addPayment,
+    addPromotion,
     getPromotions,
     deletePromotion,
   };
