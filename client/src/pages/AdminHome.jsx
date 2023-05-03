@@ -9,9 +9,10 @@ import {
   ViewCategory,
 } from "../components/AdminCategory";
 import ServiceTable from "../components/ServicesTable";
-import EditService,{ViewService} from "../components/EditService";
+import EditService, { ViewService } from "../components/EditService";
 // import ViewService from "../components/ViewService";
 import AddOnList from "../components/AddOnList";
+import PromotionTable from "../components/PromotionTable";
 
 const AdminHomepage = () => {
   return (
@@ -24,6 +25,7 @@ const AdminHomepage = () => {
         className="bg-BG h-full w-full text-white"
       >
         <Routes>
+          <Route path="/promotions" element={<PromotionTable />} />
           <Route
             path="/categories"
             element={

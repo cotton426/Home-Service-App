@@ -4,13 +4,10 @@ import * as Yup from "yup";
 import { TimePicker } from "antd";
 
 const AutoSubmit = ({ inputValues, setInputValues }) => {
-  // Grab values and submitForm from context
   const { values, submitForm } = useFormikContext();
   useEffect(() => {
     setInputValues(values);
-    // Submit the form imperatively as an effect as soon as form values.token are 6 digits long
-    // console.log(Object.values(values).includes(""));
-    // console.log(Object.values(values));
+
     if (
       values.date !== "" &&
       values.time !== "" &&
