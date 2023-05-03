@@ -78,6 +78,31 @@ const ServiceDetail = () => {
   const [page, setPage] = useState("select-page");
   const [cart, setCart] = useState([]);
   const [counters, setCounters] = useState([]);
+
+  // const [showPromptpay, setShowPromptpay] = useState(false);
+  // const [showCreditCard, setShowCreditCard] = useState(false);
+
+
+  const [initialValues, setInitialValues] = useState({
+    creditNumber: "",
+    creditName: "",
+    dateOfExpiry: "",
+    code: "",
+    PromotionCode: "",
+  });
+
+  const handleChange = (event) => {
+    const fieldName = event.target.name;
+    const fieldValue = event.target.value;
+    setInitialValues({ ...initialValues, [fieldName]:fieldValue})
+  }
+
+  // const handlePayment =(item)=> {
+  //   item ? setShowCreditCard(true): setShowPromptpay(true) ;
+  // }
+
+
+
   const [inputValues, setInputValues] = useState({
     date: "",
     time: "",
@@ -159,7 +184,15 @@ const ServiceDetail = () => {
             // handleChange={handleChange}
           />
         ) : null}
-        {page === "payment-page" ? <ServicePayment /> : null}
+        {page === "payment-page" ? 
+        <ServicePayment 
+          initialValues = {initialValues}
+          setInitialValues = {setInitialValues}
+          handleChange = {handleChange}
+          // showPromptpay = {showPromptpay}
+          // showCreditCard = {showCreditCard}
+          // handlePayment = {handlePayment}
+        /> : null}
         <ServiceSummary
           subServiceList={itemObjects.subServiceList}
           counters={counters}

@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
 import * as Yup from "yup";
-import { RxDragHandleDots2 } from "react-icons/rx";
+import { HiOutlineTrash } from "react-icons/hi";
 import SelectCategory from "./SelectCategory";
 import UploadImage from "./UploadImage";
 import useData from "../hooks/useData";
 import { EditServiceNavbar } from "./AdminNavbar";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { DetailServiceNavbar } from "./AdminNavbar";
 import { formatTime } from "../utils/timeUtils";
+import AlertConfirmation from "./AlertConfirmation";
 
 function EditService({ view }) {
   const param = useParams();
+  const navigate = useNavigate()
 
   const [initialValues, setInitialValues] = useState({
     name: "",
@@ -63,7 +65,10 @@ function EditService({ view }) {
       ),
   });
 
-  const { getService, itemObjects, editService, items } = useData();
+  const { getService, itemObjects, editService, deleteService } = useData();
+
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
 
   useEffect(() => {
     getService(param.service_id);
@@ -73,7 +78,28 @@ function EditService({ view }) {
     setInitialValues(itemObjects);
   }, [itemObjects]);
 
+  const handleDelete = () => {
+    setShowDeleteConfirmation(true);
+    setItemToDelete(itemObjects);
+  };
+
+  const confirmDelete = () => {
+    // Handle delete logic here
+    console.log("Delete item", itemToDelete);
+    setShowDeleteConfirmation(false);
+    setItemToDelete(null);
+    deleteService(itemToDelete.service_id);
+    navigate("/services")
+  };
+
+
+  const cancelDelete = () => {
+    setShowDeleteConfirmation(false);
+    setItemToDelete(null);
+  };
+
   console.log(itemObjects);
+
   const onSubmit = async (values, { setSubmitting, setErrors }) => {
     const formData = new FormData();
     formData.append("name", values.name);
@@ -343,10 +369,29 @@ function EditService({ view }) {
                     </div>
                   </div>
                 </div>
+                    {view ? null : (
+                  <div className="flex text-gray-600 py-5 justify-end ">
+                    <div
+                      className="flex items-center hover:cursor-pointer"
+                      onClick={handleDelete}
+                    >
+                      <HiOutlineTrash className="scale-110 mr-3" />
+
+                      <span className="underline font-medium">ลบบริการ</span>
+                    </div>
+                  </div>
+                )}
               </div>
             </Form>
           )}
         </Formik>
+      )}
+      {showDeleteConfirmation && (
+        <AlertConfirmation
+          itemToDelete={itemToDelete}
+          confirmDelete={confirmDelete}
+          cancelDelete={cancelDelete}
+        />
       )}
     </>
   );

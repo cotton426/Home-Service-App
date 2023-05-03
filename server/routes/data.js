@@ -102,7 +102,7 @@ dataRouter.get("/services", async (req, res) => {
 
 dataRouter.post("/services", upload.single("image"), async (req, res) => {
   const decodedFileName = decodeURIComponent(req.file.originalname);
-  log;
+
   const { serviceName, category_id, subServiceList } = req.body;
   console.log({ serviceName, category_id, subServiceList });
   const { data: service, error: alreadyExist } = await supabase
