@@ -5,8 +5,9 @@ import ProgressBar from "../components/ProgressBar";
 import AddOnList from "../components/AddOnList";
 import DetailInformation from "../components/DetailInformation";
 import ServicePayment from "../components/ServicePayment";
+// import from leng component
 
-export const ServiceSummary = ({ counters, subServiceList }) => {
+export const ServiceSummary = ({ counters, subServiceList, inputValues }) => {
   let totalPrice = 0;
   return (
     <>
@@ -25,6 +26,43 @@ export const ServiceSummary = ({ counters, subServiceList }) => {
             }
           })}
         </div>
+        {(inputValues.date ||
+          inputValues.useTime ||
+          inputValues.address ||
+          inputValues.subdistrict ||
+          inputValues.district ||
+          inputValues.province) && (
+          <div className="h-auto flex flex-col border-b border-gray-300 py-4 text-sm">
+            {inputValues.date && (
+              <div className="flex justify-between">
+                <p className="text-gray-700 font-light">วันที่</p>
+                <p className="">{inputValues.date}</p>
+              </div>
+            )}
+            {inputValues.useTime && (
+              <div className="flex justify-between">
+                <p className="text-gray-700 font-light">เวลา</p>
+                <p className="">{inputValues.useTime}</p>
+              </div>
+            )}
+            {(inputValues.address ||
+              inputValues.subdistrict ||
+              inputValues.district ||
+              inputValues.province) && (
+              <div className="flex justify-between">
+                <p className="text-gray-700 font-light">สถานที่</p>
+                <div className="flex flex-col items-end">
+                  <p className="">
+                    {inputValues.address} {inputValues.subdistrict}
+                  </p>
+                  <p className="">
+                    {inputValues.district} {inputValues.province}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
         <div className="flex justify-between py-4">
           <p className="text-gray-700">รวม</p>
           <p className="font-semibold">{totalPrice} ฿</p>
@@ -37,10 +75,27 @@ export const ServiceSummary = ({ counters, subServiceList }) => {
 const ServiceDetail = () => {
   const params = useParams();
   const { itemObjects, getService } = useData();
-  const [page, setPage] = useState("payment-page");
+  const [page, setPage] = useState("select-page");
   const [cart, setCart] = useState([]);
   const [counters, setCounters] = useState([]);
-  console.log(counters);
+  const [inputValues, setInputValues] = useState({
+    date: "",
+    time: "",
+    address: "",
+    subdistrict: "",
+    district: "",
+    province: "",
+    note: "",
+    useTime: "",
+  });
+
+  // const handleChange = (event) => {
+  //   const fieldName = event.target.name;
+  //   const fieldValue = event.target.value;
+  //   setInputValues({ ...inputValues, [fieldName]: fieldValue });
+  //   // handleSubmit();
+  //   console.log(inputValues);
+  // };
   const navigate = useNavigate();
   useEffect(() => {
     getService(params.service_id);
@@ -64,6 +119,7 @@ const ServiceDetail = () => {
       navigate("/service");
     }
   };
+
   return (
     <>
       <div className="bg-BG relative w-full -z-20">
@@ -87,6 +143,7 @@ const ServiceDetail = () => {
         </div>
         {/* real div for show data */}
       </div>
+
       <div className="w-full px-[10%] pt-[1%] pb-[5%] bg-BG flex justify-between">
         {page === "select-page" ? (
           <AddOnList
@@ -95,15 +152,29 @@ const ServiceDetail = () => {
             setCounters={setCounters}
           />
         ) : null}
-        {page === "address-page" ? <DetailInformation /> : null}
+        {page === "address-page" ? (
+          <DetailInformation
+            inputValues={inputValues}
+            setInputValues={setInputValues}
+            // handleChange={handleChange}
+          />
+        ) : null}
         {page === "payment-page" ? <ServicePayment /> : null}
         <ServiceSummary
           subServiceList={itemObjects.subServiceList}
           counters={counters}
+          inputValues={inputValues}
         />
       </div>
-      <footer className="w-full bg-white px-[10%] py-4 flex justify-between">
-        <button className={`btn-secondary`} onClick={handleClickBack}>
+      <div className="w-full bg-white px-[10%] py-4 flex justify-between">
+        <button
+          type="submit"
+          form="formik-form"
+          className={`btn-secondary`}
+          onClick={() => {
+            handleClickBack();
+          }}
+        >
           {"< "} <span className="ml-2"> ย้อนกลับ</span>
         </button>
         <button
@@ -113,7 +184,7 @@ const ServiceDetail = () => {
         >
           <span className="mr-2">ดำเนินการต่อ </span> {" >"}
         </button>
-      </footer>
+      </div>
     </>
   );
 };
