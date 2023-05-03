@@ -34,9 +34,10 @@ function AddService() {
       .test(
         "fileType",
         "Unsupported file type",
-        (value) => value && ["image/jpeg", "image/png" ,"image/jpg"].includes(value.type)
+        (value) =>
+          value && ["image/jpeg", "image/png", "image/jpg"].includes(value.type)
       ),
-      subServiceList: Yup.array()
+    subServiceList: Yup.array()
       .of(
         Yup.object().shape({
           name: Yup.string().required("กรุณาใส่ชื่อบริการย่อย"),
@@ -68,7 +69,7 @@ function AddService() {
 
     try {
       const result = await addService(formData);
-      if(result === "This Service is already exist"){
+      if (result === "This Service is already exist") {
         setErrors({
           category: "หมวดหมู่ที่ท่านเลือกมีบริการนี้แล้ว",
         });
@@ -215,19 +216,19 @@ function AddService() {
                               </div>
 
                               <div className="">
-                              {values.subServiceList.length > 1 ? (<button
-                                  type="button"
-                                  className="text-gray-400 text-base font-medium underline ml-5 mt-10"
-                                  onClick={() => 
-                                    {if(values.subServiceList.length > 1) {
-                                      remove(index)
+                                {values.subServiceList.length > 1 ? (
+                                  <button
+                                    type="button"
+                                    className="text-gray-400 text-base font-medium underline ml-5 mt-10"
+                                    onClick={() => {
+                                      if (values.subServiceList.length > 1) {
+                                        remove(index);
+                                      }
                                     }}
-                                    }
-                                >
-                                  ลบรายการ
-                                </button>) :
-                                null
-                                }
+                                  >
+                                    ลบรายการ
+                                  </button>
+                                ) : null}
                               </div>
                             </div>
                           ))}
@@ -244,12 +245,7 @@ function AddService() {
                           >
                             เพิ่มรายการ +
                           </button>
-                          {/* <ErrorMessage
-                                    name="subServiceList"
-                                    component="div"
-                                    className="text-red"
-                                  /> */}
-                      </div>
+                        </div>
                       )}
                     </FieldArray>
                   </div>
