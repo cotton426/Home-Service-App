@@ -136,7 +136,7 @@ export const EditServiceNavbar = () => (
   <Navbar
     title="บริการย่อย"
     subTitle="บริการ"
-    backLink="/services"
+    // backLink="/services"
     leftButton={
       <Link to="/services">
         <button className="btn-primary">ยกเลิก</button>
@@ -150,13 +150,13 @@ export const EditServiceNavbar = () => (
   />
 );
 
-export const EditCategoryNavbar = ({ onConfirm }) => {
+export const EditCategoryNavbar = ({ onConfirm,title }) => {
   const navigate = useNavigate();
   return (
     <Navbar
-      title="บริการย่อย"
+      title={ title }
       subTitle="หมวดหมู่"
-      backLink="/categories"
+      // backLink="/categories"
       leftButton={
         <button
           className="btn-primary"
@@ -175,11 +175,12 @@ export const EditCategoryNavbar = ({ onConfirm }) => {
     />
   );
 };
-export const DetailCategoryNavbar = () => {
+
+export const DetailCategoryNavbar = ({ title }) => {
   const param = useParams();
   return (
     <Navbar
-      title="แก้ไขหมวดหมู่ย่อย"
+      title={ title } 
       subTitle="หมวดหมู่"
       backLink="/categories"
       rightButton={
