@@ -328,4 +328,17 @@ dataRouter.get("/promotions", async (req, res) => {
   return res.json(promotions);
 });
 
+dataRouter.delete("/promotions/:id", async (req, res) => {
+  const promotionId = req.params.id;
+  const { data: promotions, error } = await supabase
+    .from("promotions")
+    .delete()
+    .eq("id", promotionId);
+  if (error) {
+    return res.status(400).json({ error: error.message });
+  }
+
+  return res.json(promotions);
+});
+
 export default dataRouter;

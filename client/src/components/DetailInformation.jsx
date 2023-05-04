@@ -81,16 +81,10 @@ const DetailInformation = ({ inputValues, setInputValues, handleChange }) => {
       type: "text",
       placeholder: "เลือกจังหวัด",
     },
-    {
-      label: "ระบุข้อมูลเพิ่มเติม",
-      name: "note",
-      type: "text",
-      placeholder: "กรุณาระบุข้อมูลเพิ่มเติม",
-    },
   ];
 
   return (
-    <div className="w-3/5 flex box p-4">
+    <div className="w-3/5 flex flex-col box p-4">
       <p className="pb-9">กรอกข้อมูล</p>
       <Formik
         initialValues={inputValues}
@@ -101,9 +95,12 @@ const DetailInformation = ({ inputValues, setInputValues, handleChange }) => {
         }}
       >
         {({ values, setFieldValue }) => (
-          <Form className="grid grid-cols-2 gap-4 mt-8">
+          <Form className="grid grid-cols-2 gap-4 ">
             {formFields.map((field, errors, touched) => (
-              <div key={field.name} className="flex flex-col">
+              <div
+                key={field.name}
+                className="flex flex-col w-[95%] ml-5 mr-5 "
+              >
                 <label htmlFor={field.name}>
                   {field.label}
                   {field.name !== "note" && (
@@ -119,6 +116,7 @@ const DetailInformation = ({ inputValues, setInputValues, handleChange }) => {
                     className="box h-11"
                     component={TimePicker}
                     placeholder={field.placeholder}
+                    placeholderTextColor="text-gray-700"
                     hideDisabledOptions={true}
                     // allowClear={false}
                     // clearIcon={false}
@@ -153,7 +151,7 @@ const DetailInformation = ({ inputValues, setInputValues, handleChange }) => {
                     type={field.type}
                     id={field.name}
                     name={field.name}
-                    className="input-default"
+                    className="input-default "
                     placeholder={field.placeholder}
                     {...(field.type === "date" && {
                       type: "date",
@@ -176,6 +174,17 @@ const DetailInformation = ({ inputValues, setInputValues, handleChange }) => {
           </Form>
         )}
       </Formik>
+      <label htmlFor="note" className="ml-5">
+        ระบุข้อมูลเพิ่มเติม
+      </label>
+      <div className="box h-24 ml-5 ">
+        <input
+          className="ml-2 w-[98%] px-3 focus:outline-none focus:border-transparent placeholder:text-gray-700 "
+          type="text"
+          as="textarea"
+          placeholder="กรุณาระบุข้อมูลเพิ่มเติม"
+        />
+      </div>
     </div>
   );
 };
