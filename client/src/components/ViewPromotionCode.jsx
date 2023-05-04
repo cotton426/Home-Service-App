@@ -6,51 +6,51 @@ import { useParams } from "react-router-dom";
 
 function ViewPromotionCode() {
 
-  const { getPromotion} = useData();
+  const { getPromotion,items,itemObjects,getPromotions} = useData();
 
   const param = useParams();
  
   useEffect(() => {
-    getPromotion(param.id);
+    getPromotions(param.id);
   }, []);
   
 
   console.log(items);
   console.log(itemObjects);
 
-  const viewPromoList = [
-    {
-      name: "Promotion Code",
-      value: "h"
-    },
-    {
-      name: "ประเภท",
-      value: items.type,
-    },
-    {
-      name: "ราคาที่ลด",
-      value: items.discount,
-    },
-    {
-      name: "โควต้าการใช้",
-      value: items.useable_quantity,
-    },
-    {
-      name: "วันหมดอายุ",
-      value: items.exp_date,
-    },
-  ];
+  // const viewPromoList = [
+  //   {
+  //     name: "Promotion Code",
+  //     value: "h"
+  //   },
+  //   {
+  //     name: "ประเภท",
+  //     value: items.type,
+  //   },
+  //   {
+  //     name: "ราคาที่ลด",
+  //     value: items.discount,
+  //   },
+  //   {
+  //     name: "โควต้าการใช้",
+  //     value: items.useable_quantity,
+  //   },
+  //   {
+  //     name: "วันหมดอายุ",
+  //     value: items.exp_date,
+  //   },
+  // ];
 
 
   return (
     <div className=" bg-BG h-full w-full p-[5%] flex flex-col justify-center items-center ">
       <div className=" box w-full flex flex-col justify-center items-start p-10">
         <div className="flex flex-col justify-center items-start gap-9">
-          {viewPromoList.map((item, index) => {
+          {items.map((item, index) => {
             return (
               <div key={index} className="flex flex-row ">
-                <h2 className="w-[250px] text-gray-700">{item.name}</h2>
-                <p className="text-black">{item.value}</p>
+                <h2 className="w-[250px] text-gray-700">{item.id}</h2>
+                <p className="text-black">{item.promotion_code}</p>
               </div>
             );
           })}
