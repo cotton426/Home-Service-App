@@ -45,7 +45,7 @@ const TableRow = ({
         <>
           <td className="py-3 px-4">{item.type}</td>
           <td className="py-3 px-4 ">
-            {item.quantity_used}/{item.usable_quantity}
+            {item.quantity_used}/{item.useable_quantity}
           </td>
           <td className="py-3 px-4">
             -{item.discount.toFixed(2)}
@@ -112,6 +112,7 @@ const TableOfContents = ({ service, promotion }) => {
     getPromotions,
     deleteCategory,
     deleteService,
+    deletePromotion,
   } = useData();
   const navigate = useNavigate();
 
@@ -136,7 +137,9 @@ const TableOfContents = ({ service, promotion }) => {
     console.log("Delete item", itemToDelete);
     setShowDeleteConfirmation(false);
     setItemToDelete(null);
-    service
+    promotion
+      ? deletePromotion(itemToDelete.id)
+      : service
       ? deleteService(itemToDelete.service_id)
       : deleteCategory(itemToDelete.category_id);
   };

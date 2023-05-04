@@ -160,7 +160,18 @@ const useData = () => {
     try {
       const response = await axios.get("http://localhost:4000/data/promotions");
       setItems(response.data);
-      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const deletePromotion = async (id) => {
+    try {
+      console.log(id);
+      const response = await axios.delete(
+        `http://localhost:4000/data/promotions/${id}`
+      );
+      navigate("/promotions");
     } catch (error) {
       console.error(error);
     }
@@ -181,6 +192,7 @@ const useData = () => {
     deleteService,
     addPayment,
     getPromotions,
+    deletePromotion,
   };
 };
 
