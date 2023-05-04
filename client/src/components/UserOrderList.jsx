@@ -3,7 +3,7 @@ import { BiUser } from "react-icons/bi";
 import { TiClipboard } from "react-icons/ti";
 import Footer from "./Footer";
 import { BiCalendarEvent, BiUserCircle } from "react-icons/bi";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useUser from "../hooks/useUser";
 import { useAuth } from "../contexts/auth";
 import { formatTimeBooking, formatDateBooking } from "../utils/timeUtils";
@@ -11,13 +11,16 @@ import { formatTimeBooking, formatDateBooking } from "../utils/timeUtils";
 export function UserOrderList() {
   const { items, getOrders } = useUser();
   const { user } = useAuth();
+  const [loading, setLoading] = useState(true);
 
   const profile_id = user.profiles.length > 0 ? user.profiles[0].id : null;
   console.log(profile_id);
 
   useEffect(() => {
     if (profile_id) {
-      getOrders(profile_id);
+      getOrders(profile_id).then(() => setLoading(false));
+    } else {
+      setLoading(false);
     }
   }, [profile_id, getOrders]);
 
@@ -43,7 +46,7 @@ export function UserOrderList() {
             <CustomerOrderSidebar />
           </div>
           <div id="box-orders" className="pl-[5%] w-full">
-            <CustomerOrderBox orders={items} />
+            <CustomerOrderBox orders={items} loading={loading} />
           </div>
         </div>
       </div>
@@ -55,7 +58,11 @@ export function UserOrderList() {
   );
 }
 
-const CustomerOrderBox = ({ orders }) => {
+const CustomerOrderBox = ({ orders, loading }) => {
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   if (orders.length === 0) {
     return <div>No orders found.</div>;
   }
@@ -68,14 +75,13 @@ const CustomerOrderBox = ({ orders }) => {
     </>
   );
 };
-
 const OrderCard = ({ order }) => {
   const {
     order_code,
     booking_date,
     booking_time,
     total_price,
-    // Add other properties from the order object you want to display
+    order_items,
   } = order;
 
   return (
@@ -120,7 +126,11 @@ const OrderCard = ({ order }) => {
               <span className="flex flex-row items-center pt-6">รายการ</span>
             </div>
             <div id="staff">
-              <span className="flex flex-row items-center">• sub-services</span>
+              {order_items.map((item, index) => (
+                <span key={index} className="flex flex-row items-center">
+                  • {item.sub_services.name}
+                </span>
+              ))}
             </div>
           </div>
           <div id="total-price" className="w-[30%] flex justify-end items-end">

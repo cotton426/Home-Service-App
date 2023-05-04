@@ -71,7 +71,7 @@ userRouter.get("/services", async (req, res) => {
 });
 
 userRouter.post("/orders", async (req, res) => {
-  console.log("Request body:", req.body);  
+  console.log("Request body:", req.body);
   const {
     profile_id,
     status,
@@ -178,7 +178,7 @@ userRouter.get("/orders", async (req, res) => {
 
   const { data, error } = await supabase
     .from("orders")
-    .select("*")
+    .select("*, order_items(*, sub_services(name))")
     .filter("profile_id", "eq", profile_id);
 
   if (error) {
@@ -188,6 +188,5 @@ userRouter.get("/orders", async (req, res) => {
 
   return res.json(data);
 });
-
 
 export default userRouter;
