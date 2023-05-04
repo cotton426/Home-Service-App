@@ -5,6 +5,8 @@ import ProgressBar from "../components/ProgressBar";
 import AddOnList from "../components/AddOnList";
 import DetailInformation from "../components/DetailInformation";
 import ServicePayment from "../components/ServicePayment";
+import useUser from "../hooks/useUser";
+import { string } from "yup";
 // import from leng component
 
 export const ServiceSummary = ({
@@ -84,6 +86,8 @@ const ServiceDetail = () => {
   const [page, setPage] = useState("select-page");
   const [cart, setCart] = useState([]);
   const [counters, setCounters] = useState([]);
+
+  const {addOrder} =useUser()
 
   // const [showPromptpay, setShowPromptpay] = useState(false);
   // const [showCreditCard, setShowCreditCard] = useState(false);
@@ -229,6 +233,21 @@ const ServiceDetail = () => {
           }
           onClick={() => {
             if (page === "payment-page") {
+              const totalPrice = cart.reduce((sum, item) => sum + item.price*item.quantity,0)
+              const profiles = localStorage.getItem("userData")
+              const profile = JSON.parse(profiles)
+              const profile_id = profile.profiles[0].id
+              console.log(profile);
+              console.log(profile_id);
+              const orderItems = {
+                cart,
+                price:totalPrice,
+                ...inputValues,
+                profile_id,
+                status:"On Process",
+              };
+              console.log(orderItems);
+              addOrder(orderItems)
               console.log(cart, inputValues, initialValues);
             }
 

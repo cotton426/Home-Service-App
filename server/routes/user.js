@@ -75,14 +75,13 @@ userRouter.post("/orders", async (req, res) => {
   const {
     profile_id,
     status,
-    total_price,
+    price: total_price,
     address,
-    sub_district,
+    date : booking_date,
+    useTime : booking_time,
+    subdistrict: sub_district,
     district,
-    province,
-    booking_date,
-    booking_time,
-    staff_id,
+    province
   } = req.body;
 
   console.log("data:", {
@@ -112,8 +111,8 @@ userRouter.post("/orders", async (req, res) => {
   console.log("Orders count for today:", orderCountToday);
 
   // Generate unique order code
-  const orderCode = generateOrderCode(orderCountToday);
-
+  const orderCode = generateOrderCode(orderCountToday,booking_date);
+  const staff_id = "1"
   // Save the order to the database
   const { data: newOrder, error: newOrderError } = await supabase
     .from("orders")
@@ -130,6 +129,9 @@ userRouter.post("/orders", async (req, res) => {
         booking_date,
         booking_time,
         staff_id,
+        sub_district,
+    district,
+    province
       },
     ]);
 

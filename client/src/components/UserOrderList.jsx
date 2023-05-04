@@ -13,6 +13,7 @@ export function UserOrderList() {
   const { user } = useAuth();
 
   const profile_id = user.profiles.length > 0 ? user.profiles[0].id : null;
+  console.log(profile_id);
 
   useEffect(() => {
     if (profile_id) {
