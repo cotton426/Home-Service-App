@@ -3,6 +3,7 @@ import { Formik, Form, Field, ErrorMessage, useFormikContext } from "formik";
 import * as Yup from "yup";
 import { TimePicker } from "antd";
 
+
 const AutoSubmit = ({ inputValues, setInputValues }) => {
   const { values, submitForm } = useFormikContext();
   useEffect(() => {
@@ -29,12 +30,10 @@ const DetailInformation = ({ inputValues, setInputValues, handleChange }) => {
   const today = new Date();
   const tomorrow = new Date();
   tomorrow.setDate(today.getDate() + 1);
-  tomorrow.setHours(today.getHours());
-  tomorrow.setMinutes(today.getMinutes());
 
   const validationSchema = Yup.object().shape({
     date: Yup.date()
-      .min(tomorrow, "กรุณาเลือกวันถัดไป")
+      .min(today, "กรุณาเลือกวันถัดไป")
       .required("กรุณากรอกวันที่"),
     time: Yup.string().required("กรุณากรอกเวลา"),
     address: Yup.string().required("กรุณากรอกที่อยู่"),

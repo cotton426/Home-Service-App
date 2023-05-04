@@ -5,8 +5,8 @@ import ProgressBar from "../components/ProgressBar";
 import AddOnList from "../components/AddOnList";
 import DetailInformation from "../components/DetailInformation";
 import ServicePayment from "../components/ServicePayment";
+import axios from "axios";
 import useUser from "../hooks/useUser";
-import { string } from "yup";
 // import from leng component
 
 export const ServiceSummary = ({
@@ -91,6 +91,34 @@ const ServiceDetail = () => {
 
   // const [showPromptpay, setShowPromptpay] = useState(false);
   // const [showCreditCard, setShowCreditCard] = useState(false);
+  const handlePayment = async () => {
+    try {
+      const response = await axios.post(
+        "https://vault.omise.co/tokens",
+        {
+          card: {
+            name: initialValues.creditName,
+            number: initialValues.creditNumber,
+            expiration_month: initialValues.dateOfExpiry.split(`/`)[0],
+            expiration_year: `20${initialValues.dateOfExpiry.split(`/`)[1]}`,
+            security_code: initialValues.code,
+          },
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Basic " + btoa("pkey_test_5vnsm9t1c9u17nytvhp"),
+          },
+        }
+      );
+      console.log(response.data);
+      // Use the token returned by Omise to create a charge or save the card to a customer
+    } catch {
+      (error) => {
+        console.error(error);
+      };
+    }
+  };
 
   const [initialValues, setInitialValues] = useState({
     creditNumber: "",
@@ -250,7 +278,7 @@ const ServiceDetail = () => {
               addOrder(orderItems)
               console.log(cart, inputValues, initialValues);
             }
-
+            handlePayment();
             handleClickNext();
           }}
         >
