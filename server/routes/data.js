@@ -360,12 +360,12 @@ dataRouter.post("/promotions", async (req, res) => {
     .insert([
       {
         promotion_code: promotionCode,
-        useable_quantity: usageLimit, 
+        useable_quantity: usageLimit,
         quantity_used: 0,
         exp_date: expirationDate,
         exp_time: expirationTime,
         type,
-        discount: type === "fixed" ? fixedAmount : percentage,
+        discount: type === "Fixed" ? fixedAmount : percentage,
       },
     ]);
 
@@ -377,6 +377,69 @@ dataRouter.post("/promotions", async (req, res) => {
   console.log("New promotion:", newPromotion);
 
   return res.json(newPromotion);
+});
+
+dataRouter.get("/promotions/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const { data: promotion, error } = await supabase
+      .from("promotions")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      console.error("Error fetching promotion:", error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    console.log("Fetched promotion:", promotion);
+    return res.json(promotion);
+  } catch (error) {
+    console.error("Error fetching promotion:", error);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+
+dataRouter.put("/promotions/:id", async (req, res) => {
+  const { id } = req.params;
+  const {
+    promotionCode,
+    type,
+    fixedAmount,
+    percentage,
+    usageLimit,
+    expirationDate,
+    expirationTime,
+  } = req.body;
+
+  try {
+    const { data: updatedPromotion, error } = await supabase
+      .from("promotions")
+      .update({
+        promotion_code: promotionCode,
+        useable_quantity: usageLimit,
+        quantity_used: 0,
+        exp_date: expirationDate,
+        exp_time: expirationTime,
+        type,
+        discount: type === "Fixed" ? fixedAmount : percentage,
+      })
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error updating promotion:", error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    console.log("Updated promotion:", updatedPromotion);
+    return res.json(updatedPromotion);
+  } catch (error) {
+    console.error("Error updating promotion:", error);
+    return res.status(500).json({ error: error.message });
+  }
 });
 
 dataRouter.get("/promotions", async (req, res) => {

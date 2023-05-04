@@ -6,9 +6,9 @@ import useData from "../hooks/useData";
 
 const ClearDisabledInput = ({ type, setFieldValue }) => {
   useEffect(() => {
-    if (type === "fixed") {
+    if (type === "Fixed") {
       setFieldValue("percentage", "");
-    } else if (type === "percent") {
+    } else if (type === "Percent") {
       setFieldValue("fixedAmount", "");
     }
   }, [type, setFieldValue]);
@@ -26,14 +26,14 @@ export const AddPromotion = () => {
       .required("Required"),
     type: Yup.string().required("Required"),
     fixedAmount: Yup.lazy((value, schema) =>
-      schema.parent.type === "fixed"
+      schema.parent.type === "Fixed"
         ? Yup.number()
             .min(0, "Amount should be greater than or equal to 0")
             .required("Fixed amount is required")
         : Yup.number().min(0, "Amount should be greater than or equal to 0")
     ),
     percentage: Yup.lazy((value, schema) =>
-      schema.parent.type === "percent"
+      schema.parent.type === "Percent"
         ? Yup.number()
             .min(0, "Percentage should be greater than or equal to 0")
             .max(100, "Percentage should be less than or equal to 100")
@@ -54,7 +54,7 @@ export const AddPromotion = () => {
       <Formik
         initialValues={{
           promotionCode: "",
-          type: "fixed",
+          type: "Fixed",
           fixedAmount: "",
           percentage: "",
           usageLimit: "",
@@ -96,13 +96,17 @@ export const AddPromotion = () => {
                 <div className="m-[5%] px-6 py-10 bg-white w-[100%]">
                   <Form onSubmit={handleSubmit}>
                     <div className="flex pb-10">
-                      <label className="mb-2 w-[253px]">Promotion Code:</label>
+                      <label className="mb-2 w-[253px]">
+                        Promotion Code<span className="text-red">*</span>
+                      </label>
                       <div>
                         <Field
+                          // as="textarea"
                           type="text"
                           name="promotionCode"
                           className="input-default w-[400px]"
                         />
+
                         <ErrorMessage
                           name="promotionCode"
                           component="div"
@@ -112,30 +116,45 @@ export const AddPromotion = () => {
                     </div>
 
                     <div className="mb-2 flex items-start pb-10">
-                      <label className="pt-[15px] w-[253px]">Type:</label>
+                      <label className="pt-[15px] w-[253px]">
+                        {" "}
+                        ประเภท<span className="text-red">*</span>
+                      </label>
                       <div>
                         <div className="flex pb-3">
                           <label
                             className={`ml-2 w-[100px] ${
-                              values.type === "percent" ? "text-gray-300" : ""
+                              values.type === "Percent" ? "text-gray-300" : ""
                             }`}
                           >
                             <Field
                               type="radio"
                               name="type"
                               className="mr-3"
-                              value="fixed"
-                              checked={values.type === "fixed"}
-                              onChange={() => setFieldValue("type", "fixed")}
+                              value="Fixed"
+                              checked={values.type === "Fixed"}
+                              onChange={() => setFieldValue("type", "Fixed")}
                             />
                             Fixed
                           </label>
-                          <Field
-                            type="number"
-                            name="fixedAmount"
-                            className="input-default"
-                            disabled={values.type === "percent"} // Disable when type is 'percent'
-                          />
+
+                          <div className="relative ">
+                            <Field
+                              type="number"
+                              name="fixedAmount"
+                              className="input-default"
+                              disabled={values.type === "Percent"}
+                            />
+                            {values.type === "Percent" ? (
+                              <span className="absolute z-1000 right-3 top-2 w-5 pl-2 pt-0.5 h-7  bg-gray-200 text-gray-500 ">
+                                ฿
+                              </span>
+                            ) : (
+                              <span className="absolute z-1000 right-3 top-2 w-5 pl-2 pt-0.5 h-7  bg-white text-gray-500 ">
+                                ฿
+                              </span>
+                            )}
+                          </div>
                           <ErrorMessage
                             name="fixedAmount"
                             component="div"
@@ -145,25 +164,37 @@ export const AddPromotion = () => {
                         <div className="flex">
                           <label
                             className={`ml-2 w-[100px] ${
-                              values.type === "fixed" ? "text-gray-300" : ""
+                              values.type === "Fixed" ? "text-gray-300" : ""
                             }`}
                           >
                             <Field
                               type="radio"
                               name="type"
                               className="mr-3"
-                              value="percent"
-                              checked={values.type === "percent"}
-                              onChange={() => setFieldValue("type", "percent")}
+                              value="Percent"
+                              checked={values.type === "Percent"}
+                              onChange={() => setFieldValue("type", "Percent")}
                             />
                             Percent
                           </label>
-                          <Field
-                            type="number"
-                            name="percentage"
-                            className="input-default"
-                            disabled={values.type === "fixed"} // Disable when type is 'fixed'
-                          />
+                          <div className="relative ">
+                            <Field
+                              type="number"
+                              name="percentage"
+                              className="input-default"
+                              disabled={values.type === "Fixed"}
+                            />
+                            {values.type === "Fixed" ? (
+                              <span className="absolute z-1000 right-3 top-2 w-5 pl-2 pt-0.5 h-7  bg-gray-200 text-gray-500 ">
+                                %
+                              </span>
+                            ) : (
+                              <span className="absolute z-1000 right-3 top-2 w-5 pl-2 pt-0.5 h-7  bg-white text-gray-500 ">
+                                %
+                              </span>
+                            )}
+                          </div>
+
                           <ErrorMessage
                             name="percentage"
                             component="div"
@@ -175,14 +206,19 @@ export const AddPromotion = () => {
 
                     <div className="flex">
                       <label className="mb-2 w-[253px] pb-10">
-                        Usage Limit (times):
+                        โควค้าการใช้<span className="text-red">*</span>
                       </label>
                       <div>
-                        <Field
-                          type="text"
-                          name="usageLimit"
-                          className="input-default w-[400px]"
-                        />
+                        <div className="relative">
+                          <Field
+                            type="text"
+                            name="usageLimit"
+                            className="input-default w-[400px]"
+                          />
+                          <span className="absolute right-0 pr-3 pt-2.5 after:bg-transparent text-gray-500">
+                            ครั้ง
+                          </span>
+                        </div>
                         <ErrorMessage
                           name="usageLimit"
                           component="div"
@@ -191,36 +227,34 @@ export const AddPromotion = () => {
                       </div>
                     </div>
 
-                    <div>
-                      <div className="flex mb-2">
-                        <label className="mb-2 w-[253px]">
-                          Expiration Date:
-                        </label>
-                        <div className="flex">
-                          <div>
-                            <Field
-                              type="date"
-                              name="expirationDate"
-                              className="input-default"
-                            />
-                            <ErrorMessage
-                              name="expirationDate"
-                              component="div"
-                              className="text-red "
-                            />
-                          </div>
-                          <div>
-                            <Field
-                              type="time"
-                              name="expirationTime"
-                              className="input-default"
-                            />
-                            <ErrorMessage
-                              name="expirationTime"
-                              component="div"
-                              className="text-red"
-                            />
-                          </div>
+                    <div className="flex mb-2">
+                      <label className="mb-2 w-[253px]">
+                        วันหมดอายุ<span className="text-red">*</span>
+                      </label>
+                      <div className="flex ">
+                        <div className="mr-6">
+                          <Field
+                            type="date"
+                            name="expirationDate"
+                            className="input-default"
+                          />
+                          <ErrorMessage
+                            name="expirationDate"
+                            component="div"
+                            className="text-red "
+                          />
+                        </div>
+                        <div>
+                          <Field
+                            type="time"
+                            name="expirationTime"
+                            className="input-default"
+                          />
+                          <ErrorMessage
+                            name="expirationTime"
+                            component="div"
+                            className="text-red"
+                          />
                         </div>
                       </div>
                     </div>

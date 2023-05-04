@@ -150,11 +150,11 @@ export const EditServiceNavbar = () => (
   />
 );
 
-export const EditCategoryNavbar = ({ onConfirm,title }) => {
+export const EditCategoryNavbar = ({ onConfirm, title }) => {
   const navigate = useNavigate();
   return (
     <Navbar
-      title={ title }
+      title={title}
       subTitle="หมวดหมู่"
       // backLink="/categories"
       leftButton={
@@ -180,7 +180,7 @@ export const DetailCategoryNavbar = ({ title }) => {
   const param = useParams();
   return (
     <Navbar
-      title={ title } 
+      title={title}
       subTitle="หมวดหมู่"
       backLink="/categories"
       rightButton={
@@ -251,3 +251,21 @@ export const DetailPromotionNavbar = () => {
     />
   );
 };
+
+export const EditPromotionNavbar = ({ onConfirm }) => (
+  <Navbar
+    title="บริการย่อย"
+    subTitle="บริการ"
+    // backLink="/services"
+    leftButton={
+      <Link to="/promotions">
+        <button className="btn-primary">ยกเลิก</button>
+      </Link>
+    }
+    rightButton={
+      <button className="btn-primary" onClick={onConfirm} type="submit">
+        ยืนยัน
+      </button>
+    }
+  />
+);
