@@ -7,7 +7,13 @@ import DetailInformation from "../components/DetailInformation";
 import ServicePayment from "../components/ServicePayment";
 // import from leng component
 
-export const ServiceSummary = ({ counters, subServiceList, inputValues }) => {
+export const ServiceSummary = ({
+  counters,
+  subServiceList,
+  inputValues,
+  cart,
+  setCart,
+}) => {
   let totalPrice = 0;
   return (
     <>
@@ -82,7 +88,6 @@ const ServiceDetail = () => {
   // const [showPromptpay, setShowPromptpay] = useState(false);
   // const [showCreditCard, setShowCreditCard] = useState(false);
 
-
   const [initialValues, setInitialValues] = useState({
     creditNumber: "",
     creditName: "",
@@ -94,14 +99,12 @@ const ServiceDetail = () => {
   const handleChange = (event) => {
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
-    setInitialValues({ ...initialValues, [fieldName]:fieldValue})
-  }
+    setInitialValues({ ...initialValues, [fieldName]: fieldValue });
+  };
 
   // const handlePayment =(item)=> {
   //   item ? setShowCreditCard(true): setShowPromptpay(true) ;
   // }
-
-
 
   const [inputValues, setInputValues] = useState({
     date: "",
@@ -175,6 +178,8 @@ const ServiceDetail = () => {
             itemObjects={itemObjects}
             counters={counters}
             setCounters={setCounters}
+            cart={cart}
+            setCart={setCart}
           />
         ) : null}
         {page === "address-page" ? (
@@ -184,19 +189,22 @@ const ServiceDetail = () => {
             // handleChange={handleChange}
           />
         ) : null}
-        {page === "payment-page" ? 
-        <ServicePayment 
-          initialValues = {initialValues}
-          setInitialValues = {setInitialValues}
-          handleChange = {handleChange}
-          // showPromptpay = {showPromptpay}
-          // showCreditCard = {showCreditCard}
-          // handlePayment = {handlePayment}
-        /> : null}
+        {page === "payment-page" ? (
+          <ServicePayment
+            initialValues={initialValues}
+            setInitialValues={setInitialValues}
+            handleChange={handleChange}
+            // showPromptpay = {showPromptpay}
+            // showCreditCard = {showCreditCard}
+            // handlePayment = {handlePayment}
+          />
+        ) : null}
         <ServiceSummary
           subServiceList={itemObjects.subServiceList}
           counters={counters}
           inputValues={inputValues}
+          cart={cart}
+          setCart={setCart}
         />
       </div>
       <div className="w-full bg-white px-[10%] py-4 flex justify-between">
@@ -220,6 +228,10 @@ const ServiceDetail = () => {
                 (inputValues.note === "" ? 1 : 0))
           }
           onClick={() => {
+            if (page === "payment-page") {
+              console.log(cart, inputValues, initialValues);
+            }
+
             handleClickNext();
           }}
         >
