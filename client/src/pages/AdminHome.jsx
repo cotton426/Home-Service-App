@@ -1,5 +1,9 @@
 import { AdminSidebar } from "../components/AdminSidebar";
-import { CategoryNavbar, ServiceNavbar } from "../components/AdminNavbar";
+import {
+  CategoryNavbar,
+  ServiceNavbar,
+  DetailPromotionNavbar,
+} from "../components/AdminNavbar";
 import { Routes, Route } from "react-router-dom";
 import AddService from "../components/AddService";
 import TableOfContents from "../components/TableOfContents";
@@ -112,7 +116,15 @@ const AdminHomepage = () => {
               </>
             }
           />
-          <Route path="/view-promotion/:promotion_id" element={<ViewPromotionCode />} />
+          <Route
+            path="/view-promotion/:promotion_id"
+            element={
+              <>
+                <DetailPromotionNavbar />
+                <ViewPromotionCode />
+              </>
+            }
+          />
         </Routes>
       </div>
     </div>

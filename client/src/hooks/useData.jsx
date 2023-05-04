@@ -195,35 +195,6 @@ const useData = () => {
     }
   };
 
-  const getPromotion = async (param) => {
-    try {
-      const response = await axios.get("http://localhost:4000/data/promotions/"+ param);
-      setItemObjects(response.data);
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-    }
-    
-  };
-
-
-  // const getService = async (param) => {
-  //   try {
-  //     const response = await axios.get(
-  //       "http://localhost:4000/data/services/" + param
-  //     );
-  //     const { services } = response.data[0];
-  //     const result = response.data.map((item) => {
-  //       delete item.services;
-  //       return item;
-  //     });
-  //     services.subServiceList = result;
-  //     setItemObjects(services);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
 
   const updatePromotion = async (promotionId, promotionData) => {
     try {
@@ -273,7 +244,6 @@ const useData = () => {
     updatePromotion,
     getPromotions,
     deletePromotion,
-    getPromotion,
   };
 };
 
