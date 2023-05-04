@@ -1,42 +1,61 @@
 import React from "react";
 import { formatTime } from "../utils/timeUtils";
+import useData from "../hooks/useData";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 function ViewPromotionCode() {
-  const viewPromoList = [
-    {
-      name: "Promotion Code",
-      value: "HOME0202",
-    },
-    {
-      name: "ประเภท",
-      value: "Fixed",
-    },
-    {
-      name: "ราคาที่ลด",
-      value: "-50.00฿",
-    },
-    {
-      name: "โควต้าการใช้",
-      value: "10/100 ครั้ง",
-    },
-    {
-      name: "วันหมดอายุ",
-      value: "12/06/2022 10:30PM",
-    },
-  ];
+
+  const {getPromotion,items,itemObjects,getPromotions} = useData()
+  const param = useParams();
+ 
+  useEffect(() => {
+    getPromotion(param.id);
+  }, []);
+  
+  // useEffect(() => {
+  //   getPromotions(param.id);
+  // }, []);
+
+  console.log(items);
+  console.log(itemObjects);
+  // console.log(param.id);
+
+  // const viewPromoList = [
+  //   {
+  //     name: "Promotion Code",
+  //     value: "h"
+  //   },
+  //   {
+  //     name: "ประเภท",
+  //     value: items.type,
+  //   },
+  //   {
+  //     name: "ราคาที่ลด",
+  //     value: items.discount,
+  //   },
+  //   {
+  //     name: "โควต้าการใช้",
+  //     value: items.useable_quantity,
+  //   },
+  //   {
+  //     name: "วันหมดอายุ",
+  //     value: items.exp_date,
+  //   },
+  // ];
 
 
   // const {  } = useData();
 
   return (
-    <div className=" w-full flex flex-col justify-center items-center p-10">
-      <div className=" w-3/5 box flex flex-col justify-center items-start p-10">
-        <div className="flex flex-col justify-center items-start gap-8">
-          {viewPromoList.map((item, index) => {
+    <div className=" bg-BG h-full w-full p-[5%] flex flex-col justify-center items-center ">
+      <div className=" box w-full flex flex-col justify-center items-start p-10">
+        <div className="flex flex-col justify-center items-start gap-9">
+          {items.map((item, index) => {
             return (
               <div key={index} className="flex flex-row ">
-                <h2 className="w-[250px] text-gray-700">{item.name}</h2>
-                <p className="text-black">{item.value}</p>
+                <h2 className="w-[250px] text-gray-700">{items.name}</h2>
+                <p className="text-black">{items.value}</p>
               </div>
             );
           })}

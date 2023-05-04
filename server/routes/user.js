@@ -77,11 +77,12 @@ userRouter.post("/orders", async (req, res) => {
     status,
     price: total_price,
     address,
-    date : booking_date,
-    useTime : booking_time,
+    date: booking_date,
+    useTime: booking_time,
     subdistrict: sub_district,
     district,
-    province
+    province,
+    cart,
   } = req.body;
 
   console.log("data:", {
@@ -111,8 +112,8 @@ userRouter.post("/orders", async (req, res) => {
   console.log("Orders count for today:", orderCountToday);
 
   // Generate unique order code
-  const orderCode = generateOrderCode(orderCountToday,booking_date);
-  const staff_id = "1"
+  const orderCode = generateOrderCode(orderCountToday, booking_date);
+  const staff_id = "1";
   // Save the order to the database
   const { data: newOrder, error: newOrderError } = await supabase
     .from("orders")
@@ -130,14 +131,40 @@ userRouter.post("/orders", async (req, res) => {
         booking_time,
         staff_id,
         sub_district,
-    district,
-    province
+        district,
+        province,
       },
-    ]);
+    ])
+    .select("order_id");
+
+  // console.log(newOrder[0].order_id);
 
   if (newOrderError) {
     console.error("Error inserting order:", newOrderError);
     return res.status(400).json({ error: newOrderError.message });
+  }
+
+  const newCart = cart.map(item => {delete item.price
+    return item
+  })
+
+  console.log(newCart);
+
+  const { order_id } = newOrder[0];
+  const addCart = newCart.map((subService) => {
+    return {...subService, order_id : order_id}
+  });
+
+  console.log(addCart);
+
+  const { data: orderItem, error: insertSubServiceError } = await supabase
+    .from("order_items")
+    .insert(addCart)
+    .select("*");
+
+  if (insertSubServiceError) {
+    console.error("Error inserting data:", insertSubServiceError);
+    return res.status(400).json({ error: insertSubServiceError.message });
   }
 
   return res.json(newOrder);

@@ -41,9 +41,10 @@ function AddOnList({ itemObjects, counters, setCounters, cart, setCart }) {
       const newCart = [...prevCart];
       // modify the array as needed
       newCart[index] = {
-        name: subServiceList[index].name,
+        // name: subServiceList[index].name,
         quantity: newCounters[index],
         price: subServiceList[index].price,
+        sub_service_id:  subServiceList[index].sub_service_id,
       };
       // return the new array as the updated state
       return newCart;

@@ -15,6 +15,7 @@ import AddOnList from "../components/AddOnList";
 import { AddPromotion } from "../components/PromotionAdd";
 import { EditPromotion } from "../components/PromotionEdit";
 import PromotionTable from "../components/PromotionTable";
+import ViewPromotionCode from "../components/ViewPromotionCode";
 
 const AdminHomepage = () => {
   return (
@@ -111,6 +112,7 @@ const AdminHomepage = () => {
               </>
             }
           />
+          <Route path="/view-promotion/:promotion_id" element={<ViewPromotionCode />} />
         </Routes>
       </div>
     </div>
