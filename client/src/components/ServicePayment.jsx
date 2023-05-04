@@ -5,7 +5,7 @@ import { MdOutlineQrCode2 } from "react-icons/md";
 import { MdCreditCard } from "react-icons/md";
 import { useState, useEffect } from "react";
 
-const AutoSubmit = ({setInitialValues}) => {
+const AutoSubmit = ({ setInitialValues }) => {
   const { values, submitForm } = useFormikContext();
 
   useEffect(() => {
@@ -13,9 +13,9 @@ const AutoSubmit = ({setInitialValues}) => {
       setInitialValues(values);
       if (
         values.creditNumber !== "" &&
-      values.creditName !== "" &&
-      values.dateOfExpiry !== "" &&
-      values.code !== ""
+        values.creditName !== "" &&
+        values.dateOfExpiry !== "" &&
+        values.code !== ""
       ) {
         submitForm();
       }
@@ -24,8 +24,6 @@ const AutoSubmit = ({setInitialValues}) => {
   }, [values, submitForm]);
   return null;
 };
-
-
 
 function ServicePayment({ initialValues, handleChange, setInitialValues }) {
   // useEffect(()=>{},[]);
@@ -50,7 +48,9 @@ function ServicePayment({ initialValues, handleChange, setInitialValues }) {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values)=>{setInitialValues(values)}}
+        onSubmit={(values) => {
+          setInitialValues(values);
+        }}
       >
         {({}) => (
           <Form className="w-3/5 ">
@@ -85,7 +85,7 @@ function ServicePayment({ initialValues, handleChange, setInitialValues }) {
                     // value={initialValues.creditNumber}
                     type="text"
                     name="creditNumber"
-                    maxLength="13"
+                    maxLength="16"
                     placeholder="กรุณากรอกหมายเลขบัตรเครดิต"
                     className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
                     // onChange={handleChange}
@@ -184,9 +184,7 @@ function ServicePayment({ initialValues, handleChange, setInitialValues }) {
                 </button>
               </div>
             </div>
-            <AutoSubmit
-            setInitialValues ={setInitialValues}
-            />
+            <AutoSubmit setInitialValues={setInitialValues} />
           </Form>
         )}
       </Formik>

@@ -3,7 +3,7 @@ import useData from "../hooks/useData";
 import { useEffect } from "react";
 import { FiTag } from "react-icons/fi";
 
-function AddOnList({ itemObjects, counters, setCounters }) {
+function AddOnList({ itemObjects, counters, setCounters, cart, setCart }) {
   const { subServiceList } = itemObjects;
   // useEffect(() => {
   //   setData(subServiceList);
@@ -36,6 +36,19 @@ function AddOnList({ itemObjects, counters, setCounters }) {
       ? (newCounters[index] = 1)
       : (newCounters[index] += 1);
     setCounters(newCounters);
+    setCart((prevCart) => {
+      // make a copy of the previous state array
+      const newCart = [...prevCart];
+      // modify the array as needed
+      newCart[index] = {
+        name: subServiceList[index].name,
+        quantity: newCounters[index],
+        price: subServiceList[index].price,
+      };
+      // return the new array as the updated state
+      return newCart;
+    });
+    console.log(cart);
   };
 
   const handleSubtractCounter = (index) => {
