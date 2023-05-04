@@ -12,8 +12,8 @@ import ServiceTable from "../components/ServicesTable";
 import EditService, { ViewService } from "../components/EditService";
 // import ViewService from "../components/ViewService";
 import AddOnList from "../components/AddOnList";
-import { AddPromotion } from "../components/AddPromotion";
-import { EditPromotion } from "../components/EditPromotion";
+import { AddPromotion } from "../components/PromotionAdd";
+import { EditPromotion } from "../components/PromotionEdit";
 import PromotionTable from "../components/PromotionTable";
 
 const AdminHomepage = () => {
