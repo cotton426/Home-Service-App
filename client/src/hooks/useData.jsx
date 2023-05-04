@@ -123,7 +123,6 @@ const useData = () => {
     } catch (error) {
       console.error(error);
       return error.response.data.error;
-      return error.response.data.error;
     }
   };
 
@@ -137,7 +136,6 @@ const useData = () => {
       console.error(error);
     }
   };
-
 
   const addPayment = async (formData) => {
     try {
@@ -157,7 +155,7 @@ const useData = () => {
       return error.response.data.error;
     }
   };
-  
+
   const getPromotions = async () => {
     try {
       const response = await axios.get("http://localhost:4000/data/promotions");
@@ -211,6 +209,7 @@ const useData = () => {
       };
     }
   };
+
   const deletePromotion = async (id) => {
     try {
       console.log(id);

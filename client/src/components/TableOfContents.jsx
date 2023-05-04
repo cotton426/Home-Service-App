@@ -122,7 +122,9 @@ const TableOfContents = ({ service, promotion }) => {
 
   const handleEdit = (item) => {
     // Handle edit logic here
-    service
+    promotion
+      ? navigate("/edit-promotion/" + item.id)
+      : service
       ? navigate("/edit-service/" + item.service_id)
       : navigate("/edit-category/" + item.category_id);
     console.log("Edit item", item);

@@ -5,6 +5,8 @@ import { EditPromotionNavbar } from "./AdminNavbar";
 import useData from "../hooks/useData";
 import { useParams } from "react-router-dom";
 import { HiOutlineTrash } from "react-icons/hi";
+import { formatTime } from "../utils/timeUtils";
+import AlertConfirmation from "./AlertConfirmation";
 
 const ClearDisabledInput = ({ type, setFieldValue }) => {
   useEffect(() => {
@@ -18,11 +20,20 @@ const ClearDisabledInput = ({ type, setFieldValue }) => {
 };
 
 export const EditPromotion = () => {
+  const today = new Date();
+  const tomorrow = new Date();
   const { promotion_id } = useParams(); // Destructure the `promotion_id` from the params
   console.log("promotion_id:", promotion_id);
 
   const [promotion, setPromotion] = useState(null);
-  const { getPromotion, updatePromotion } = useData();
+  const { getPromotion, updatePromotion, deletePromotion } = useData();
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+  tomorrow.setDate(today.getDate() + 1);
+
+  console.log(promotion);
+  console.log(tomorrow);
+  console.log(today);
 
   useEffect(() => {
     (async () => {
@@ -30,7 +41,22 @@ export const EditPromotion = () => {
       setPromotion(promotionData);
     })();
   }, [promotion_id]);
-  console.log(promotion);
+
+  const handleDelete = () => {
+    setShowDeleteConfirmation(true);
+    setItemToDelete(promotion);
+  };
+  const confirmDelete = () => {
+    console.log("Delete item", itemToDelete);
+    setShowDeleteConfirmation(false);
+    setItemToDelete(null);
+    deletePromotion(itemToDelete.id);
+    navigate("/promotions");
+  };
+  const cancelDelete = () => {
+    setShowDeleteConfirmation(false);
+    setItemToDelete(null);
+  };
 
   const EditPromotionSchema = Yup.object().shape({
     promotionCode: Yup.string()
@@ -58,7 +84,9 @@ export const EditPromotion = () => {
     usageLimit: Yup.number()
       .min(1, "Usage limit should be greater than or equal to 1")
       .required("Required"),
-    expirationDate: Yup.date().required("Required"),
+    expirationDate: Yup.date()
+      .min(today, "กรุณาเลือกวันถัดไป")
+      .required("Required"),
     expirationTime: Yup.string().required("Required"),
   });
 
@@ -205,6 +233,12 @@ export const EditPromotion = () => {
                                 %
                               </span>
                             )}
+                            <Field
+                              type="text"
+                              name="expirationDate"
+                              className="input-default"
+                              min={tomorrow.toISOString().slice(0, 10)}
+                            />
                           </div>
                           <ErrorMessage
                             name="percentage"
@@ -274,19 +308,22 @@ export const EditPromotion = () => {
 
                     <div className="flex pt-10 pb-8">
                       <div className="w-[253px]">สร้างเมื่อ</div>
-                      <div>{promotion.created_at}</div>
+                      <div>{formatTime(promotion.created_at)}</div>
                     </div>
 
                     <div className="flex">
                       <div className="w-[253px]">แก้ไขล่าสุด</div>
-                      <div>{promotion.updated_at}</div>
+                      <div>{formatTime(promotion.updated_at)}</div>
                     </div>
                   </Form>
                 </div>
-                <div className="flex  text-gray-600 py-5 justify-end pr-[5%]">
-                  <div id="delete" className="cursor-pointer flex items-center">
-                    {/*   click delete id="delete" */}
-                    <HiOutlineTrash className="scale-110 mr-3 " />
+                <div className="flex text-gray-600 py-5 justify-end pr-[5%]">
+                  <div
+                    id="delete"
+                    className="cursor-pointer flex items-center"
+                    onClick={handleDelete}
+                  >
+                    <HiOutlineTrash className="scale-110 mr-3" />
                     <div className="underline font-medium">
                       ลบ Promotion Code
                     </div>
@@ -297,6 +334,13 @@ export const EditPromotion = () => {
           </>
         )}
       </Formik>
+      {showDeleteConfirmation && (
+        <AlertConfirmation
+          itemToDelete={itemToDelete}
+          confirmDelete={confirmDelete}
+          cancelDelete={cancelDelete}
+        />
+      )}
     </>
   );
 };

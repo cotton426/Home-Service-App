@@ -2,6 +2,7 @@ import { AdminSidebar } from "../components/AdminSidebar";
 import {
   CategoryNavbar,
   ServiceNavbar,
+  PromotionNavbar,
   DetailPromotionNavbar,
 } from "../components/AdminNavbar";
 import { Routes, Route } from "react-router-dom";
@@ -32,7 +33,15 @@ const AdminHomepage = () => {
         className="bg-BG h-full w-full text-white"
       >
         <Routes>
-          <Route path="/promotions" element={<PromotionTable />} />
+          <Route
+            path="/promotions"
+            element={
+              <>
+                <PromotionNavbar />
+                <PromotionTable />
+              </>
+            }
+          />
           <Route
             path="/categories"
             element={

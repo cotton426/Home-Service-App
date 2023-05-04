@@ -177,7 +177,6 @@ dataRouter.get("/services/:id", async (req, res) => {
     .select(`*,services(*)`)
     .eq("service_id", serviceId);
 
-
   if (error) {
     // Handle the error
     console.error(error);
@@ -333,13 +332,11 @@ dataRouter.post("/promotions", async (req, res) => {
     expirationTime,
   } = req.body;
 
-  const {
-    data: existingPromotion,
-    error: existingPromotionError,
-  } = await supabase
-    .from("promotions")
-    .select("*")
-    .filter("promotion_code", "eq", promotionCode);
+  const { data: existingPromotion, error: existingPromotionError } =
+    await supabase
+      .from("promotions")
+      .select("*")
+      .filter("promotion_code", "eq", promotionCode);
 
   if (existingPromotionError) {
     console.error(
@@ -379,6 +376,15 @@ dataRouter.post("/promotions", async (req, res) => {
   return res.json(newPromotion);
 });
 
+dataRouter.get("/promotions", async (req, res) => {
+  const { data: promotions, error } = await supabase
+    .from("promotions")
+    .select("*")
+    .order("updated_at", { ascending: false });
+
+  return res.json(promotions);
+});
+
 dataRouter.get("/promotions/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -401,7 +407,6 @@ dataRouter.get("/promotions/:id", async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 });
-
 
 dataRouter.put("/promotions/:id", async (req, res) => {
   const { id } = req.params;
@@ -440,15 +445,6 @@ dataRouter.put("/promotions/:id", async (req, res) => {
     console.error("Error updating promotion:", error);
     return res.status(500).json({ error: error.message });
   }
-});
-
-dataRouter.get("/promotions", async (req, res) => {
-  const { data: promotions, error } = await supabase
-    .from("promotions")
-    .select("*")
-    .order("updated_at", { ascending: false });
-
-  return res.json(promotions);
 });
 
 dataRouter.delete("/promotions/:id", async (req, res) => {
