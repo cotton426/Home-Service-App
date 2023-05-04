@@ -195,6 +195,7 @@ const useData = () => {
     }
   };
 
+
   const updatePromotion = async (promotionId, promotionData) => {
     try {
       const response = await axios.put(
@@ -221,6 +222,8 @@ const useData = () => {
       console.error(error);
     }
   };
+
+
 
   return {
     items,
