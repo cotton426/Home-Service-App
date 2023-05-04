@@ -37,7 +37,7 @@ const Navbar = ({
           </div>
 
           <div className="flex items-center ">
-            {inputPlaceholder && (
+            {/* {inputPlaceholder && (
               <div className="flex flex-row items-center border border-gray-300 px-2 rounded-xl ">
                 <GoSearch className="h-5 w-5 text-gray-500 ml-2" />
                 <input
@@ -46,7 +46,7 @@ const Navbar = ({
                   className=" text-black focus:outline-none  ml-2 px-1 py-2 rounded border-none"
                 />
               </div>
-            )}
+            )} */}
             {leftButton && <div className="pl-6">{leftButton}</div>}
             {rightButton && <div className="pl-6">{rightButton}</div>}
           </div>
@@ -136,7 +136,7 @@ export const EditServiceNavbar = () => (
   <Navbar
     title="บริการย่อย"
     subTitle="บริการ"
-    backLink="/services"
+    // backLink="/services"
     leftButton={
       <Link to="/services">
         <button className="btn-primary">ยกเลิก</button>
@@ -150,13 +150,13 @@ export const EditServiceNavbar = () => (
   />
 );
 
-export const EditCategoryNavbar = ({ onConfirm }) => {
+export const EditCategoryNavbar = ({ onConfirm, title }) => {
   const navigate = useNavigate();
   return (
     <Navbar
-      title="บริการย่อย"
+      title={title}
       subTitle="หมวดหมู่"
-      backLink="/categories"
+      // backLink="/categories"
       leftButton={
         <button
           className="btn-primary"
@@ -175,11 +175,12 @@ export const EditCategoryNavbar = ({ onConfirm }) => {
     />
   );
 };
-export const DetailCategoryNavbar = () => {
+
+export const DetailCategoryNavbar = ({ title }) => {
   const param = useParams();
   return (
     <Navbar
-      title="แก้ไขหมวดหมู่ย่อย"
+      title={title}
       subTitle="หมวดหมู่"
       backLink="/categories"
       rightButton={
@@ -206,3 +207,65 @@ export const DetailServiceNavbar = () => {
     />
   );
 };
+
+export const AddPromotionNavbar = ({ onConfirm }) => (
+  <Navbar
+    title="เพิ่มบริการ"
+    leftButton={
+      <Link to="/promotions">
+        <button className="btn-primary">ยกเลิก</button>
+      </Link>
+    }
+    rightButton={
+      <button className="btn-primary" onClick={onConfirm} type="submit">
+        ยืนยัน
+      </button>
+    }
+  />
+);
+
+export const PromotionNavbar = () => (
+  <Navbar
+    title="Promotion Code"
+    inputPlaceholder="ค้นหา Promotion Code..."
+    rightButton={
+      <Link to="/add-promotion">
+        <button className="btn-primary">เพิ่มบริการ +</button>
+      </Link>
+    }
+  />
+);
+
+export const DetailPromotionNavbar = () => {
+  const param = useParams();
+  return (
+    <Navbar
+      title="HOME0202" // axios.get("")
+      subTitle="Promotion Code"
+      backLink="/promotion"
+      rightButton={
+        <Link to={`/edit-promotion/${param.promotion_id}`}>
+          <button className="btn-primary">แก้ไข</button>
+        </Link>
+      }
+    />
+  );
+};
+
+export const EditPromotionNavbar = ({ onConfirm }) => (
+  <Navbar
+    title="บริการย่อย"
+    subTitle="บริการ"
+    // backLink="/services"
+    leftButton={
+      <Link to="/promotions">
+        <button className="btn-primary">ยกเลิก</button>
+      </Link>
+    }
+    rightButton={
+      <button className="btn-primary" onClick={onConfirm} type="submit">
+        ยืนยัน
+      </button>
+    }
+  />
+);

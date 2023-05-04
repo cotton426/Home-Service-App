@@ -71,16 +71,32 @@ userRouter.get("/services", async (req, res) => {
 });
 
 userRouter.post("/orders", async (req, res) => {
-  console.log("Request body:", req.body);
+  console.log("Request body:", req.body);  
   const {
     profile_id,
     status,
     total_price,
     address,
+    sub_district,
+    district,
+    province,
     booking_date,
     booking_time,
     staff_id,
   } = req.body;
+
+  console.log("data:", {
+    profile_id,
+    status,
+    total_price,
+    address,
+    sub_district,
+    district,
+    province,
+    booking_date,
+    booking_time,
+    staff_id,
+  });
 
   const { data: ordersToday, error: ordersTodayError } = await supabase
     .from("orders")
@@ -108,6 +124,9 @@ userRouter.post("/orders", async (req, res) => {
         status,
         total_price,
         address,
+        sub_district,
+        district,
+        province,
         booking_date,
         booking_time,
         staff_id,
@@ -140,5 +159,6 @@ userRouter.get("/orders", async (req, res) => {
 
   return res.json(data);
 });
+
 
 export default userRouter;

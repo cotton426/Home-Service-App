@@ -9,6 +9,9 @@ const BookingForm = () => {
     status: "",
     total_price: "",
     address: "",
+    sub_district: "",
+    district: "",
+    province: "",
     booking_date: "",
     booking_time: "",
     staff_id: "",
@@ -25,7 +28,7 @@ const BookingForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log("Form data:", formData);
     const result = await submitBooking(formData); // Call submitBooking function here
     if (result.success) {
       setSuccessMessage(result.message);
@@ -77,6 +80,37 @@ const BookingForm = () => {
           type="text"
           name="address"
           value={formData.address}
+          onChange={handleChange}
+        />
+      </label>
+      <br />
+
+      <label>
+        Sub-district:
+        <input
+          type="text"
+          name="sub_district"
+          value={formData.sub_district}
+          onChange={handleChange}
+        />
+      </label>
+      <br />
+      <label>
+        District:
+        <input
+          type="text"
+          name="district"
+          value={formData.district}
+          onChange={handleChange}
+        />
+      </label>
+      <br />
+      <label>
+        Province:
+        <input
+          type="text"
+          name="province"
+          value={formData.province}
           onChange={handleChange}
         />
       </label>
