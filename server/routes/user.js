@@ -129,9 +129,6 @@ userRouter.post("/orders", async (req, res) => {
         booking_date,
         booking_time,
         staff_id,
-        sub_district,
-        district,
-        province,
       },
     ])
     .select("order_id");

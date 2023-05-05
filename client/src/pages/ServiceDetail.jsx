@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import useData from "../hooks/useData";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import ProgressBar from "../components/ProgressBar";
 import AddOnList from "../components/AddOnList";
 import DetailInformation from "../components/DetailInformation";
 import ServicePayment from "../components/ServicePayment";
 import axios from "axios";
 import useUser from "../hooks/useUser";
+import { BsCheckCircleFill } from "react-icons/bs";
 // import from leng component
 
 export const ServiceSummary = ({
@@ -15,13 +16,36 @@ export const ServiceSummary = ({
   inputValues,
   cart,
   setCart,
+  page,
 }) => {
   let totalPrice = 0;
+
+  const options = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  };
+
+  const formatter = new Intl.DateTimeFormat("th-TH", options);
+
+  const formattedDate = (date) => formatter.format(new Date(date));
   return (
     <>
-      <div className="box flex flex-col justify-between w-1/3 h-1/3 px-4">
+      <div
+        className={`box flex flex-col justify-between w-1/3 h-1/3 ${
+          page === "summary-page" ? "px-[3%] py-[3%]" : "px-4"
+        }`}
+      >
         <div className="flex flex-col border-b border-gray-300 py-4">
-          <h1 className="text-gray-700 text-xl pb-4">สรุปรายการ</h1>
+          {page !== "summary-page" ? (
+            <h1 className="text-gray-700 text-xl pb-4">สรุปรายการ</h1>
+          ) : (
+            <div className="flex flex-col items-center py-12 gap-8">
+              <BsCheckCircleFill className="scale-[4] text-green-900" />
+              <div className="text-[32px]">ชำระเงินเรียบร้อย !</div>
+            </div>
+          )}
           {counters.map((item, index) => {
             if (item > 0) {
               totalPrice += subServiceList[index].price * counters[index];
@@ -44,13 +68,13 @@ export const ServiceSummary = ({
             {inputValues.date && (
               <div className="flex justify-between">
                 <p className="text-gray-700 font-light">วันที่</p>
-                <p className="">{inputValues.date}</p>
+                <p className="">{formattedDate(inputValues.date)}</p>
               </div>
             )}
             {inputValues.useTime && (
               <div className="flex justify-between">
                 <p className="text-gray-700 font-light">เวลา</p>
-                <p className="">{inputValues.useTime}</p>
+                <p className="">{inputValues.useTime.replace(":", ".")} น.</p>
               </div>
             )}
             {(inputValues.address ||
@@ -75,6 +99,11 @@ export const ServiceSummary = ({
           <p className="text-gray-700">รวม</p>
           <p className="font-semibold">{totalPrice} ฿</p>
         </div>
+        {page === "summary-page" && (
+          <Link to="/user-orders-list">
+            <button className="btn-primary w-full">เช็ครายการซ่อม</button>
+          </Link>
+        )}
       </div>
     </>
   );
@@ -183,114 +212,136 @@ const ServiceDetail = () => {
 
   return (
     <>
-      <div className="bg-BG relative w-full -z-20">
-        <img
-          src={itemObjects.image}
-          alt={itemObjects.name}
-          className="absolute w-full object-cover aspect-[6/1] -z-10 "
-        />
-        {/* real div for show data */}
-        <div className="bg-none w-full px-[10%] pt-[5%] pb-[1%] z-10">
-          <header className="shadow bg-white inline-block px-8 py-2.5 mb-8">
-            <div className="flex items-center">
-              <span className="text-gray-700">บริการของเรา</span>
-              <span className="text-gray-400 px-2">{"  >  "}</span>
-              <span className="text-[2rem] text-blue-600">
-                {itemObjects.name}
-              </span>
+      {page !== "summary-page" ? (
+        <>
+          <div className="bg-BG relative w-full -z-20">
+            <img
+              src={itemObjects.image}
+              alt={itemObjects.name}
+              className="absolute w-full object-cover aspect-[6/1] -z-10 "
+            />
+            {/* real div for show data */}
+            <div className="bg-none w-full px-[10%] pt-[5%] pb-[1%] z-10">
+              <header className="shadow bg-white inline-block px-8 py-2.5 mb-8">
+                <div className="flex items-center">
+                  <span className="text-gray-700">บริการของเรา</span>
+                  <span className="text-gray-400 px-2">{"  >  "}</span>
+                  <span className="text-[2rem] text-blue-600">
+                    {itemObjects.name}
+                  </span>
+                </div>
+              </header>
+              <ProgressBar page={page} />
             </div>
-          </header>
-          <ProgressBar page={page} />
-        </div>
-        {/* real div for show data */}
-      </div>
+            {/* real div for show data */}
+          </div>
 
-      <div className="w-full px-[10%] pt-[1%] pb-[5%] bg-BG flex justify-between">
-        {page === "select-page" ? (
-          <AddOnList
-            itemObjects={itemObjects}
-            counters={counters}
-            setCounters={setCounters}
-            cart={cart}
-            setCart={setCart}
-          />
-        ) : null}
-        {page === "address-page" ? (
-          <DetailInformation
-            inputValues={inputValues}
-            setInputValues={setInputValues}
-            // handleChange={handleChange}
-          />
-        ) : null}
-        {page === "payment-page" ? (
-          <ServicePayment
-            initialValues={initialValues}
-            setInitialValues={setInitialValues}
-            handleChange={handleChange}
-            // showPromptpay = {showPromptpay}
-            // showCreditCard = {showCreditCard}
-            // handlePayment = {handlePayment}
-          />
-        ) : null}
-        <ServiceSummary
-          subServiceList={itemObjects.subServiceList}
-          counters={counters}
-          inputValues={inputValues}
-          cart={cart}
-          setCart={setCart}
-        />
-      </div>
-      <div className="w-full bg-white px-[10%] py-4 flex justify-between">
-        <button
-          type="submit"
-          form="formik-form"
-          className={`btn-secondary`}
-          onClick={() => {
-            handleClickBack();
-          }}
-        >
-          {"< "} <span className="ml-2"> ย้อนกลับ</span>
-        </button>
-        <button
-          className="btn-primary"
-          disabled={
-            (page === "select-page" &&
-              counters.filter((item) => item > 0).length === 0) ||
-            (page === "address-page" &&
-              Object.values(inputValues).filter((item) => item === "").length >
-                (inputValues.note === "" ? 1 : 0))
-          }
-          onClick={async() => {
-            if (page === "payment-page") {
-              const totalPrice = cart.reduce(
-                (sum, item) => sum + item.price * item.quantity,
-                0
-              );
-              const selectCart = cart.filter((item) => item.quantity > 0);
-              const profiles = localStorage.getItem("userData");
-              const profile = JSON.parse(profiles);
-              const profile_id = profile.profiles[0].id;
-              console.log(profile);
-              console.log(profile_id);
-                const creditData = await handlePayment()
-              const orderItems = {
-                creditData,
-                cart: selectCart,
-                price: totalPrice,
-                ...inputValues,
-                profile_id,
-                status: "On Process",
-              };
-              console.log(orderItems);
-              addOrder(orderItems);
-              console.log(selectCart, inputValues, initialValues);
-            }
-            handleClickNext();
-          }}
-        >
-          <span className="mr-2">ดำเนินการต่อ </span> {" >"}
-        </button>
-      </div>
+          <div className="w-full px-[10%] pt-[1%] pb-[5%] bg-BG flex justify-between">
+            {page === "select-page" && (
+              <AddOnList
+                itemObjects={itemObjects}
+                counters={counters}
+                setCounters={setCounters}
+                cart={cart}
+                setCart={setCart}
+              />
+            )}
+            {page === "address-page" && (
+              <DetailInformation
+                inputValues={inputValues}
+                setInputValues={setInputValues}
+                // handleChange={handleChange}
+              />
+            )}
+            {page === "payment-page" && (
+              <ServicePayment
+                initialValues={initialValues}
+                setInitialValues={setInitialValues}
+                handleChange={handleChange}
+                // showPromptpay = {showPromptpay}
+                // showCreditCard = {showCreditCard}
+                // handlePayment = {handlePayment}
+              />
+            )}
+            {page !== "summary-page" && (
+              <ServiceSummary
+                subServiceList={itemObjects.subServiceList}
+                counters={counters}
+                inputValues={inputValues}
+                cart={cart}
+                setCart={setCart}
+                page={page}
+              />
+            )}
+          </div>
+
+          <div className="w-full bg-white px-[10%] py-4 flex justify-between">
+            <button
+              type="submit"
+              form="formik-form"
+              className={`btn-secondary`}
+              onClick={() => {
+                handleClickBack();
+              }}
+            >
+              {"< "} <span className="ml-2"> ย้อนกลับ</span>
+            </button>
+            <button
+              className="btn-primary"
+              disabled={
+                (page === "select-page" &&
+                  counters.filter((item) => item > 0).length === 0) ||
+                (page === "address-page" &&
+                  Object.values(inputValues).filter((item) => item === "")
+                    .length > (inputValues.note === "" ? 1 : 0))
+              }
+              onClick={async () => {
+                if (page === "payment-page") {
+                  const totalPrice = cart.reduce(
+                    (sum, item) => sum + item.price * item.quantity,
+                    0
+                  );
+                  const selectCart = cart.filter((item) => item.quantity > 0);
+                  const profiles = localStorage.getItem("userData");
+                  const profile = JSON.parse(profiles);
+                  const profile_id = profile.profiles[0].id;
+                  console.log(profile);
+                  console.log(profile_id);
+                  const creditData = await handlePayment();
+                  const orderItems = {
+                    creditData,
+                    cart: selectCart,
+                    price: totalPrice,
+                    ...inputValues,
+                    profile_id,
+                    status: "On Process",
+                  };
+                  console.log(orderItems);
+                  addOrder(orderItems);
+                  console.log(selectCart, inputValues, initialValues);
+                  setPage("summary-page");
+                }
+                handleClickNext();
+              }}
+            >
+              <span className="mr-2">ดำเนินการต่อ </span> {" >"}
+            </button>
+          </div>
+        </>
+      ) : (
+        <div className="bg-BG h-[90vh] w-full flex justify-center items-center">
+          <div className="w-4/5 flex justify-center items-center">
+            <ServiceSummary
+              subServiceList={itemObjects.subServiceList}
+              counters={counters}
+              inputValues={inputValues}
+              cart={cart}
+              setCart={setCart}
+              page={page}
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 };
