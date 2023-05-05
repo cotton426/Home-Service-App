@@ -31,7 +31,7 @@ function UploadImage({ field, form, view }) {
         {image ? (
           <label
             htmlFor={field?.name}
-            className="flex flex-col justify-center items-center border-gray-300 rounded h-[225px] w-[450px] p-0"
+            className="flex flex-col justify-center items-center border-gray-300 rounded h-[225px] w-[450px] p-0 "
           >
             {!view && (
               <input
@@ -107,7 +107,7 @@ function UploadImage({ field, form, view }) {
                 <img
                   src={image}
                   alt={fileName}
-                  className="flex w-auto h-[225px]"
+                  className="flex w-auto h-[225px] "
                 />
               </div>
             ) : (

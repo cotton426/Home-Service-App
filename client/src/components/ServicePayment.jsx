@@ -25,13 +25,24 @@ const AutoSubmit = ({ setInitialValues }) => {
   return null;
 };
 
-function ServicePayment({ initialValues, handleChange, setInitialValues }) {
-  // useEffect(()=>{},[]);
+function ServicePayment({ initialValues, setInitialValues }) {
   console.log(initialValues);
+
+  function formatCreditCardNumber(event) {
+    // Get the input value and remove all non-numeric characters
+    let input = event.target.value.replace(/\D/g, "");
+    // Add a space after every 4 characters
+    input = input.replace(/(\d{4})(?=\d)/g, "$1 ");
+    // Set the formatted value back to the input field
+    event.target.value = input;
+  }
 
   const validationSchema = Yup.object().shape({
     creditNumber: Yup.string()
-      .matches(/^[0-9]{16}$/, "หมายเลขบัตรเครดิตต้องเป็นตัวเลข 16 หลัก")
+      .matches(
+        /^[0-9]{4}\s?[0-9]{4}\s?[0-9]{4}\s?[0-9]{4}$/,
+        "หมายเลขบัตรเครดิตต้องเป็นตัวเลข 16 หลัก"
+      )
       .required("กรุณากรอกหมายเลขบัตรเครดิต"),
     creditName: Yup.string().required("กรุณากรอกชื่อบนบัตร"),
     dateOfExpiry: Yup.string()
@@ -40,7 +51,9 @@ function ServicePayment({ initialValues, handleChange, setInitialValues }) {
         "กรุณากรอกวันหมดอายุในรูปแบบ MM/YY"
       )
       .required("กรุณากรอกวันหมดอายุ"),
-    code: Yup.string().required("กรุณากรอกรหัส CVC / CVV*"),
+    code: Yup.string()
+      .required("กรุณากรอกรหัส CVC / CVV*")
+      .matches(/^[0-9]+$/, "กรุณากรอกตัวเลขเท่านั้น"),
   });
 
   return (
@@ -52,29 +65,13 @@ function ServicePayment({ initialValues, handleChange, setInitialValues }) {
           setInitialValues(values);
         }}
       >
-        {({}) => (
+        {({ values, setValues }) => (
           <Form className="w-3/5 ">
             <div className="box flex flex-col p-8 gap-4">
               <h1 className="text-gray-700 font-normal text-xl">ชำระเงิน</h1>
-
-              <div className="flex flex-row justify-between">
-                <button
-                  className="select-box flex flex-col justify-center items-center text-center gap-2"
-                  type="checkbox"
-                >
-                  <MdOutlineQrCode2
-                    id="MdOutlineQrCode2"
-                    className="text-3xl"
-                  />
-                  <div className="font-semibold text-sm">พร้อมเพย์</div>
-                </button>
-                <button
-                  className="select-box flex flex-col justify-center items-center text-center gap-2"
-                  type="checkbox"
-                >
-                  <MdCreditCard className="text-3xl" />
-                  <div className="font-semibold text-sm">บัตรเครดิต</div>
-                </button>
+              <div className="select-box h-[86px] w-full flex flex-col justify-center items-center text-center gap-2">
+                <MdCreditCard className="text-3xl" />
+                <div className="font-semibold text-sm">บัตรเครดิต</div>
               </div>
               <div className="w-full flex flex-col justify-center items-start gap-1">
                 <div className="flex text-gray-900 font-medium">
@@ -82,13 +79,12 @@ function ServicePayment({ initialValues, handleChange, setInitialValues }) {
                 </div>
                 <div className="w-full">
                   <Field
-                    // value={initialValues.creditNumber}
                     type="text"
                     name="creditNumber"
-                    maxLength="16"
+                    maxLength="19"
                     placeholder="กรุณากรอกหมายเลขบัตรเครดิต"
                     className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
-                    // onChange={handleChange}
+                    onKeyUp={formatCreditCardNumber}
                   />
 
                   <ErrorMessage
@@ -104,12 +100,10 @@ function ServicePayment({ initialValues, handleChange, setInitialValues }) {
                 </div>
                 <div className="w-full">
                   <Field
-                    // value={initialValues.creditName}
                     type="text"
                     name="creditName"
                     placeholder="กรุณากรอกชื่อบนบัตร"
                     className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
-                    // onChange={handleChange}
                   />
                   <ErrorMessage
                     name="creditName"
@@ -125,14 +119,27 @@ function ServicePayment({ initialValues, handleChange, setInitialValues }) {
                   </div>
                   <div className="w-full">
                     <Field
-                      // value={initialValues.dateOfExpiry}
                       type="text"
                       name="dateOfExpiry"
                       placeholder="MM/YY"
                       maxLength="5"
                       className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
-                      // onChange={handleChange}
+                      onChange={(event) => {
+                        const { name, value } = event.target;
+                        let formattedValue = value;
+                        // Remove all non-numeric characters from the input value
+                        formattedValue = formattedValue.replace(/[^\d]/g, "");
+                        // Add the slash between month and year if the user has entered two characters
+                        if (formattedValue.length > 2) {
+                          formattedValue = `${formattedValue.slice(
+                            0,
+                            2
+                          )}/${formattedValue.slice(2)}`;
+                        }
+                        setValues({ ...values, [name]: formattedValue });
+                      }}
                     />
+
                     <ErrorMessage
                       name="dateOfExpiry"
                       component="p"
@@ -146,13 +153,11 @@ function ServicePayment({ initialValues, handleChange, setInitialValues }) {
                   </div>
                   <div className="w-full">
                     <Field
-                      // value={initialValues.code}
                       type="text"
                       name="code"
                       placeholder="xxx"
                       maxLength="3"
                       className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
-                      // onChange={handleChange}
                     />
                     <ErrorMessage
                       name="code"
