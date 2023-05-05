@@ -14,7 +14,7 @@ import AlertConfirmation from "./AlertConfirmation";
 
 function EditService({ view }) {
   const param = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [initialValues, setInitialValues] = useState({
     name: "",
@@ -91,9 +91,8 @@ function EditService({ view }) {
     setShowDeleteConfirmation(false);
     setItemToDelete(null);
     deleteService(itemToDelete.service_id);
-    navigate("/services")
+    navigate("/services");
   };
-
 
   const cancelDelete = () => {
     setShowDeleteConfirmation(false);
@@ -146,9 +145,12 @@ function EditService({ view }) {
           {({ values, submitForm, handleSubmit, formikProps }) => (
             <Form onSubmit={handleSubmit}>
               {view ? (
-                <DetailServiceNavbar />
+                <DetailServiceNavbar title={itemObjects.name} />
               ) : (
-                <EditServiceNavbar onConfirm={submitForm} />
+                <EditServiceNavbar
+                  onConfirm={submitForm}
+                  title={itemObjects.name}
+                />
               )}
               <div className=" bg-BG h-full w-full p-[5%]">
                 <div className="flex flex-col justify-start border border-gray-300 rounded-lg bg-white w-full">
@@ -160,7 +162,7 @@ function EditService({ view }) {
                           className="w-[100px] text-gray-700"
                         >
                           ชื่อบริการ
-                          <label className="text-red">*</label>
+                          {!view && <label className="text-red">*</label>}
                         </label>
                         <div className="flex flex-col items-end justify-end">
                           {view ? (
@@ -200,7 +202,7 @@ function EditService({ view }) {
                         />
                       </div>
 
-                      <div className="flex flex-col justify-center items-end cursor-pointer">
+                      <div className="flex flex-col justify-center items-end ">
                         <Field
                           name="image"
                           type="file"
@@ -399,7 +401,7 @@ function EditService({ view }) {
                     </div>
                   </div>
                 </div>
-                    {view ? null : (
+                {view ? null : (
                   <div className="flex text-gray-600 py-5 justify-end ">
                     <div
                       className="flex items-center hover:cursor-pointer"

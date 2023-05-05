@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { FiTag } from "react-icons/fi";
-import { Link } from "react-router-dom";
 import useUser from "../hooks/useUser";
+import { useNavigate } from "react-router-dom";
 
 function ServiceList() {
   const { items, homepageGetServices } = useUser();
+
+const navigate = useNavigate()
 
   useEffect(() => {
     homepageGetServices();
@@ -60,7 +62,10 @@ function ServiceList() {
                   </div>
                   <button
                     className="btn-ghost mb-3 ml-4"
-                    onClick={() => console.log(item)}
+                    onClick={() => {
+                      console.log(item);
+                      navigate(`/select-service/${item.service_id}`);
+                    }}
                   >
                     เลือกบริการ
                   </button>

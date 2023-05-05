@@ -11,7 +11,7 @@ function Service() {
       <div className="content flex flex-row justify-center space-x-11 mt-6 w-[65%]">
         <ServiceList />
       </div>
-      <Link to="/service">
+      <Link to="/services">
         <button className="btn-primary mt-6">ดูบริการท้ังหมด</button>
       </Link>
     </div>

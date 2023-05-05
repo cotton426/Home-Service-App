@@ -21,7 +21,7 @@ function AuthenticatedApp({ isAdmin }) {
       <NavbarLogout isAdmin={isAdmin} />
       <Routes>
         <Route path="/" element={<Homepage />} />
-        <Route path="/service" element={<ServicesPage />} />
+        <Route path="/services" element={<ServicesPage />} />
         <Route path="/order-service" element={<BookingForm />} />
         <Route path="/user-orders-list" element={<CustomerServiceList />} />
         <Route path="*" element={<Homepage />} />

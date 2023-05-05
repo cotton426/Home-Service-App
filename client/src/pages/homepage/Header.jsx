@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Header = () => {
   return (
     <header className="bg-blue-100 px-[10%] py-20 w-screen relative">
@@ -12,7 +14,9 @@ const Header = () => {
         <br />
         โดยพนักงานแม่บ้าน และช่างมืออาชีพ
       </p>
-      <button className="btn-primary">เช็คราคาบริการ</button>
+      <Link to="/services">
+        <button className="btn-primary">เช็คราคาบริการ</button>
+      </Link>
       <img
         className="absolute h-[90%] bottom-0 right-[8%]"
         src="../../images/plumber-pointing-lateral_1368-587-removebg-preview 1.png"
