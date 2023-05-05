@@ -44,7 +44,7 @@ function AddOnList({ itemObjects, counters, setCounters, cart, setCart }) {
         // name: subServiceList[index].name,
         quantity: newCounters[index],
         price: subServiceList[index].price,
-        sub_service_id:  subServiceList[index].sub_service_id,
+        sub_service_id: subServiceList[index].sub_service_id,
       };
       // return the new array as the updated state
       return newCart;
@@ -57,6 +57,20 @@ function AddOnList({ itemObjects, counters, setCounters, cart, setCart }) {
       const newCounters = [...counters];
       newCounters[index] -= 1;
       setCounters(newCounters);
+      setCart((prevCart) => {
+        // make a copy of the previous state array
+        const newCart = [...prevCart];
+        // modify the array as needed
+        newCart[index] = {
+          // name: subServiceList[index].name,
+          quantity: newCounters[index],
+          price: subServiceList[index].price,
+          sub_service_id: subServiceList[index].sub_service_id,
+        };
+        // return the new array as the updated state
+        return newCart;
+      });
+      console.log(cart);
     }
   };
 

@@ -260,21 +260,22 @@ const ServiceDetail = () => {
               Object.values(inputValues).filter((item) => item === "").length >
                 (inputValues.note === "" ? 1 : 0))
           }
-          onClick={() => {
+          onClick={async() => {
             if (page === "payment-page") {
               const totalPrice = cart.reduce(
                 (sum, item) => sum + item.price * item.quantity,
                 0
               );
+              const selectCart = cart.filter((item) => item.quantity > 0);
               const profiles = localStorage.getItem("userData");
               const profile = JSON.parse(profiles);
               const profile_id = profile.profiles[0].id;
               console.log(profile);
               console.log(profile_id);
-
+                const creditData = await handlePayment()
               const orderItems = {
-                creditData: handlePayment(),
-                cart,
+                creditData,
+                cart: selectCart,
                 price: totalPrice,
                 ...inputValues,
                 profile_id,
@@ -282,7 +283,7 @@ const ServiceDetail = () => {
               };
               console.log(orderItems);
               addOrder(orderItems);
-              console.log(cart, inputValues, initialValues);
+              console.log(selectCart, inputValues, initialValues);
             }
             handleClickNext();
           }}
