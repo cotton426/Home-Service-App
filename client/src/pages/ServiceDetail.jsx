@@ -87,7 +87,7 @@ const ServiceDetail = () => {
   const [cart, setCart] = useState([]);
   const [counters, setCounters] = useState([]);
 
-  const {addOrder} =useUser()
+  const { addOrder } = useUser();
 
   // const [showPromptpay, setShowPromptpay] = useState(false);
   // const [showCreditCard, setShowCreditCard] = useState(false);
@@ -112,6 +112,7 @@ const ServiceDetail = () => {
         }
       );
       console.log(response.data);
+      return response.data;
       // Use the token returned by Omise to create a charge or save the card to a customer
     } catch {
       (error) => {
@@ -261,24 +262,28 @@ const ServiceDetail = () => {
           }
           onClick={() => {
             if (page === "payment-page") {
-              const totalPrice = cart.reduce((sum, item) => sum + item.price*item.quantity,0)
-              const profiles = localStorage.getItem("userData")
-              const profile = JSON.parse(profiles)
-              const profile_id = profile.profiles[0].id
+              const totalPrice = cart.reduce(
+                (sum, item) => sum + item.price * item.quantity,
+                0
+              );
+              const profiles = localStorage.getItem("userData");
+              const profile = JSON.parse(profiles);
+              const profile_id = profile.profiles[0].id;
               console.log(profile);
               console.log(profile_id);
+
               const orderItems = {
+                creditData: handlePayment(),
                 cart,
-                price:totalPrice,
+                price: totalPrice,
                 ...inputValues,
                 profile_id,
-                status:"On Process",
+                status: "On Process",
               };
               console.log(orderItems);
-              addOrder(orderItems)
+              addOrder(orderItems);
               console.log(cart, inputValues, initialValues);
             }
-            handlePayment();
             handleClickNext();
           }}
         >
