@@ -2,7 +2,11 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      whitespace: {
+        "pre-wrap": "pre-wrap",
+      },
+    },
     colors: {
       "blue-100": "#E7EEFF",
       "blue-200": "#D2DFFC",

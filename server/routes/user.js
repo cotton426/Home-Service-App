@@ -95,7 +95,6 @@ userRouter.post("/orders", async (req, res) => {
     province,
     booking_date,
     booking_time,
-    staff_id,
   });
 
   const { data: ordersToday, error: ordersTodayError } = await supabase
@@ -144,15 +143,16 @@ userRouter.post("/orders", async (req, res) => {
     return res.status(400).json({ error: newOrderError.message });
   }
 
-  const newCart = cart.map(item => {delete item.price
-    return item
-  })
+  const newCart = cart.map((item) => {
+    delete item.price;
+    return item;
+  });
 
   console.log(newCart);
 
   const { order_id } = newOrder[0];
   const addCart = newCart.map((subService) => {
-    return {...subService, order_id : order_id}
+    return { ...subService, order_id: order_id };
   });
 
   console.log(addCart);
@@ -178,14 +178,15 @@ userRouter.get("/orders", async (req, res) => {
 
   const { data, error } = await supabase
     .from("orders")
-    .select("*, order_items(*, sub_services(name))")
-    .filter("profile_id", "eq", profile_id);
+    .select("*, order_items(*, sub_services(name,unit))")
+    .filter("profile_id", "eq", profile_id)
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error("Error fetching user orders:", error);
     return res.status(500).json({ error: error.message });
   }
-
+  console.log(data);
   return res.json(data);
 });
 

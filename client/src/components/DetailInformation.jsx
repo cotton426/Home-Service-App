@@ -3,7 +3,6 @@ import { Formik, Form, Field, ErrorMessage, useFormikContext } from "formik";
 import * as Yup from "yup";
 import { TimePicker } from "antd";
 
-
 const AutoSubmit = ({ inputValues, setInputValues }) => {
   const { values, submitForm } = useFormikContext();
   useEffect(() => {
@@ -176,11 +175,11 @@ const DetailInformation = ({ inputValues, setInputValues, handleChange }) => {
       <label htmlFor="note" className="ml-5">
         ระบุข้อมูลเพิ่มเติม
       </label>
-      <div className="box h-24 ml-5 ">
-        <input
-          className="ml-2 w-[98%] px-3 focus:outline-none focus:border-transparent placeholder:text-gray-700 "
-          type="text"
-          as="textarea"
+
+      <div className="h-24 ml-5 ">
+        <textarea
+          style={{ height: "90px" }}
+          className="input-default w-[98%] px-3 py-2 focus:outline-none focus:border-transparent placeholder:text-gray-700 whitespace-pre-wrap"
           placeholder="กรุณาระบุข้อมูลเพิ่มเติม"
         />
       </div>
