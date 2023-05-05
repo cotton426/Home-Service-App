@@ -33,7 +33,7 @@ function ViewPromotionCode() {
           </div>
           <div className="flex flex-row ">
             <h2 className="w-[250px] text-gray-700">ราคาที่ลด</h2>
-            <p className="text-red">{promotion?.discount}฿</p>
+            <p className="text-red">-{promotion?.discount}฿</p>
           </div>
           <div className="flex flex-row ">
             <h2 className="w-[250px] text-gray-700">โควต้าการใช้</h2>

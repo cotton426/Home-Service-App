@@ -132,9 +132,9 @@ export const AddServiceNavbar = () => (
   />
 );
 
-export const EditServiceNavbar = () => (
+export const EditServiceNavbar = ({ title }) => (
   <Navbar
-    title="บริการย่อย"
+    title={title}
     subTitle="บริการ"
     // backLink="/services"
     leftButton={
@@ -192,11 +192,11 @@ export const DetailCategoryNavbar = ({ title }) => {
   );
 };
 
-export const DetailServiceNavbar = () => {
+export const DetailServiceNavbar = ({ title }) => {
   const param = useParams();
   return (
     <Navbar
-      title="แก้ไขบริการย่อย"
+      title={title}
       subTitle="บริการ"
       backLink="/services"
       rightButton={
@@ -242,7 +242,7 @@ export const DetailPromotionNavbar = () => {
     <Navbar
       title="HOME0202" // axios.get("")
       subTitle="Promotion Code"
-      backLink="/promotion"
+      backLink="/promotions"
       rightButton={
         <Link to={`/edit-promotion/${param.promotion_id}`}>
           <button className="btn-primary">แก้ไข</button>

@@ -100,10 +100,12 @@ td {
 }
 
 .select-box {
-  @apply text-gray-800 border border-gray-300 bg-white rounded-lg w-[48%] h-[86px]
-  hover:border-blue-600 hover:text-blue-600 
-  focus:bg-blue-100 focus:text-blue-600 focus:border-blue-600;
+  @apply text-gray-800 border border-gray-300 bg-white rounded-lg 
+  /* hover:border-blue-600 hover:text-blue-600 
+  focus:bg-blue-100 focus:text-blue-600 focus:border-blue-600
+  active:bg-blue-100 */
 }
+
 
 .present-stage {
   @apply text-blue-500 font-medium border-blue-500 bg-white;

@@ -26,21 +26,23 @@ function UploadImage({ field, form, view }) {
       <div className="flex flex-row justify-center space-x-40 mt-10 text-gray-700">
         <label htmlFor={field?.name} className="w-[100px] text-gray-700">
           รูปภาพ
-          <label className="text-red">*</label>
+          {!view && <label className="text-red">*</label>}
         </label>
         {image ? (
           <label
             htmlFor={field?.name}
-            className="flex flex-col justify-center items-center border-gray-300 rounded h-[225px] w-[450px] cursor-pointer p-0"
+            className="flex flex-col justify-center items-center border-gray-300 rounded h-[225px] w-[450px] p-0 "
           >
-            <input
-              type="file"
-              id={field?.name}
-              accept="image/*"
-              className="input-field"
-              hidden
-              onChange={handleChange}
-            />
+            {!view && (
+              <input
+                type="file"
+                id={field?.name}
+                accept="image/*"
+                className="input-field cursor-pointer"
+                hidden
+                onChange={handleChange}
+              />
+            )}
             {!image ? (
               <div className="flex flex-col items-center">
                 <img
@@ -55,7 +57,7 @@ function UploadImage({ field, form, view }) {
                 <p className="text-gray-700">PNG, JPG ขนาดไม่เกิน 5MB</p>
               </div>
             ) : view ? (
-              <div className="flex flex-col justify-center items-center rounded h-[225px] w-[450px] cursor-pointer p-0">
+              <div className="flex flex-col justify-center items-center rounded h-[225px] w-[450px]  p-0">
                 <img
                   src={image}
                   alt={fileName}
@@ -64,24 +66,26 @@ function UploadImage({ field, form, view }) {
               </div>
             ) : (
               <div className="flex flex-col justify-center items-center border-2 border-gray-300 rounded h-[225px] w-[450px] cursor-pointer p-0">
-                <img
-                  src={image}
-                  alt={fileName}
-                  className="flex w-auto h-full"
-                />
+                {!view && (
+                  <img
+                    src={image}
+                    alt={fileName}
+                    className="flex w-auto h-full "
+                  />
+                )}
               </div>
             )}
           </label>
         ) : (
           <label
             htmlFor={field?.name}
-            className="flex flex-col justify-center items-center border-2 border-dashed border-gray-300 rounded h-[225px] w-[450px] cursor-pointer p-0"
+            className="flex flex-col justify-center items-center border-2 border-dashed border-gray-300 rounded h-[225px] w-[450px]  p-0"
           >
             <input
               type="file"
               id={field?.name}
               accept="image/*"
-              className="input-field"
+              className="input-field cursor-pointer"
               hidden
               onChange={handleChange}
             />
@@ -99,11 +103,11 @@ function UploadImage({ field, form, view }) {
                 <p className="text-gray-700">PNG, JPG ขนาดไม่เกิน 5MB</p>
               </div>
             ) : view ? (
-              <div className="flex flex-col justify-center items-center rounded h-[225px] w-[450px] cursor-pointer p-0">
+              <div className="flex flex-col justify-center items-center rounded h-[225px] w-[450px]  p-0">
                 <img
                   src={image}
                   alt={fileName}
-                  className="flex w-auto h-[225px]"
+                  className="flex w-auto h-[225px] "
                 />
               </div>
             ) : (
