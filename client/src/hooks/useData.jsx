@@ -165,7 +165,6 @@ const useData = () => {
     }
   };
 
-
   const addPromotion = async (promotionData) => {
     try {
       const response = await axios.post(
@@ -196,7 +195,6 @@ const useData = () => {
     }
   };
 
-
   const updatePromotion = async (promotionId, promotionData) => {
     try {
       const response = await axios.put(
@@ -224,8 +222,6 @@ const useData = () => {
       console.error(error);
     }
   };
-
-
 
   return {
     items,

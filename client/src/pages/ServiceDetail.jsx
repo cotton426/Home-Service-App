@@ -132,6 +132,7 @@ const ServiceDetail = () => {
   const [page, setPage] = useState("select-page");
   const [cart, setCart] = useState([]);
   const [counters, setCounters] = useState([]);
+  const [paid, setPaid] = useState(false);
 
   const { addOrder } = useUser();
 
@@ -346,9 +347,13 @@ const ServiceDetail = () => {
                     status: "On Process",
                   };
                   console.log(orderItems);
-                  addOrder(orderItems);
-                  console.log(selectCart, inputValues, initialValues);
-                  setPage("summary-page");
+                  // console.log(selectCart, inputValues, initialValues);
+                  try {
+                    await addOrder(orderItems);
+                    setPage("summary-page");
+                  } catch (e) {
+                    console.log(e);
+                  }
                 }
                 handleClickNext();
               }}

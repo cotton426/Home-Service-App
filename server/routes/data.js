@@ -1,8 +1,10 @@
 import { Router } from "express";
 import multer from "multer";
 import { supabase } from "../utils/supabase.js";
-
+import { requireAuth } from "../middleware/authMiddleware.js";
 const dataRouter = Router();
+
+dataRouter.use(requireAuth);
 const upload = multer({ storage: multer.memoryStorage() });
 
 dataRouter.get("/categories", async (req, res) => {
