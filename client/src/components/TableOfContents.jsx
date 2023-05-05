@@ -24,6 +24,8 @@ const TableRow = ({
 
   const navigateToItem = () => {
     navigate(
+      promotion ? `/view-promotion/${item.id}` 
+      :
       service
         ? `/view-service/${item.service_id}`
         : `/view-category/${item.category_id}`

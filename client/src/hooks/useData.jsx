@@ -164,6 +164,8 @@ const useData = () => {
       console.error(error);
     }
   };
+
+
   const addPromotion = async (promotionData) => {
     try {
       const response = await axios.post(
@@ -185,6 +187,7 @@ const useData = () => {
       const response = await axios.get(
         "http://localhost:4000/data/promotions/" + param
       );
+      setItemObjects(response);
       console.log(response);
       return response.data;
     } catch (error) {
