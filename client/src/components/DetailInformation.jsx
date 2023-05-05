@@ -79,6 +79,12 @@ const DetailInformation = ({ inputValues, setInputValues, handleChange }) => {
       type: "text",
       placeholder: "เลือกจังหวัด",
     },
+    {
+      label: "ระบุข้อมูลเพิ่มเติม",
+      name: "note",
+      type: "textarea",
+      placeholder: "กรุณาระบุข้อมูลเพิ่มเติม",
+    },
   ];
 
   return (
@@ -105,7 +111,16 @@ const DetailInformation = ({ inputValues, setInputValues, handleChange }) => {
                     <label className="text-red">*</label>
                   )}
                 </label>
-                {field.component === TimePicker ? (
+                {field.type === "textarea" ? (
+                  <Field
+                    as="textarea"
+                    style={{ height: "90px", width: "210%" }}
+                    id={field.name}
+                    name={field.name}
+                    className="input-default w-[98%] px-3 py-2 focus:outline-none focus:border-transparent placeholder:text-gray-700 whitespace-pre-wrap"
+                    placeholder={field.placeholder}
+                  />
+                ) : field.component === TimePicker ? (
                   <Field
                     format="HH:mm"
                     type="text"
@@ -172,17 +187,6 @@ const DetailInformation = ({ inputValues, setInputValues, handleChange }) => {
           </Form>
         )}
       </Formik>
-      <label htmlFor="note" className="ml-5">
-        ระบุข้อมูลเพิ่มเติม
-      </label>
-
-      <div className="h-24 ml-5 ">
-        <textarea
-          style={{ height: "90px" }}
-          className="input-default w-[98%] px-3 py-2 focus:outline-none focus:border-transparent placeholder:text-gray-700 whitespace-pre-wrap"
-          placeholder="กรุณาระบุข้อมูลเพิ่มเติม"
-        />
-      </div>
     </div>
   );
 };

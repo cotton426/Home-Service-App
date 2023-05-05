@@ -11,6 +11,7 @@ userRouter.get("/", async (req, res) => {
       `
     name,
     image,
+    service_id,
     categories(name),
     sub_services (price)
     `
@@ -83,6 +84,7 @@ userRouter.post("/orders", async (req, res) => {
     district,
     province,
     cart,
+    note,
   } = req.body;
 
   console.log("data:", {
@@ -129,9 +131,7 @@ userRouter.post("/orders", async (req, res) => {
         booking_date,
         booking_time,
         staff_id,
-        sub_district,
-        district,
-        province,
+        note
       },
     ])
     .select("order_id");

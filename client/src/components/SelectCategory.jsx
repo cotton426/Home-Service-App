@@ -26,7 +26,7 @@ function SelectCategory({ field, form, view }) {
       <div className="relative flex flex-row justify-center space-x-40 text-gray-950 mt-10">
         <label htmlFor="category" className="w-[100px] text-gray-700">
           หมวดหมู่
-          <label className="text-red">*</label>
+          {!view && <label className="text-red">*</label>}
         </label>
         {view ? (
           <div>{getCategoryName(field.value)}</div>

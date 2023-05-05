@@ -155,7 +155,8 @@ export const EditCategory = ({ view }) => {
                 <div className="text-black w-full h-[340px] border border-gray-200 bg-white flex flex-col justify-start items-center px-[5%]">
                   <div className="flex flex-row items-center w-full py-[50px]">
                     <div className="flex w-[180px] text-gray-700">
-                      ชื่อหมวดหมู่<span className="text-red">*</span>
+                      ชื่อหมวดหมู่
+                      {!view && <label className="text-red">*</label>}
                     </div>
 
                     <div className="pl-[120px] w-full">
