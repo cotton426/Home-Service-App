@@ -31,10 +31,8 @@ function ServicePayment({ initialValues, setInitialValues }) {
   function formatCreditCardNumber(event) {
     // Get the input value and remove all non-numeric characters
     let input = event.target.value.replace(/\D/g, "");
-
     // Add a space after every 4 characters
     input = input.replace(/(\d{4})(?=\d)/g, "$1 ");
-
     // Set the formatted value back to the input field
     event.target.value = input;
   }
@@ -53,7 +51,9 @@ function ServicePayment({ initialValues, setInitialValues }) {
         "กรุณากรอกวันหมดอายุในรูปแบบ MM/YY"
       )
       .required("กรุณากรอกวันหมดอายุ"),
-    code: Yup.string().required("กรุณากรอกรหัส CVC / CVV*"),
+    code: Yup.string()
+      .required("กรุณากรอกรหัส CVC / CVV*")
+      .matches(/^[0-9]+$/, "กรุณากรอกตัวเลขเท่านั้น"),
   });
 
   return (
@@ -65,29 +65,13 @@ function ServicePayment({ initialValues, setInitialValues }) {
           setInitialValues(values);
         }}
       >
-        {({values, setValues}) => (
+        {({ values, setValues }) => (
           <Form className="w-3/5 ">
             <div className="box flex flex-col p-8 gap-4">
               <h1 className="text-gray-700 font-normal text-xl">ชำระเงิน</h1>
-
-              <div className="flex flex-row justify-between">
-                <button
-                  className="select-box flex flex-col justify-center items-center text-center gap-2"
-                  type="checkbox"
-                >
-                  <MdOutlineQrCode2
-                    id="MdOutlineQrCode2"
-                    className="text-3xl"
-                  />
-                  <div className="font-semibold text-sm">พร้อมเพย์</div>
-                </button>
-                <button
-                  className="select-box flex flex-col justify-center items-center text-center gap-2"
-                  type="checkbox"
-                >
-                  <MdCreditCard className="text-3xl" />
-                  <div className="font-semibold text-sm">บัตรเครดิต</div>
-                </button>
+              <div className="select-box h-[86px] w-full flex flex-col justify-center items-center text-center gap-2">
+                <MdCreditCard className="text-3xl" />
+                <div className="font-semibold text-sm">บัตรเครดิต</div>
               </div>
               <div className="w-full flex flex-col justify-center items-start gap-1">
                 <div className="flex text-gray-900 font-medium">
@@ -143,10 +127,8 @@ function ServicePayment({ initialValues, setInitialValues }) {
                       onChange={(event) => {
                         const { name, value } = event.target;
                         let formattedValue = value;
-
                         // Remove all non-numeric characters from the input value
                         formattedValue = formattedValue.replace(/[^\d]/g, "");
-
                         // Add the slash between month and year if the user has entered two characters
                         if (formattedValue.length > 2) {
                           formattedValue = `${formattedValue.slice(
@@ -154,7 +136,6 @@ function ServicePayment({ initialValues, setInitialValues }) {
                             2
                           )}/${formattedValue.slice(2)}`;
                         }
-
                         setValues({ ...values, [name]: formattedValue });
                       }}
                     />
@@ -172,13 +153,11 @@ function ServicePayment({ initialValues, setInitialValues }) {
                   </div>
                   <div className="w-full">
                     <Field
-                      // value={initialValues.code}
                       type="text"
                       name="code"
                       placeholder="xxx"
                       maxLength="3"
                       className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
-                      // onChange={handleChange}
                     />
                     <ErrorMessage
                       name="code"
