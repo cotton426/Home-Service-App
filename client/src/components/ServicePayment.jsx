@@ -25,9 +25,7 @@ const AutoSubmit = ({ setInitialValues }) => {
   return null;
 };
 
-function ServicePayment({ initialValues, setInitialValues }) {
-  console.log(initialValues);
-
+function ServicePayment({ initialValues, setInitialValues, paymentError }) {
   function formatCreditCardNumber(event) {
     // Get the input value and remove all non-numeric characters
     let input = event.target.value.replace(/\D/g, "");
@@ -86,7 +84,9 @@ function ServicePayment({ initialValues, setInitialValues }) {
                     className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
                     onKeyUp={formatCreditCardNumber}
                   />
-
+                  {paymentError.includes("number") && (
+                    <p className="text-red">{paymentError}</p>
+                  )}
                   <ErrorMessage
                     name="creditNumber"
                     component="p"
@@ -139,7 +139,9 @@ function ServicePayment({ initialValues, setInitialValues }) {
                         setValues({ ...values, [name]: formattedValue });
                       }}
                     />
-
+                    {paymentError.includes("exp") && (
+                      <p className="text-red">{paymentError}</p>
+                    )}
                     <ErrorMessage
                       name="dateOfExpiry"
                       component="p"

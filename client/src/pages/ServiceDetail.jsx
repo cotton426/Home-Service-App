@@ -116,38 +116,72 @@ const ServiceDetail = () => {
   const [cart, setCart] = useState([]);
   const [counters, setCounters] = useState([]);
   const [paid, setPaid] = useState(false);
+  const [paymentError, setPaymentError] = useState("");
 
   const { addOrder } = useUser();
 
   // const [showPromptpay, setShowPromptpay] = useState(false);
   // const [showCreditCard, setShowCreditCard] = useState(false);
+  // const handlePayment = async () => {
+  //   try {
+
+  //     const response = await axios.post(
+  //       "https://vault.omise.co/tokens",
+  //       {
+  //         card: {
+  //           name: initialValues.creditName,
+  //           number: initialValues.creditNumber.split(" ").join(""),
+  //           expiration_month: initialValues.dateOfExpiry.split(`/`)[0],
+  //           expiration_year: `20${initialValues.dateOfExpiry.split(`/`)[1]}`,
+  //           security_code: initialValues.code,
+  //         },
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: "Basic " + btoa("pkey_test_5vnsm9t1c9u17nytvhp"),
+  //         },
+  //       }
+  //     );
+  //     console.log(response.data);
+  //     return response.data;
+  //     // Use the token returned by Omise to create a charge or save the card to a customer
+  //   } catch {
+  //     (error) => {
+  //       console.error(error);
+  //     };
+  //   }
+  // };
   const handlePayment = async () => {
     try {
-      const response = await axios.post(
-        "https://vault.omise.co/tokens",
-        {
-          card: {
-            name: initialValues.creditName,
-            number: initialValues.creditNumber,
-            expiration_month: initialValues.dateOfExpiry.split(`/`)[0],
-            expiration_year: `20${initialValues.dateOfExpiry.split(`/`)[1]}`,
-            security_code: initialValues.code,
-          },
+      const headers = new Headers({
+        "Content-Type": "application/json",
+        Authorization: "Basic " + btoa("pkey_test_5vnsm9t1c9u17nytvhp"),
+      });
+
+      const body = JSON.stringify({
+        card: {
+          name: initialValues.creditName,
+          number: initialValues.creditNumber.split(" ").join(""),
+          expiration_month: initialValues.dateOfExpiry.split(`/`)[0],
+          expiration_year: `20${initialValues.dateOfExpiry.split(`/`)[1]}`,
+          security_code: initialValues.code,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Basic " + btoa("pkey_test_5vnsm9t1c9u17nytvhp"),
-          },
-        }
-      );
-      console.log(response.data);
-      return response.data;
+      });
+
+      const response = await fetch("https://vault.omise.co/tokens", {
+        method: "POST",
+        headers,
+        body,
+      });
+
+      const data = await response.json();
+
+      console.log(data);
+      return data;
       // Use the token returned by Omise to create a charge or save the card to a customer
-    } catch {
-      (error) => {
-        console.error(error);
-      };
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -259,6 +293,7 @@ const ServiceDetail = () => {
                 initialValues={initialValues}
                 setInitialValues={setInitialValues}
                 handleChange={handleChange}
+                paymentError={paymentError}
                 // showPromptpay = {showPromptpay}
                 // showCreditCard = {showCreditCard}
                 // handlePayment = {handlePayment}
@@ -308,7 +343,15 @@ const ServiceDetail = () => {
                   const profile_id = profile.profiles[0].id;
                   console.log(profile);
                   console.log(profile_id);
+                  console.log("work1");
+
                   const creditData = await handlePayment();
+                  if (creditData.object === "error") {
+                    setPaymentError(creditData.message);
+                    return;
+                  }
+
+                  console.log("work2");
                   const orderItems = {
                     creditData,
                     cart: selectCart,
