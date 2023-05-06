@@ -85,7 +85,7 @@ function ServicePayment({ initialValues, setInitialValues, paymentError }) {
                     onKeyUp={formatCreditCardNumber}
                   />
                   {paymentError.includes("number") && (
-                    <p className="text-red">{paymentError}</p>
+                    <p className="text-red">หมายเลขบัตรเครดิตไม่ถูกต้อง</p>
                   )}
                   <ErrorMessage
                     name="creditNumber"
@@ -140,7 +140,7 @@ function ServicePayment({ initialValues, setInitialValues, paymentError }) {
                       }}
                     />
                     {paymentError.includes("exp") && (
-                      <p className="text-red">{paymentError}</p>
+                      <p className="text-red">กรุณาตรวจสอบวันหมดอายุ</p>
                     )}
                     <ErrorMessage
                       name="dateOfExpiry"
