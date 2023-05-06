@@ -103,13 +103,26 @@ export const ServiceSummary = ({
             <div className="flex justify-between pb-2">
               <p className="text-gray-700 font-light text-sm">Promotion Code</p>
               <div className="flex flex-col items-end">
-                <p className="text-red text-sm font-medium">-{discountType === "Fixed"? (discount) : (totalPrice*((discount)/100))} ฿ </p>
+                <p className="text-red text-sm font-medium">
+                  -
+                  {discountType === "Fixed"
+                    ? discount
+                    : totalPrice * (discount / 100)}{" "}
+                  ฿{" "}
+                </p>
               </div>
             </div>
           )}
           <div className="flex justify-between">
             <p className="text-gray-700">รวม</p>
-            <p className="font-semibold">{!discount ? totalPrice : discountType === "Fixed"? (totalPrice - discount) : (totalPrice*((100-discount)/100)) } ฿</p>
+            <p className="font-semibold">
+              {!discount
+                ? totalPrice
+                : discountType === "Fixed"
+                ? totalPrice - discount
+                : totalPrice * ((100 - discount) / 100)}{" "}
+              ฿
+            </p>
           </div>
         </div>
 
@@ -353,16 +366,16 @@ const ServiceDetail = () => {
               }
               onClick={async () => {
                 if (page === "payment-page") {
-                  const totalPrice = cart.reduce(
+                  let totalPrice = cart.reduce(
                     (sum, item) => sum + item.price * item.quantity,
                     0
                   );
 
-                  if(discount) {
-                    if(discountType === "Fixed"){
-                      totalPrice = totalPrice - discount
+                  if (discount) {
+                    if (discountType === "Fixed") {
+                      totalPrice = totalPrice - discount;
                     } else {
-                      totalPrice = totalPrice*((100-discount)/100)
+                      totalPrice = totalPrice * ((100 - discount) / 100);
                     }
                   }
 
