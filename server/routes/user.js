@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { supabase } from "../utils/supabase.js";
 import { generateOrderCode } from "../utils/orderCode.js";
+import { omise } from "../utils/omise.js";
 
 const userRouter = Router();
 
@@ -72,7 +73,6 @@ userRouter.get("/services", async (req, res) => {
 });
 
 userRouter.post("/orders", async (req, res) => {
-  console.log("Request body:", req.body);
   const {
     profile_id,
     status,
@@ -85,19 +85,21 @@ userRouter.post("/orders", async (req, res) => {
     province,
     cart,
     note,
+    creditData,
   } = req.body;
 
-  console.log("data:", {
-    profile_id,
-    status,
-    total_price,
-    address,
-    sub_district,
-    district,
-    province,
-    booking_date,
-    booking_time,
-  });
+
+  // console.log("data:", {
+  //   profile_id,
+  //   status,
+  //   total_price,
+  //   address,
+  //   sub_district,
+  //   district,
+  //   province,
+  //   booking_date,
+  //   booking_time,
+  // });
 
   const { data: ordersToday, error: ordersTodayError } = await supabase
     .from("orders")
@@ -110,10 +112,26 @@ userRouter.post("/orders", async (req, res) => {
   }
 
   const orderCountToday = ordersToday.length;
-  console.log("Orders count for today:", orderCountToday);
+  // console.log("Orders count for today:", orderCountToday);
 
   // Generate unique order code
   const orderCode = generateOrderCode(orderCountToday, booking_date);
+
+  try {
+    const charge = await omise.charges.create({
+      amount: total_price*100,
+      currency: "thb",
+      card: creditData.id,
+      description: "Order #" + orderCode,
+    });
+
+    console.log(charge);
+    // handle successful charge
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ error: error.message });
+  }
+
   const staff_id = "1";
   // Save the order to the database
   const { data: newOrder, error: newOrderError } = await supabase
@@ -148,14 +166,14 @@ userRouter.post("/orders", async (req, res) => {
     return item;
   });
 
-  console.log(newCart);
+  // console.log(newCart);
 
   const { order_id } = newOrder[0];
   const addCart = newCart.map((subService) => {
     return { ...subService, order_id: order_id };
   });
 
-  console.log(addCart);
+  // console.log(addCart);
 
   const { data: orderItem, error: insertSubServiceError } = await supabase
     .from("order_items")

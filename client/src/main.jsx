@@ -5,6 +5,10 @@ import "./index.css";
 import { AuthProvider } from "./contexts/auth";
 // import { DataProvider } from "./contexts/data";
 import { BrowserRouter } from "react-router-dom";
+import jwtInterceptor from "./utils/jwtInterceptor";
+
+jwtInterceptor();
+
 // import { QueryClientProvider, QueryClient } from "react-query";
 
 // const queryClient = new QueryClient();
@@ -13,11 +17,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       {/* <QueryClientProvider client={queryClient}> */}
-        <AuthProvider>
-          {/* <DataProvider> */}
-            <App />
-          {/* </DataProvider> */}
-        </AuthProvider>
+      <AuthProvider>
+        {/* <DataProvider> */}
+        <App />
+        {/* </DataProvider> */}
+      </AuthProvider>
       {/* </QueryClientProvider> */}
     </BrowserRouter>
   </React.StrictMode>

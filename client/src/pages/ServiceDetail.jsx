@@ -103,13 +103,26 @@ export const ServiceSummary = ({
             <div className="flex justify-between pb-2">
               <p className="text-gray-700 font-light text-sm">Promotion Code</p>
               <div className="flex flex-col items-end">
-                <p className="text-red text-sm font-medium">-{discountType === "Fixed"? (discount) : (totalPrice*((discount)/100))} ฿ </p>
+                <p className="text-red text-sm font-medium">
+                  -
+                  {discountType === "Fixed"
+                    ? discount
+                    : totalPrice * (discount / 100)}{" "}
+                  ฿{" "}
+                </p>
               </div>
             </div>
           )}
           <div className="flex justify-between">
             <p className="text-gray-700">รวม</p>
-            <p className="font-semibold">{!discount ? totalPrice : discountType === "Fixed"? (totalPrice - discount) : (totalPrice*((100-discount)/100)) } ฿</p>
+            <p className="font-semibold">
+              {!discount
+                ? totalPrice
+                : discountType === "Fixed"
+                ? totalPrice - discount
+                : totalPrice * ((100 - discount) / 100)}{" "}
+              ฿
+            </p>
           </div>
         </div>
 
@@ -132,38 +145,73 @@ const ServiceDetail = () => {
   const [page, setPage] = useState("select-page");
   const [cart, setCart] = useState([]);
   const [counters, setCounters] = useState([]);
+  const [paid, setPaid] = useState(false);
+  const [paymentError, setPaymentError] = useState("");
 
   const { addOrder } = useUser();
 
   // const [showPromptpay, setShowPromptpay] = useState(false);
   // const [showCreditCard, setShowCreditCard] = useState(false);
+  // const handlePayment = async () => {
+  //   try {
+
+  //     const response = await axios.post(
+  //       "https://vault.omise.co/tokens",
+  //       {
+  //         card: {
+  //           name: initialValues.creditName,
+  //           number: initialValues.creditNumber.split(" ").join(""),
+  //           expiration_month: initialValues.dateOfExpiry.split(`/`)[0],
+  //           expiration_year: `20${initialValues.dateOfExpiry.split(`/`)[1]}`,
+  //           security_code: initialValues.code,
+  //         },
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: "Basic " + btoa("pkey_test_5vnsm9t1c9u17nytvhp"),
+  //         },
+  //       }
+  //     );
+  //     console.log(response.data);
+  //     return response.data;
+  //     // Use the token returned by Omise to create a charge or save the card to a customer
+  //   } catch {
+  //     (error) => {
+  //       console.error(error);
+  //     };
+  //   }
+  // };
   const handlePayment = async () => {
     try {
-      const response = await axios.post(
-        "https://vault.omise.co/tokens",
-        {
-          card: {
-            name: initialValues.creditName,
-            number: initialValues.creditNumber,
-            expiration_month: initialValues.dateOfExpiry.split(`/`)[0],
-            expiration_year: `20${initialValues.dateOfExpiry.split(`/`)[1]}`,
-            security_code: initialValues.code,
-          },
+      const headers = new Headers({
+        "Content-Type": "application/json",
+        Authorization: "Basic " + btoa("pkey_test_5vnsm9t1c9u17nytvhp"),
+      });
+
+      const body = JSON.stringify({
+        card: {
+          name: initialValues.creditName,
+          number: initialValues.creditNumber.split(" ").join(""),
+          expiration_month: initialValues.dateOfExpiry.split(`/`)[0],
+          expiration_year: `20${initialValues.dateOfExpiry.split(`/`)[1]}`,
+          security_code: initialValues.code,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Basic " + btoa("pkey_test_5vnsm9t1c9u17nytvhp"),
-          },
-        }
-      );
-      console.log(response.data);
-      return response.data;
+      });
+
+      const response = await fetch("https://vault.omise.co/tokens", {
+        method: "POST",
+        headers,
+        body,
+      });
+
+      const data = await response.json();
+
+      console.log(data);
+      return data;
       // Use the token returned by Omise to create a charge or save the card to a customer
-    } catch {
-      (error) => {
-        console.error(error);
-      };
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -276,6 +324,7 @@ const ServiceDetail = () => {
                 initialValues={initialValues}
                 setInitialValues={setInitialValues}
                 handleChange={handleChange}
+                paymentError={paymentError}
                 setDiscountType={setDiscountType}
                 setDiscount={setDiscount}
               />
@@ -317,16 +366,16 @@ const ServiceDetail = () => {
               }
               onClick={async () => {
                 if (page === "payment-page") {
-                  const totalPrice = cart.reduce(
+                  let totalPrice = cart.reduce(
                     (sum, item) => sum + item.price * item.quantity,
                     0
                   );
 
-                  if(discount) {
-                    if(discountType === "Fixed"){
-                      totalPrice = totalPrice - discount
+                  if (discount) {
+                    if (discountType === "Fixed") {
+                      totalPrice = totalPrice - discount;
                     } else {
-                      totalPrice = totalPrice*((100-discount)/100)
+                      totalPrice = totalPrice * ((100 - discount) / 100);
                     }
                   }
 
@@ -336,7 +385,15 @@ const ServiceDetail = () => {
                   const profile_id = profile.profiles[0].id;
                   console.log(profile);
                   console.log(profile_id);
+                  console.log("work1");
+
                   const creditData = await handlePayment();
+                  if (creditData.object === "error") {
+                    setPaymentError(creditData.message);
+                    return;
+                  }
+
+                  console.log("work2");
                   const orderItems = {
                     creditData,
                     cart: selectCart,
@@ -346,9 +403,13 @@ const ServiceDetail = () => {
                     status: "On Process",
                   };
                   console.log(orderItems);
-                  addOrder(orderItems);
-                  console.log(selectCart, inputValues, initialValues);
-                  setPage("summary-page");
+                  // console.log(selectCart, inputValues, initialValues);
+                  try {
+                    await addOrder(orderItems);
+                    setPage("summary-page");
+                  } catch (e) {
+                    console.log(e);
+                  }
                 }
                 handleClickNext();
               }}

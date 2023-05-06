@@ -27,7 +27,7 @@ const AutoSubmit = ({ setInitialValues, promotionApplied }) => {
   }, [values, submitForm, promotionApplied]); // Add promotionApplied as a dependency
 };
 
-function ServicePayment({ initialValues, setInitialValues, setDiscount, setDiscountType }) {
+function ServicePayment({ initialValues, setInitialValues, setDiscount, setDiscountType,paymentError }) {
   console.log(initialValues);
   const { checkPromotion } = useUser();
   const [promotionState, setPromotionState] = useState({
@@ -126,7 +126,9 @@ function ServicePayment({ initialValues, setInitialValues, setDiscount, setDisco
                       className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
                       onKeyUp={formatCreditCardNumber}
                     />
-
+                  {paymentError.includes("number") && (
+                    <p className="text-red">หมายเลขบัตรเครดิตไม่ถูกต้อง</p>
+                  )}
                     <ErrorMessage
                       name="creditNumber"
                       component="p"
@@ -179,7 +181,9 @@ function ServicePayment({ initialValues, setInitialValues, setDiscount, setDisco
                           setValues({ ...values, [name]: formattedValue });
                         }}
                       />
-
+                    {paymentError.includes("exp") && (
+                      <p className="text-red">กรุณาตรวจสอบวันหมดอายุ</p>
+                    )}
                       <ErrorMessage
                         name="dateOfExpiry"
                         component="p"
