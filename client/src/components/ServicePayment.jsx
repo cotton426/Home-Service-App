@@ -17,6 +17,7 @@ const AutoSubmit = ({ setInitialValues, promotionApplied }) => {
         values.creditName !== "" &&
         values.dateOfExpiry !== "" &&
         values.code !== "" &&
+        values.promotionCode !== "" &&
         promotionApplied // Add this condition
       ) {
         submitForm();
@@ -26,7 +27,7 @@ const AutoSubmit = ({ setInitialValues, promotionApplied }) => {
   }, [values, submitForm, promotionApplied]); // Add promotionApplied as a dependency
 };
 
-function ServicePayment({ initialValues, setInitialValues }) {
+function ServicePayment({ initialValues, setInitialValues, setDiscount, setDiscountType }) {
   console.log(initialValues);
   const { checkPromotion } = useUser();
   const [promotionState, setPromotionState] = useState({
@@ -47,9 +48,8 @@ function ServicePayment({ initialValues, setInitialValues }) {
   }
 
   const handleCheckPromotion = () => {
-  //  if(items[0].promotion_code === ){
-
-  //  }
+    //  if(items[0].promotion_code === ){
+    //  }
   };
 
   const validationSchema = Yup.object().shape({
@@ -71,12 +71,12 @@ function ServicePayment({ initialValues, setInitialValues }) {
       .matches(/^[0-9]+$/, "กรุณากรอกตัวเลขเท่านั้น"),
   });
 
-  const [discount, setDiscount] = useState(0);
+  
   const [promotionCodeError, setPromotionCodeError] = useState("");
 
   const handlePromotionCodeSubmit = async () => {
     console.log("handlePromotionCodeSubmit called");
-    const { valid, discount, message } = await checkPromotion(promotionCode);
+    const { valid, discount, message, type } = await checkPromotion(promotionCode);
 
     if (valid) {
       console.log("Promotion code is valid:", promotionCode);
@@ -85,6 +85,7 @@ function ServicePayment({ initialValues, setInitialValues }) {
       setDiscount(discount);
       setPromotionCodeError("");
       setPromotionApplied(true);
+      setDiscountType(type)
       // alert(
       //   `You have successfully applied the promotion code. You get a ${discount}% discount.`
       // );
@@ -179,77 +180,78 @@ function ServicePayment({ initialValues, setInitialValues }) {
                         }}
                       />
 
-                    <ErrorMessage
-                      name="dateOfExpiry"
-                      component="p"
-                      className="text-red"
-                    />
+                      <ErrorMessage
+                        name="dateOfExpiry"
+                        component="p"
+                        className="text-red"
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="w-[48%] flex flex-col justify-center items-startgap-1">
-                  <div className="flex text-gray-900 font-medium">
-                    รหัส CVC / CVV<span className="text-red">*</span>
-                  </div>
-                  <div className="w-full">
-                    <Field
-                      type="text"
-                      name="code"
-                      placeholder="xxx"
-                      maxLength="3"
-                      className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
-                    />
-                    <ErrorMessage
-                      name="code"
-                      component="p"
-                      className="text-red"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-row justify-start items-end">
-                <div className="w-[48%] flex flex-col justify-center items-startgap-1">
-                  <div className="flex text-gray-900 font-medium">
-                    Promotion Code
-                  </div>
-                  <div className="w-full">
-                    <Field
-                      id="promotion-code-input"
-                      value={promotionCode}
-                      type="text"
-                      name="PromotionCode"
-                      placeholder="กรุณากรอกโค้ดส่วนลด (ถ้ามี)"
-                      className={`border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none ${
-                        promotionApplied ? "text-gray-600" : ""
-                      }`}
-                      onChange={(e) => {
-                        setPromotionCode(e.target.value);
-                        if (promotionApplied) {
-                          setPromotionApplied(false);
-                        }
-                        setPromotionCodeError("");
-                      }}
-                    />
-                    <div className="absolute text-red mt-1">
-                      {promotionCodeError}
+                  <div className="w-[48%] flex flex-col justify-center items-startgap-1">
+                    <div className="flex text-gray-900 font-medium">
+                      รหัส CVC / CVV<span className="text-red">*</span>
+                    </div>
+                    <div className="w-full">
+                      <Field
+                        type="text"
+                        name="code"
+                        placeholder="xxx"
+                        maxLength="3"
+                        className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
+                      />
+                      <ErrorMessage
+                        name="code"
+                        component="p"
+                        className="text-red"
+                      />
                     </div>
                   </div>
                 </div>
-                {!promotionApplied && (
-                  <button
-                    type="button"
-                    className="btn-primary h-[44px] w-[90px] ml-7"
-                    onClick={handlePromotionCodeSubmit}
-                  >
-                    ใช้โค้ด
-                  </button>
-                )}
+                <div className="flex flex-row justify-start items-end">
+                  <div className="w-[48%] flex flex-col justify-center items-startgap-1">
+                    <div className="flex text-gray-900 font-medium">
+                      Promotion Code
+                    </div>
+                    <div className="w-full">
+                      <Field
+                        id="promotion-code-input"
+                        value={promotionCode}
+                        type="text"
+                        name="promotionCode"
+                        placeholder="กรุณากรอกโค้ดส่วนลด (ถ้ามี)"
+                        className={`border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none ${
+                          promotionApplied ? "text-gray-600" : ""
+                        }`}
+                        onChange={(e) => {
+                          setPromotionCode(e.target.value);
+                          if (promotionApplied) {
+                            setPromotionApplied(false);
+                          }
+                          setPromotionCodeError("");
+                        }}
+                      />
+                      <div className="absolute text-red mt-1">
+                        {promotionCodeError}
+                      </div>
+                    </div>
+                  </div>
+                  {!promotionApplied && (
+                    <button
+                      type="button"
+                      className="btn-primary h-[44px] w-[90px] ml-7"
+                      onClick={handlePromotionCodeSubmit}
+                    >
+                      ใช้โค้ด
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-            <AutoSubmit
-              setInitialValues={setInitialValues}
-              promotionApplied={promotionApplied}
-            />
-          </Form>
+              <AutoSubmit
+                setInitialValues={setInitialValues}
+                promotionApplied={promotionApplied}
+              />
+            </Form>
+          </div>
         )}
       </Formik>
     </>

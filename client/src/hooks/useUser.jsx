@@ -95,6 +95,7 @@ const useUser = () => {
         valid: response.data.valid,
         discount: response.data.discount,
         message: response.data.message,
+        type:response.data.type,
       };
     } catch (error) {
       console.error(error);
