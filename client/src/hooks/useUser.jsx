@@ -83,6 +83,30 @@ const useUser = () => {
     }
   };
 
+  const checkPromotion = async (promotionCode) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/user/check-promotion",
+        { promotionCode }
+      );
+      console.log(promotionCode);
+      console.log(response.data);
+      return {
+        valid: response.data.valid,
+        discount: response.data.discount,
+        message: response.data.message,
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        valid: false,
+        discount: 0,
+        message:
+          error.response?.data?.message ||
+          "Failed to check promotion code. Please try again.",
+      };
+    }
+  };
 
   return {
     items,
@@ -92,7 +116,8 @@ const useUser = () => {
     isLoading,
     error,
     getOrders,
-    addOrder
+    addOrder,
+    checkPromotion,
   };
 };
 

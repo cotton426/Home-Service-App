@@ -49,7 +49,7 @@ const TableRow = ({
           <td className="py-3 px-4 ">
             {item.quantity_used}/{item.useable_quantity}
           </td>
-          <td className="py-3 px-4">
+          <td className="py-3 px-4 text-red">
             -{item.discount.toFixed(2)}
             {item.type === "Fixed" ? "฿" : "%"}
           </td>

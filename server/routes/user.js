@@ -131,7 +131,7 @@ userRouter.post("/orders", async (req, res) => {
         booking_date,
         booking_time,
         staff_id,
-        note
+        note,
       },
     ])
     .select("order_id");
@@ -188,6 +188,50 @@ userRouter.get("/orders", async (req, res) => {
   }
   console.log(data);
   return res.json(data);
+});
+
+userRouter.post("/check-promotion", async (req, res) => {
+  console.log("req body:", req.body);
+  const { promotionCode } = req.body;
+  if (!promotionCode) {
+    return res
+      .status(400)
+      .json({ message: "Please provide a promotion code." });
+  }
+
+  const { data, error } = await supabase
+    .from("promotions")
+    .select("*")
+    .filter("promotion_code", "eq", promotionCode)
+    .single();
+
+  if (error) {
+    console.error("Error fetching promotion code:", error);
+    return res.status(500).json({ error: error.message });
+  }
+
+  if (!data) {
+    return res.status(404).json({ message: "Promotion code not found." });
+  }
+
+  const currentDate = new Date();
+  const expDate = new Date(data.exp_date);
+  const expTime = new Date(data.exp_time);
+
+  if (currentDate > expDate || currentDate > expTime) {
+    return res.status(400).json({ message: "Promotion code has expired." });
+  }
+
+  if (data.quantity_used >= data.useable_quantity) {
+    return res
+      .status(400)
+      .json({ message: "Promotion code has reached its usage limit." });
+  }
+  console.log("res is here :", data);
+  return res.json({
+    valid: true,
+    ...data,
+  });
 });
 
 export default userRouter;

@@ -4,8 +4,9 @@ import * as Yup from "yup";
 import { MdOutlineQrCode2 } from "react-icons/md";
 import { MdCreditCard } from "react-icons/md";
 import { useState, useEffect } from "react";
+import useUser from "../hooks/useUser";
 
-const AutoSubmit = ({ setInitialValues }) => {
+const AutoSubmit = ({ setInitialValues, promotionApplied }) => {
   const { values, submitForm } = useFormikContext();
 
   useEffect(() => {
@@ -15,18 +16,26 @@ const AutoSubmit = ({ setInitialValues }) => {
         values.creditNumber !== "" &&
         values.creditName !== "" &&
         values.dateOfExpiry !== "" &&
-        values.code !== ""
+        values.code !== "" &&
+        promotionApplied // Add this condition
       ) {
         submitForm();
       }
     }, 500);
     return () => clearTimeout(timer);
-  }, [values, submitForm]);
-  return null;
+  }, [values, submitForm, promotionApplied]); // Add promotionApplied as a dependency
 };
 
 function ServicePayment({ initialValues, setInitialValues }) {
   console.log(initialValues);
+  const { checkPromotion } = useUser();
+  const [promotionState, setPromotionState] = useState({
+    code: "",
+    applied: false,
+    error: "",
+  });
+  const [promotionCode, setPromotionCode] = useState("");
+  const [promotionApplied, setPromotionApplied] = useState(false);
 
   function formatCreditCardNumber(event) {
     // Get the input value and remove all non-numeric characters
@@ -55,6 +64,29 @@ function ServicePayment({ initialValues, setInitialValues }) {
       .required("กรุณากรอกรหัส CVC / CVV*")
       .matches(/^[0-9]+$/, "กรุณากรอกตัวเลขเท่านั้น"),
   });
+
+  const [discount, setDiscount] = useState(0);
+  const [promotionCodeError, setPromotionCodeError] = useState("");
+
+  const handlePromotionCodeSubmit = async () => {
+    console.log("handlePromotionCodeSubmit called");
+    const { valid, discount, message } = await checkPromotion(promotionCode);
+
+    if (valid) {
+      console.log("Promotion code is valid:", promotionCode);
+      console.log("Discount received:", discount);
+
+      setDiscount(discount);
+      setPromotionCodeError("");
+      setPromotionApplied(true);
+      // alert(
+      //   `You have successfully applied the promotion code. You get a ${discount}% discount.`
+      // );
+    } else {
+      setPromotionCodeError(message);
+      console.log("Invalid promotion code:", { valid, discount, message });
+    }
+  };
 
   return (
     <>
@@ -174,22 +206,42 @@ function ServicePayment({ initialValues, setInitialValues }) {
                   </div>
                   <div className="w-full">
                     <Field
-                      // value={initialValues.PromotionCode}
+                      id="promotion-code-input"
+                      value={promotionCode}
                       type="text"
                       name="PromotionCode"
                       placeholder="กรุณากรอกโค้ดส่วนลด (ถ้ามี)"
-                      maxLength="3"
-                      className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
-                      // onChange={handleChange}
+                      className={`border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none ${
+                        promotionApplied ? "text-gray-600" : ""
+                      }`}
+                      onChange={(e) => {
+                        setPromotionCode(e.target.value);
+                        if (promotionApplied) {
+                          setPromotionApplied(false);
+                        }
+                        setPromotionCodeError("");
+                      }}
                     />
+                    <div className="absolute text-red mt-1">
+                      {promotionCodeError}
+                    </div>
                   </div>
                 </div>
-                <button className="btn-primary h-[44px] w-[90px] ml-7">
-                  ใช้โค้ด
-                </button>
+                {!promotionApplied && (
+                  <button
+                    type="button"
+                    className="btn-primary h-[44px] w-[90px] ml-7"
+                    onClick={handlePromotionCodeSubmit}
+                  >
+                    ใช้โค้ด
+                  </button>
+                )}
               </div>
             </div>
-            <AutoSubmit setInitialValues={setInitialValues} />
+            <AutoSubmit
+              setInitialValues={setInitialValues}
+              promotionApplied={promotionApplied}
+            />
           </Form>
         )}
       </Formik>
