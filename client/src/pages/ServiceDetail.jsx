@@ -17,6 +17,9 @@ export const ServiceSummary = ({
   cart,
   setCart,
   page,
+  initialValues,
+  discountType,
+  discount,
 }) => {
   let totalPrice = 0;
 
@@ -28,7 +31,7 @@ export const ServiceSummary = ({
   };
 
   const formatter = new Intl.DateTimeFormat("th-TH", options);
-
+  console.log(initialValues);
   const formattedDate = (date) => formatter.format(new Date(date));
   return (
     <>
@@ -95,10 +98,24 @@ export const ServiceSummary = ({
             )}
           </div>
         )}
-        <div className="flex justify-between py-4">
-          <p className="text-gray-700">รวม</p>
-          <p className="font-semibold">{totalPrice} ฿</p>
+        <div className="py-4">
+          {discount !== 0 && (
+            <div className="flex justify-between pb-2">
+              <p className="text-gray-700 font-light text-sm">Promotion Code</p>
+              <div className="flex flex-col items-end">
+                <p className="text-red text-sm font-medium">-{discountType === "Fixed"? (discount) : (totalPrice*((discount)/100))} ฿ </p>
+              </div>
+            </div>
+          )}
+          <div className="flex justify-between">
+            <p className="text-gray-700">รวม</p>
+            <p className="font-semibold">{!discount ? totalPrice : discountType === "Fixed"? (totalPrice - discount) : (totalPrice*((100-discount)/100)) } ฿</p>
+          </div>
         </div>
+
+        {console.log(discount)}
+        {console.log(discountType)}
+
         {page === "summary-page" && (
           <Link to="/user-orders-list">
             <button className="btn-primary w-full">เช็ครายการซ่อม</button>
@@ -155,18 +172,16 @@ const ServiceDetail = () => {
     creditName: "",
     dateOfExpiry: "",
     code: "",
-    PromotionCode: "",
+    promotionCode: "",
   });
+
+  // console.log(initialValues);
 
   const handleChange = (event) => {
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
     setInitialValues({ ...initialValues, [fieldName]: fieldValue });
   };
-
-  // const handlePayment =(item)=> {
-  //   item ? setShowCreditCard(true): setShowPromptpay(true) ;
-  // }
 
   const [inputValues, setInputValues] = useState({
     date: "",
@@ -178,6 +193,9 @@ const ServiceDetail = () => {
     note: "",
     useTime: "",
   });
+
+  const [discount, setDiscount] = useState(0);
+  const [discountType, setDiscountType] = useState("");
 
   // const handleChange = (event) => {
   //   const fieldName = event.target.name;
@@ -258,9 +276,8 @@ const ServiceDetail = () => {
                 initialValues={initialValues}
                 setInitialValues={setInitialValues}
                 handleChange={handleChange}
-                // showPromptpay = {showPromptpay}
-                // showCreditCard = {showCreditCard}
-                // handlePayment = {handlePayment}
+                setDiscountType={setDiscountType}
+                setDiscount={setDiscount}
               />
             )}
             {page !== "summary-page" && (
@@ -268,9 +285,12 @@ const ServiceDetail = () => {
                 subServiceList={itemObjects.subServiceList}
                 counters={counters}
                 inputValues={inputValues}
+                initialValues={initialValues}
                 cart={cart}
                 setCart={setCart}
                 page={page}
+                discountType={discountType}
+                discount={discount}
               />
             )}
           </div>
@@ -301,6 +321,15 @@ const ServiceDetail = () => {
                     (sum, item) => sum + item.price * item.quantity,
                     0
                   );
+
+                  if(discount) {
+                    if(discountType === "Fixed"){
+                      totalPrice = totalPrice - discount
+                    } else {
+                      totalPrice = totalPrice*((100-discount)/100)
+                    }
+                  }
+
                   const selectCart = cart.filter((item) => item.quantity > 0);
                   const profiles = localStorage.getItem("userData");
                   const profile = JSON.parse(profiles);
@@ -338,6 +367,8 @@ const ServiceDetail = () => {
               cart={cart}
               setCart={setCart}
               page={page}
+              discountType={discountType}
+              discount={discount}
             />
           </div>
         </div>

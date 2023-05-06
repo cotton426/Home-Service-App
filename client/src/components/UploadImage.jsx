@@ -57,11 +57,11 @@ function UploadImage({ field, form, view }) {
                 <p className="text-gray-700">PNG, JPG ขนาดไม่เกิน 5MB</p>
               </div>
             ) : view ? (
-              <div className="flex flex-col justify-center items-center rounded h-[225px] w-[450px]  p-0">
+              <div className="flex flex-col justify-center items-start rounded-lg h-[225px] w-[450px] p-0">
                 <img
                   src={image}
                   alt={fileName}
-                  className="flex w-auto h-[225px]"
+                  className="flex w-auto h-[225px] rounded-lg "
                 />
               </div>
             ) : (

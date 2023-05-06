@@ -29,7 +29,7 @@ const Navbar = ({
               )}
               <div
                 id="left-container"
-                className="font-medium text-xl text-black w-[200px]"
+                className="font-medium text-xl text-black "
               >
                 {title}
               </div>
@@ -230,7 +230,7 @@ export const PromotionNavbar = () => (
     inputPlaceholder="ค้นหา Promotion Code..."
     rightButton={
       <Link to="/add-promotion">
-        <button className="btn-primary">เพิ่มบริการ +</button>
+        <button className="btn-primary">เพิ่ม Promotion Code +</button>
       </Link>
     }
   />

@@ -233,12 +233,12 @@ export const EditPromotion = () => {
                                 %
                               </span>
                             )}
-                            <Field
+                            {/* <Field
                               type="text"
                               name="expirationDate"
                               className="input-default"
                               min={tomorrow.toISOString().slice(0, 10)}
-                            />
+                            /> */}
                           </div>
                           <ErrorMessage
                             name="percentage"
