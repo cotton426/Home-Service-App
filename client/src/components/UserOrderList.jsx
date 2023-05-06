@@ -86,7 +86,8 @@ const OrderCard = ({ order }) => {
     total_price,
     order_items,
   } = order;
-  const formattedTotalPrice = formatter.format(total_price);  return (
+  const formattedTotalPrice = formatter.format(total_price);
+  return (
     <div className="flex justify-center items-center w-[100%] h-auto border py-6 px-7 box mb-4">
       <div id="box-1" className="flex flex-col w-[100%] h-auto">
         <div id="order-code" className="flex text-xl pb-3">
@@ -180,11 +181,11 @@ const CustomerOrderSidebar = () => {
 };
 
 const menuList = [
-  {
-    label: "ข้อมูลผู้ใช้งาน",
-    IconComponent: BiUser,
-    to: "/user-orders-list",
-  },
+  // {
+  //   label: "ข้อมูลผู้ใช้งาน",
+  //   IconComponent: BiUser,
+  //   to: "/user-orders-list",
+  // },
   {
     label: "รายการคำสั่งซ่อม",
     IconComponent: TiClipboard,

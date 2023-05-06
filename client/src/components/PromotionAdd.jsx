@@ -21,32 +21,32 @@ export const AddPromotion = () => {
 
   const AddPromotionSchema = Yup.object().shape({
     promotionCode: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    type: Yup.string().required("Required"),
+      .min(2, "สั้นเกินไป")
+      .max(50, "ยาวเกินไป")
+      .required("กรุณากรอก Promotion Code"),
+    type: Yup.string().required("กรุณากรอกประเภท"),
     fixedAmount: Yup.lazy((value, schema) =>
       schema.parent.type === "Fixed"
         ? Yup.number()
-            .min(0, "Amount should be greater than or equal to 0")
-            .required("Fixed amount is required")
-        : Yup.number().min(0, "Amount should be greater than or equal to 0")
+            .min(0, "กรุณากรอกตัวเลขที่ีมากกว่าหรือเท่ากับ 0")
+            .required("กรุณากรอกตัวเลข")
+        : Yup.number().min(0, "กรุณากรอกตัวเลขที่ีมากกว่าหรือเท่ากับ 0")
     ),
     percentage: Yup.lazy((value, schema) =>
       schema.parent.type === "Percent"
         ? Yup.number()
-            .min(0, "Percentage should be greater than or equal to 0")
-            .max(100, "Percentage should be less than or equal to 100")
-            .required("Percentage is required")
+            .min(0, "กรุณากรอกตัวเลขที่ีมากกว่าหรือเท่ากับ 0")
+            .max(99, "กรุณากรอกตัวเลขที่ีน้อยกว่า 100")
+            .required("กรุณากรอกตัวเลข")
         : Yup.number()
-            .min(0, "Percentage should be greater than or equal to 0")
-            .max(100, "Percentage should be less than or equal to 100")
+            .min(0, "กรุณากรอกตัวเลขที่ีมากกว่าหรือเท่ากับ 0")
+            .max(100, "กรุณากรอกตัวเลขที่ีน้อยกว่า 100")
     ),
     usageLimit: Yup.number()
-      .min(1, "Usage limit should be greater than or equal to 1")
-      .required("Required"),
-    expirationDate: Yup.date().required("Required"),
-    expirationTime: Yup.string().required("Required"),
+      .min(1, "จำนวนโควต้าการใช้งานควรมากกว่า 1")
+      .required("กรุณากรอกจำนวนครั้ง"),
+    expirationDate: Yup.date().required("กรุณากรอกวันหมดอายุ"),
+    expirationTime: Yup.string().required("กรุณากรอกเวลาหมดอายุ"),
   });
 
   return (
@@ -62,7 +62,7 @@ export const AddPromotion = () => {
           expirationTime: "",
         }}
         validationSchema={AddPromotionSchema}
-        onSubmit={async (values) => {
+        onSubmit={async (values, { setErrors }) => {
           console.log("Promotion data:", values);
           const promotionData = {
             promotionCode: values.promotionCode,
@@ -75,15 +75,12 @@ export const AddPromotion = () => {
           };
 
           const result = await addPromotion(promotionData);
-
-          if (result.success) {
-            alert(result.message);
-          } else {
-            alert(result.message);
-          }
+          setErrors({
+            promotionCode: result,
+          });
         }}
       >
-        {({ handleSubmit, submitForm, setFieldValue, values }) => (
+        {({ handleSubmit, submitForm, setFieldValue, values, setErrors }) => (
           <>
             <ClearDisabledInput
               type={values.type}
@@ -101,7 +98,6 @@ export const AddPromotion = () => {
                       </label>
                       <div>
                         <Field
-                          // as="textarea"
                           type="text"
                           name="promotionCode"
                           className="input-default w-[400px]"
@@ -155,11 +151,13 @@ export const AddPromotion = () => {
                               </span>
                             )}
                           </div>
-                          <ErrorMessage
-                            name="fixedAmount"
-                            component="div"
-                            className="text-red"
-                          />
+                          <div className="flex items-center pl-3">
+                            <ErrorMessage
+                              name="fixedAmount"
+                              component="div"
+                              className="text-red"
+                            />
+                          </div>
                         </div>
                         <div className="flex">
                           <label
@@ -194,12 +192,13 @@ export const AddPromotion = () => {
                               </span>
                             )}
                           </div>
-
-                          <ErrorMessage
-                            name="percentage"
-                            component="div"
-                            className="text-red"
-                          />
+                          <div className="flex items-center pl-3">
+                            <ErrorMessage
+                              name="percentage"
+                              component="div"
+                              className="text-red"
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>

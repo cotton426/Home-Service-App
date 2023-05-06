@@ -148,6 +148,7 @@ const ServiceDetail = () => {
   const [paid, setPaid] = useState(false);
   const [paymentError, setPaymentError] = useState("");
 
+  const [promotion, setPromotion] = useState({});
   const { addOrder } = useUser();
 
   // const [showPromptpay, setShowPromptpay] = useState(false);
@@ -327,8 +328,10 @@ const ServiceDetail = () => {
                 paymentError={paymentError}
                 setDiscountType={setDiscountType}
                 setDiscount={setDiscount}
+                setPromotion={setPromotion}
               />
             )}
+            {console.log(promotion)}
             {page !== "summary-page" && (
               <ServiceSummary
                 subServiceList={itemObjects.subServiceList}
@@ -401,6 +404,8 @@ const ServiceDetail = () => {
                     ...inputValues,
                     profile_id,
                     status: "On Process",
+                    promotion_id: promotion.id,
+                    quantity_used: promotion.quantity_used,
                   };
                   console.log(orderItems);
                   // console.log(selectCart, inputValues, initialValues);

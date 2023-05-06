@@ -334,11 +334,13 @@ dataRouter.post("/promotions", async (req, res) => {
     expirationTime,
   } = req.body;
 
-  const { data: existingPromotion, error: existingPromotionError } =
-    await supabase
-      .from("promotions")
-      .select("*")
-      .filter("promotion_code", "eq", promotionCode);
+  const {
+    data: existingPromotion,
+    error: existingPromotionError,
+  } = await supabase
+    .from("promotions")
+    .select("*")
+    .filter("promotion_code", "eq", promotionCode);
 
   if (existingPromotionError) {
     console.error(
@@ -351,7 +353,7 @@ dataRouter.post("/promotions", async (req, res) => {
   console.log("Existing promotion:", existingPromotion);
 
   if (existingPromotion.length > 0) {
-    return res.status(400).json({ message: "Promotion code already exists." });
+    return res.json({ message: "Promotion code already exists." });
   }
 
   const { data: newPromotion, error: newPromotionError } = await supabase

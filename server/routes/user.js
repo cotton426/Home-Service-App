@@ -86,8 +86,9 @@ userRouter.post("/orders", async (req, res) => {
     cart,
     note,
     creditData,
+    promotion_id,
+    quantity_used,
   } = req.body;
-
 
   // console.log("data:", {
   //   profile_id,
@@ -119,7 +120,7 @@ userRouter.post("/orders", async (req, res) => {
 
   try {
     const charge = await omise.charges.create({
-      amount: total_price*100,
+      amount: total_price * 100,
       currency: "thb",
       card: creditData.id,
       description: "Order #" + orderCode,
@@ -185,6 +186,16 @@ userRouter.post("/orders", async (req, res) => {
     return res.status(400).json({ error: insertSubServiceError.message });
   }
 
+  const { data: promotion, error: countQuantityUsed } = await supabase
+    .from("promotions")
+    .update({ quantity_used: quantity_used + 1 })
+    .eq("id", promotion_id);
+
+  if (insertSubServiceError) {
+    console.error("Error inserting data:", insertSubServiceError);
+    return res.status(400).json({ error: insertSubServiceError.message });
+  }
+
   return res.json(newOrder);
 });
 
@@ -204,17 +215,13 @@ userRouter.get("/orders", async (req, res) => {
     console.error("Error fetching user orders:", error);
     return res.status(500).json({ error: error.message });
   }
-  console.log(data);
   return res.json(data);
 });
 
 userRouter.post("/check-promotion", async (req, res) => {
-  console.log("req body:", req.body);
   const { promotionCode } = req.body;
   if (!promotionCode) {
-    return res
-      .status(400)
-      .json({ message: "Please provide a promotion code." });
+    return res.json({ message: "กรุณากรอก promotion code" });
   }
 
   const { data, error } = await supabase
@@ -225,11 +232,11 @@ userRouter.post("/check-promotion", async (req, res) => {
 
   if (error) {
     console.error("Error fetching promotion code:", error);
-    return res.status(500).json({ error: error.message });
+    return res.json({ message: "ไม่พบ Promotion code" });
   }
-
   if (!data) {
-    return res.status(404).json({ message: "Promotion code not found." });
+    console.log("Promotion code not found.");
+    return res.json({ message: "ไม่พบ Promotion code" });
   }
 
   const currentDate = new Date();
@@ -237,13 +244,13 @@ userRouter.post("/check-promotion", async (req, res) => {
   const expTime = new Date(data.exp_time);
 
   if (currentDate > expDate || currentDate > expTime) {
-    return res.status(400).json({ message: "Promotion code has expired." });
+    console.log("Promotion code has expired.");
+    return res.json({ message: "Promotion code หมดอายุ" });
   }
 
   if (data.quantity_used >= data.useable_quantity) {
-    return res
-      .status(400)
-      .json({ message: "Promotion code has reached its usage limit." });
+    console.log("Promotion code has reached its usage limit.");
+    return res.json({ message: "Promotion code ถูกใช้งานเต็มจำนวนแล้ว" });
   }
   console.log("res is here :", data);
   return res.json({

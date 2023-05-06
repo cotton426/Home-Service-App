@@ -19,7 +19,6 @@ function jwtInterceptor() {
 
   axios.interceptors.response.use(
     (req) => {
-      console.log(req);
       return req;
     },
     (error) => {

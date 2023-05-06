@@ -27,7 +27,14 @@ const AutoSubmit = ({ setInitialValues, promotionApplied }) => {
   }, [values, submitForm, promotionApplied]); // Add promotionApplied as a dependency
 };
 
-function ServicePayment({ initialValues, setInitialValues, setDiscount, setDiscountType,paymentError }) {
+function ServicePayment({
+  initialValues,
+  setInitialValues,
+  setDiscount,
+  setDiscountType,
+  paymentError,
+  setPromotion,
+}) {
   console.log(initialValues);
   const { checkPromotion } = useUser();
   const [promotionState, setPromotionState] = useState({
@@ -71,13 +78,12 @@ function ServicePayment({ initialValues, setInitialValues, setDiscount, setDisco
       .matches(/^[0-9]+$/, "กรุณากรอกตัวเลขเท่านั้น"),
   });
 
-  
   const [promotionCodeError, setPromotionCodeError] = useState("");
 
   const handlePromotionCodeSubmit = async () => {
     console.log("handlePromotionCodeSubmit called");
-    const { valid, discount, message, type } = await checkPromotion(promotionCode);
-
+    const promotionResult = await checkPromotion(promotionCode);
+    const { valid, discount, message, type } = promotionResult;
     if (valid) {
       console.log("Promotion code is valid:", promotionCode);
       console.log("Discount received:", discount);
@@ -85,7 +91,9 @@ function ServicePayment({ initialValues, setInitialValues, setDiscount, setDisco
       setDiscount(discount);
       setPromotionCodeError("");
       setPromotionApplied(true);
-      setDiscountType(type)
+      setDiscountType(type);
+      setPromotion(promotionResult);
+
       // alert(
       //   `You have successfully applied the promotion code. You get a ${discount}% discount.`
       // );
@@ -126,9 +134,9 @@ function ServicePayment({ initialValues, setInitialValues, setDiscount, setDisco
                       className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
                       onKeyUp={formatCreditCardNumber}
                     />
-                  {paymentError.includes("number") && (
-                    <p className="text-red">หมายเลขบัตรเครดิตไม่ถูกต้อง</p>
-                  )}
+                    {paymentError.includes("number") && (
+                      <p className="text-red">หมายเลขบัตรเครดิตไม่ถูกต้อง</p>
+                    )}
                     <ErrorMessage
                       name="creditNumber"
                       component="p"
@@ -181,9 +189,9 @@ function ServicePayment({ initialValues, setInitialValues, setDiscount, setDisco
                           setValues({ ...values, [name]: formattedValue });
                         }}
                       />
-                    {paymentError.includes("exp") && (
-                      <p className="text-red">กรุณาตรวจสอบวันหมดอายุ</p>
-                    )}
+                      {paymentError.includes("exp") && (
+                        <p className="text-red">กรุณาตรวจสอบวันหมดอายุ</p>
+                      )}
                       <ErrorMessage
                         name="dateOfExpiry"
                         component="p"
