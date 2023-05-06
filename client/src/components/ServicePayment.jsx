@@ -46,6 +46,12 @@ function ServicePayment({ initialValues, setInitialValues }) {
     event.target.value = input;
   }
 
+  const handleCheckPromotion = () => {
+  //  if(items[0].promotion_code === ){
+
+  //  }
+  };
+
   const validationSchema = Yup.object().shape({
     creditNumber: Yup.string()
       .matches(
@@ -98,79 +104,80 @@ function ServicePayment({ initialValues, setInitialValues }) {
         }}
       >
         {({ values, setValues }) => (
-          <Form className="w-3/5 ">
-            <div className="box flex flex-col p-8 gap-4">
-              <h1 className="text-gray-700 font-normal text-xl">ชำระเงิน</h1>
-              <div className="select-box h-[86px] w-full flex flex-col justify-center items-center text-center gap-2">
-                <MdCreditCard className="text-3xl" />
-                <div className="font-semibold text-sm">บัตรเครดิต</div>
-              </div>
-              <div className="w-full flex flex-col justify-center items-start gap-1">
-                <div className="flex text-gray-900 font-medium">
-                  หมายเลขบัตรเครดิต<span className="text-red">*</span>
+          <div className="w-3/5 box flex flex-col p-8 gap-4 ">
+            <Form className="">
+              <div className="flex flex-col gap-4">
+                <h1 className="text-gray-700 font-normal text-xl">ชำระเงิน</h1>
+                <div className="select-box h-[86px] w-full flex flex-col justify-center items-center text-center gap-2">
+                  <MdCreditCard className="text-3xl" />
+                  <div className="font-semibold text-sm">บัตรเครดิต</div>
                 </div>
-                <div className="w-full">
-                  <Field
-                    type="text"
-                    name="creditNumber"
-                    maxLength="19"
-                    placeholder="กรุณากรอกหมายเลขบัตรเครดิต"
-                    className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
-                    onKeyUp={formatCreditCardNumber}
-                  />
-
-                  <ErrorMessage
-                    name="creditNumber"
-                    component="p"
-                    className="text-red"
-                  />
-                </div>
-              </div>
-              <div className="w-full flex flex-col justify-center items-start gap-1">
-                <div className="flex text-gray-900 font-medium">
-                  ชื่อบนบัตร<span className="text-red">*</span>
-                </div>
-                <div className="w-full">
-                  <Field
-                    type="text"
-                    name="creditName"
-                    placeholder="กรุณากรอกชื่อบนบัตร"
-                    className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
-                  />
-                  <ErrorMessage
-                    name="creditName"
-                    component="p"
-                    className="text-red"
-                  />
-                </div>
-              </div>
-              <div className="w-full flex flex-row justify-between items-start gap-1">
-                <div className="w-[48%] flex flex-col justify-center items-start">
+                <div className="w-full flex flex-col justify-center items-start gap-1">
                   <div className="flex text-gray-900 font-medium">
-                    วันหมดอายุ<span className="text-red">*</span>
+                    หมายเลขบัตรเครดิต<span className="text-red">*</span>
                   </div>
                   <div className="w-full">
                     <Field
                       type="text"
-                      name="dateOfExpiry"
-                      placeholder="MM/YY"
-                      maxLength="5"
+                      name="creditNumber"
+                      maxLength="19"
+                      placeholder="กรุณากรอกหมายเลขบัตรเครดิต"
                       className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
-                      onChange={(event) => {
-                        const { name, value } = event.target;
-                        let formattedValue = value;
-                        // Remove all non-numeric characters from the input value
-                        formattedValue = formattedValue.replace(/[^\d]/g, "");
-                        // Add the slash between month and year if the user has entered two characters
-                        if (formattedValue.length > 2) {
-                          formattedValue = `${formattedValue.slice(
-                            0,
-                            2
-                          )}/${formattedValue.slice(2)}`;
-                        }
-                        setValues({ ...values, [name]: formattedValue });
-                      }}
+                      onKeyUp={formatCreditCardNumber}
                     />
+
+                    <ErrorMessage
+                      name="creditNumber"
+                      component="p"
+                      className="text-red"
+                    />
+                  </div>
+                </div>
+                <div className="w-full flex flex-col justify-center items-start gap-1">
+                  <div className="flex text-gray-900 font-medium">
+                    ชื่อบนบัตร<span className="text-red">*</span>
+                  </div>
+                  <div className="w-full">
+                    <Field
+                      type="text"
+                      name="creditName"
+                      placeholder="กรุณากรอกชื่อบนบัตร"
+                      className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
+                    />
+                    <ErrorMessage
+                      name="creditName"
+                      component="p"
+                      className="text-red"
+                    />
+                  </div>
+                </div>
+                <div className="w-full flex flex-row justify-between items-start gap-1">
+                  <div className="w-[48%] flex flex-col justify-center items-start">
+                    <div className="flex text-gray-900 font-medium">
+                      วันหมดอายุ<span className="text-red">*</span>
+                    </div>
+                    <div className="w-full">
+                      <Field
+                        type="text"
+                        name="dateOfExpiry"
+                        placeholder="MM/YY"
+                        maxLength="5"
+                        className="border border-gray-300 py-2 w-full h-[44px] px-2 rounded-lg focus:outline-none"
+                        onChange={(event) => {
+                          const { name, value } = event.target;
+                          let formattedValue = value;
+                          // Remove all non-numeric characters from the input value
+                          formattedValue = formattedValue.replace(/[^\d]/g, "");
+                          // Add the slash between month and year if the user has entered two characters
+                          if (formattedValue.length > 2) {
+                            formattedValue = `${formattedValue.slice(
+                              0,
+                              2
+                            )}/${formattedValue.slice(2)}`;
+                          }
+                          setValues({ ...values, [name]: formattedValue });
+                        }}
+                      />
 
                     <ErrorMessage
                       name="dateOfExpiry"

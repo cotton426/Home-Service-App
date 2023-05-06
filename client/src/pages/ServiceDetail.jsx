@@ -17,6 +17,7 @@ export const ServiceSummary = ({
   cart,
   setCart,
   page,
+  initialValues,
 }) => {
   let totalPrice = 0;
 
@@ -93,6 +94,16 @@ export const ServiceSummary = ({
                 </div>
               </div>
             )}
+            {(initialValues.promotionCode) && (
+              <div className="flex justify-between">
+                <p className="text-gray-700 font-light">Promotion Code</p>
+                <div className="flex flex-col items-end">
+                  <p className="text-red">
+                  -{initialValues.promotionCode} ฿
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         )}
         <div className="flex justify-between py-4">
@@ -155,8 +166,10 @@ const ServiceDetail = () => {
     creditName: "",
     dateOfExpiry: "",
     code: "",
-    PromotionCode: "",
+    promotionCode: "",
   });
+
+  // console.log(initialValues);
 
   const handleChange = (event) => {
     const fieldName = event.target.name;
@@ -164,9 +177,6 @@ const ServiceDetail = () => {
     setInitialValues({ ...initialValues, [fieldName]: fieldValue });
   };
 
-  // const handlePayment =(item)=> {
-  //   item ? setShowCreditCard(true): setShowPromptpay(true) ;
-  // }
 
   const [inputValues, setInputValues] = useState({
     date: "",
@@ -258,9 +268,6 @@ const ServiceDetail = () => {
                 initialValues={initialValues}
                 setInitialValues={setInitialValues}
                 handleChange={handleChange}
-                // showPromptpay = {showPromptpay}
-                // showCreditCard = {showCreditCard}
-                // handlePayment = {handlePayment}
               />
             )}
             {page !== "summary-page" && (
@@ -268,6 +275,7 @@ const ServiceDetail = () => {
                 subServiceList={itemObjects.subServiceList}
                 counters={counters}
                 inputValues={inputValues}
+                initialValues={initialValues}
                 cart={cart}
                 setCart={setCart}
                 page={page}
