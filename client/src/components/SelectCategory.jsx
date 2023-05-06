@@ -29,7 +29,7 @@ function SelectCategory({ field, form, view }) {
           {!view && <label className="text-red">*</label>}
         </label>
         {view ? (
-          <div>{getCategoryName(field.value)}</div>
+          <div className="flex flex-col items-start justify-end w-[450px]">{getCategoryName(field.value)}</div>
         ) : (
           <>
             <select
