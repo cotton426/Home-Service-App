@@ -321,6 +321,15 @@ const ServiceDetail = () => {
                     (sum, item) => sum + item.price * item.quantity,
                     0
                   );
+
+                  if(discount) {
+                    if(discountType === "Fixed"){
+                      totalPrice = totalPrice - discount
+                    } else {
+                      totalPrice = totalPrice*((100-discount)/100)
+                    }
+                  }
+
                   const selectCart = cart.filter((item) => item.quantity > 0);
                   const profiles = localStorage.getItem("userData");
                   const profile = JSON.parse(profiles);
