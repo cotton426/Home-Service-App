@@ -369,8 +369,10 @@ const ServiceDetail = () => {
               }
               onClick={async () => {
                 if (page === "payment-page") {
+                  console.log(cart);
                   let totalPrice = cart.reduce(
-                    (sum, item) => sum + item.price * item.quantity,
+                    (sum, item) =>
+                      sum + (item?.price ?? 0) * (item?.quantity ?? 0),
                     0
                   );
 
@@ -382,7 +384,7 @@ const ServiceDetail = () => {
                     }
                   }
 
-                  const selectCart = cart.filter((item) => item.quantity > 0);
+                  const selectCart = cart.filter((item) => item?.quantity > 0);
                   const profiles = localStorage.getItem("userData");
                   const profile = JSON.parse(profiles);
                   const profile_id = profile.profiles[0].id;
