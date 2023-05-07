@@ -64,7 +64,7 @@ export const AddPromotion = () => {
         validationSchema={AddPromotionSchema}
         onSubmit={async (values, { setErrors }) => {
           const promotionData = {
-            promotionCode: values.promotionCode,
+            promotionCode: values.promotionCode.trim(),
             type: values.type,
             fixedAmount: values.fixedAmount,
             percentage: values.percentage,

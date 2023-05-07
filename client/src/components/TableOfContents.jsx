@@ -132,14 +132,14 @@ const TableOfContents = ({ service, promotion }) => {
     setShowDeleteConfirmation(true);
     setItemToDelete(item);
   };
-  const confirmDelete = () => { 
+  const confirmDelete = async () => { 
+    promotion
+    ? await deletePromotion(itemToDelete.id)
+    : service
+    ? await deleteService(itemToDelete.service_id)
+    : await deleteCategory(itemToDelete.category_id);
     setShowDeleteConfirmation(false);
     setItemToDelete(null);
-    promotion
-      ? deletePromotion(itemToDelete.id)
-      : service
-      ? deleteService(itemToDelete.service_id)
-      : deleteCategory(itemToDelete.category_id);
   };
 
   const cancelDelete = () => {
