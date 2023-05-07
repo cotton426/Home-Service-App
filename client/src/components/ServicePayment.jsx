@@ -18,13 +18,13 @@ const AutoSubmit = ({ setInitialValues, promotionApplied }) => {
         values.dateOfExpiry !== "" &&
         values.code !== "" &&
         values.promotionCode !== "" &&
-        promotionApplied // Add this condition
+        promotionApplied 
       ) {
         submitForm();
       }
     }, 500);
     return () => clearTimeout(timer);
-  }, [values, submitForm, promotionApplied]); // Add promotionApplied as a dependency
+  }, [values, submitForm, promotionApplied]); 
 };
 
 function ServicePayment({
@@ -35,7 +35,6 @@ function ServicePayment({
   paymentError,
   setPromotion,
 }) {
-  console.log(initialValues);
   const { checkPromotion } = useUser();
   const [promotionState, setPromotionState] = useState({
     code: "",
@@ -46,18 +45,11 @@ function ServicePayment({
   const [promotionApplied, setPromotionApplied] = useState(false);
 
   function formatCreditCardNumber(event) {
-    // Get the input value and remove all non-numeric characters
     let input = event.target.value.replace(/\D/g, "");
-    // Add a space after every 4 characters
     input = input.replace(/(\d{4})(?=\d)/g, "$1 ");
-    // Set the formatted value back to the input field
     event.target.value = input;
   }
 
-  const handleCheckPromotion = () => {
-    //  if(items[0].promotion_code === ){
-    //  }
-  };
 
   const validationSchema = Yup.object().shape({
     creditNumber: Yup.string()
@@ -75,18 +67,15 @@ function ServicePayment({
       .required("กรุณากรอกวันหมดอายุ"),
     code: Yup.string()
       .required("กรุณากรอกรหัส CVC / CVV*")
-      .matches(/^[0-9]+$/, "กรุณากรอกตัวเลขเท่านั้น"),
+      .matches(/^[0-9]{3}$/, "กรุณากรอกรหัส CVC / CVV ที่มีความยาว 3 ตัวเลข"),
   });
 
   const [promotionCodeError, setPromotionCodeError] = useState("");
 
   const handlePromotionCodeSubmit = async () => {
-    console.log("handlePromotionCodeSubmit called");
     const promotionResult = await checkPromotion(promotionCode);
     const { valid, discount, message, type } = promotionResult;
     if (valid) {
-      console.log("Promotion code is valid:", promotionCode);
-      console.log("Discount received:", discount);
 
       setDiscount(discount);
       setPromotionCodeError("");
@@ -94,12 +83,9 @@ function ServicePayment({
       setDiscountType(type);
       setPromotion(promotionResult);
 
-      // alert(
-      //   `You have successfully applied the promotion code. You get a ${discount}% discount.`
-      // );
+      
     } else {
       setPromotionCodeError(message);
-      console.log("Invalid promotion code:", { valid, discount, message });
     }
   };
 
@@ -177,9 +163,7 @@ function ServicePayment({
                         onChange={(event) => {
                           const { name, value } = event.target;
                           let formattedValue = value;
-                          // Remove all non-numeric characters from the input value
                           formattedValue = formattedValue.replace(/[^\d]/g, "");
-                          // Add the slash between month and year if the user has entered two characters
                           if (formattedValue.length > 2) {
                             formattedValue = `${formattedValue.slice(
                               0,

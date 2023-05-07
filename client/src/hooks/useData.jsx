@@ -148,7 +148,6 @@ const useData = () => {
           },
         }
       );
-      console.log(response);
       navigate("/services");
     } catch (error) {
       console.error(error);
@@ -190,7 +189,6 @@ const useData = () => {
         "http://localhost:4000/data/promotions/" + param
       );
       setItemObjects(response);
-      console.log(response);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -216,7 +214,6 @@ const useData = () => {
 
   const deletePromotion = async (id) => {
     try {
-      console.log(id);
       const response = await axios.delete(
         `http://localhost:4000/data/promotions/${id}`
       );

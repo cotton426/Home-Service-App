@@ -63,7 +63,6 @@ export const AddPromotion = () => {
         }}
         validationSchema={AddPromotionSchema}
         onSubmit={async (values, { setErrors }) => {
-          console.log("Promotion data:", values);
           const promotionData = {
             promotionCode: values.promotionCode,
             type: values.type,
@@ -75,9 +74,11 @@ export const AddPromotion = () => {
           };
 
           const result = await addPromotion(promotionData);
-          setErrors({
-            promotionCode: result,
-          });
+          if (result === "Promotion code already exists.") {
+            setErrors({
+              promotionCode: "Promotion code ถูกใช้งานแล้ว",
+            });
+          }
         }}
       >
         {({ handleSubmit, submitForm, setFieldValue, values, setErrors }) => (

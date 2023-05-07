@@ -37,22 +37,6 @@ const useUser = () => {
     }
   };
 
-  // const submitBooking = async (formData) => {
-  //   try {
-  //     const response = await axios.post(
-  //       "http://localhost:4000/user/orders",
-  //       formData
-  //     );
-  //     return { success: true, message: "Booking submitted successfully!" };
-  //   } catch (error) {
-  //     console.error(error);
-  //     return {
-  //       success: false,
-  //       message: "Failed to submit the booking. Please try again.",
-  //     };
-  //   }
-  // };
-
   const getOrders = useCallback(
     async (profile_id) => {
       try {
@@ -89,8 +73,6 @@ const useUser = () => {
         "http://localhost:4000/user/check-promotion",
         { promotionCode }
       );
-      console.log(promotionCode);
-      console.log(response?.data);
       return {
         ...response?.data,
         valid: response?.data.valid ?? false,
@@ -100,12 +82,10 @@ const useUser = () => {
       };
     } catch (error) {
       console.error(error);
-      console.log(error);
       return {
         valid: false,
         discount: 0,
-        message: error.response?.message,
-        //  || "กรุณากรอกโปรโมชั่นใหม่อีกครั้งค่ะ"
+        message: error.response?.message
       };
     }
   };

@@ -1,5 +1,4 @@
 import axios from "axios";
-// โค้ดนี้อยู่ในไฟล์ client/src/utils/jwtInterceptors.js
 
 function jwtInterceptor() {
   axios.interceptors.request.use((req) => {

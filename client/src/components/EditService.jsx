@@ -86,8 +86,6 @@ function EditService({ view }) {
   };
 
   const confirmDelete = () => {
-    // Handle delete logic here
-    console.log("Delete item", itemToDelete);
     setShowDeleteConfirmation(false);
     setItemToDelete(null);
     deleteService(itemToDelete.service_id);
@@ -99,7 +97,6 @@ function EditService({ view }) {
     setItemToDelete(null);
   };
 
-  console.log(itemObjects);
 
   const onSubmit = async (values, { setSubmitting, setErrors }) => {
     const formData = new FormData();
@@ -125,7 +122,6 @@ function EditService({ view }) {
     try {
       editService(param.service_id, formData);
     } catch (error) {
-      console.error("Error submitting form:", error);
       setErrors({
         submit: "Error submitting form",
       });
@@ -270,7 +266,6 @@ function EditService({ view }) {
                                   className="flex flex-row justify-start items-start gap-5 w-full "
                                   key={index}
                                 >
-                                  {console.log(item)}
                                   <div className="flex flex-col ">
                                     <label
                                       htmlFor={`subServiceList.${index}.name`}

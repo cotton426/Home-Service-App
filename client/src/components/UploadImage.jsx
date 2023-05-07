@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { BiImageAdd } from "react-icons/bi";
 import { Field, ErrorMessage } from "formik";
 
 function UploadImage({ field, form, view }) {
@@ -7,7 +6,6 @@ function UploadImage({ field, form, view }) {
   const [fileName, setFileName] = useState("");
 
   function removeImage() {
-    console.log("Image removed!");
     setImage("");
   }
 

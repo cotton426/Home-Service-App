@@ -3,7 +3,6 @@ import useData from "../hooks/useData";
 import { useEffect, useState } from "react";
 
 function SelectCategory({ field, form, view }) {
-  // const [select, setSelect] = useState();
 
   const { getCategories, items } = useData();
 
@@ -12,7 +11,6 @@ function SelectCategory({ field, form, view }) {
   }, []);
 
   const handleSelection = (item) => {
-    // setSelect(item)
     const { category_id } = items.filter((x) => x.name === item)[0];
     form.setFieldValue(field.name, category_id);
   };

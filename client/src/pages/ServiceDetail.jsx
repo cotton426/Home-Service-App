@@ -5,10 +5,8 @@ import ProgressBar from "../components/ProgressBar";
 import AddOnList from "../components/AddOnList";
 import DetailInformation from "../components/DetailInformation";
 import ServicePayment from "../components/ServicePayment";
-import axios from "axios";
 import useUser from "../hooks/useUser";
 import { BsCheckCircleFill } from "react-icons/bs";
-// import from leng component
 
 export const ServiceSummary = ({
   counters,
@@ -31,7 +29,6 @@ export const ServiceSummary = ({
   };
 
   const formatter = new Intl.DateTimeFormat("th-TH", options);
-  console.log(initialValues);
   const formattedDate = (date) => formatter.format(new Date(date));
   return (
     <>
@@ -126,8 +123,6 @@ export const ServiceSummary = ({
           </div>
         </div>
 
-        {console.log(discount)}
-        {console.log(discountType)}
 
         {page === "summary-page" && (
           <Link to="/user-orders-list">
@@ -145,44 +140,10 @@ const ServiceDetail = () => {
   const [page, setPage] = useState("select-page");
   const [cart, setCart] = useState([]);
   const [counters, setCounters] = useState([]);
-  const [paid, setPaid] = useState(false);
   const [paymentError, setPaymentError] = useState("");
-
   const [promotion, setPromotion] = useState({});
   const { addOrder } = useUser();
 
-  // const [showPromptpay, setShowPromptpay] = useState(false);
-  // const [showCreditCard, setShowCreditCard] = useState(false);
-  // const handlePayment = async () => {
-  //   try {
-
-  //     const response = await axios.post(
-  //       "https://vault.omise.co/tokens",
-  //       {
-  //         card: {
-  //           name: initialValues.creditName,
-  //           number: initialValues.creditNumber.split(" ").join(""),
-  //           expiration_month: initialValues.dateOfExpiry.split(`/`)[0],
-  //           expiration_year: `20${initialValues.dateOfExpiry.split(`/`)[1]}`,
-  //           security_code: initialValues.code,
-  //         },
-  //       },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: "Basic " + btoa("pkey_test_5vnsm9t1c9u17nytvhp"),
-  //         },
-  //       }
-  //     );
-  //     console.log(response.data);
-  //     return response.data;
-  //     // Use the token returned by Omise to create a charge or save the card to a customer
-  //   } catch {
-  //     (error) => {
-  //       console.error(error);
-  //     };
-  //   }
-  // };
   const handlePayment = async () => {
     try {
       const headers = new Headers({
@@ -208,9 +169,7 @@ const ServiceDetail = () => {
 
       const data = await response.json();
 
-      console.log(data);
       return data;
-      // Use the token returned by Omise to create a charge or save the card to a customer
     } catch (error) {
       console.error(error);
     }
@@ -224,7 +183,6 @@ const ServiceDetail = () => {
     promotionCode: "",
   });
 
-  // console.log(initialValues);
 
   const handleChange = (event) => {
     const fieldName = event.target.name;
@@ -246,13 +204,6 @@ const ServiceDetail = () => {
   const [discount, setDiscount] = useState(0);
   const [discountType, setDiscountType] = useState("");
 
-  // const handleChange = (event) => {
-  //   const fieldName = event.target.name;
-  //   const fieldValue = event.target.value;
-  //   setInputValues({ ...inputValues, [fieldName]: fieldValue });
-  //   // handleSubmit();
-  //   console.log(inputValues);
-  // };
   const navigate = useNavigate();
   useEffect(() => {
     getService(params.service_id);
@@ -263,9 +214,6 @@ const ServiceDetail = () => {
     } else if (page === "address-page") {
       setPage("payment-page");
     }
-    // else if (page === "payment-page") {
-    //   setPage("summary-page");
-    // }
   };
   const handleClickBack = () => {
     if (page === "payment-page") {
@@ -331,7 +279,6 @@ const ServiceDetail = () => {
                 setPromotion={setPromotion}
               />
             )}
-            {console.log(promotion)}
             {page !== "summary-page" && (
               <ServiceSummary
                 subServiceList={itemObjects.subServiceList}
@@ -365,11 +312,14 @@ const ServiceDetail = () => {
                   counters.filter((item) => item > 0).length === 0) ||
                 (page === "address-page" &&
                   Object.values(inputValues).filter((item) => item === "")
-                    .length > (inputValues.note === "" ? 1 : 0))
+                    .length > (inputValues.note === "" ? 1 : 0)) ||
+                (page === "payment-page" &&
+                  (Object.values(initialValues).filter((item) => item === "")
+                    .length > 1 ||
+                    initialValues.code.length !== 3))
               }
               onClick={async () => {
                 if (page === "payment-page") {
-                  console.log(cart);
                   let totalPrice = cart.reduce(
                     (sum, item) =>
                       sum + (item?.price ?? 0) * (item?.quantity ?? 0),
@@ -388,9 +338,6 @@ const ServiceDetail = () => {
                   const profiles = localStorage.getItem("userData");
                   const profile = JSON.parse(profiles);
                   const profile_id = profile.profiles[0].id;
-                  console.log(profile);
-                  console.log(profile_id);
-                  console.log("work1");
 
                   const creditData = await handlePayment();
                   if (creditData.object === "error") {
@@ -398,7 +345,6 @@ const ServiceDetail = () => {
                     return;
                   }
 
-                  console.log("work2");
                   const orderItems = {
                     creditData,
                     cart: selectCart,
@@ -409,13 +355,11 @@ const ServiceDetail = () => {
                     promotion_id: promotion.id,
                     quantity_used: promotion.quantity_used,
                   };
-                  console.log(orderItems);
-                  // console.log(selectCart, inputValues, initialValues);
                   try {
                     await addOrder(orderItems);
                     setPage("summary-page");
                   } catch (e) {
-                    console.log(e);
+                    console.error(e);
                   }
                 }
                 handleClickNext();
