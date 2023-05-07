@@ -28,6 +28,8 @@ function jwtInterceptor() {
         window.localStorage.removeItem("userData");
         window.location.replace("/login");
       }
+
+      throw error;
     }
   );
 }

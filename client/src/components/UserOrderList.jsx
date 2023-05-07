@@ -133,8 +133,8 @@ const OrderCard = ({ order }) => {
             <div id="staff">
               {order_items.map((item, index) => (
                 <span key={index} className="flex flex-row items-center">
-                  • {item.sub_services.name} {item.quantity}{" "}
-                  {item.sub_services.unit}
+                  • {item.sub_service_name ?? item.sub_services.name}{" "}
+                  {item.quantity} {item.sub_services.unit??"รายการ"}
                 </span>
               ))}
             </div>

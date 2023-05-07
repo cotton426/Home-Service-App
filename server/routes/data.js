@@ -44,7 +44,7 @@ dataRouter.post("/categories", async (req, res) => {
     .from("categories")
     .insert([{ name: name }]);
   if (error) {
-    return res.json({ error: error.message });
+    return res.status(400).json({ error: error.message });
   }
   return res.json(categories);
 });
@@ -57,7 +57,6 @@ dataRouter.put("/categories/:id", async (req, res) => {
     .from("categories")
     .update([{ name: name }])
     .eq("category_id", categoryId);
-
 
   if (error) {
     return res.status(400).json({ error: error.message });
@@ -101,7 +100,6 @@ dataRouter.post("/services", upload.single("image"), async (req, res) => {
   const decodedFileName = decodeURIComponent(req.file.originalname);
   const { serviceName, category_id, subServiceList } = req.body;
 
-  
   const { data: service, error: alreadyExist } = await supabase
     .from("services")
     .select("*")
@@ -112,7 +110,6 @@ dataRouter.post("/services", upload.single("image"), async (req, res) => {
     console.error("Error inserting data:", alreadyExist);
     return res.status(400).json({ error: "This Service is already exist" });
   }
-
 
   // Save the image to Supabase Storage
   const file = req.file;
@@ -241,7 +238,6 @@ dataRouter.put("/services/:id", upload.single("image"), async (req, res) => {
     .update(fieldsToUpdate)
     .eq("service_id", serviceId);
 
-
   if (error) {
     return res.status(400).json({ error: error.message });
   }
@@ -309,7 +305,6 @@ dataRouter.delete("/services/:id", async (req, res) => {
 });
 
 dataRouter.post("/promotions", async (req, res) => {
-
   const {
     promotionCode,
     type,
@@ -336,7 +331,6 @@ dataRouter.post("/promotions", async (req, res) => {
     return res.status(500).json({ error: existingPromotionError.message });
   }
 
-
   if (existingPromotion.length > 0) {
     return res.json({ message: "Promotion code already exists." });
   }
@@ -359,7 +353,6 @@ dataRouter.post("/promotions", async (req, res) => {
     console.error("Error inserting promotion:", newPromotionError);
     return res.status(400).json({ error: newPromotionError.message });
   }
-
 
   return res.json(newPromotion);
 });

@@ -15,6 +15,7 @@ function AddOnList({ itemObjects, counters, setCounters, cart, setCart }) {
     setCart((prevCart) => {
       const newCart = [...prevCart];
       newCart[index] = {
+        sub_service_name: subServiceList[index].name,
         quantity: newCounters[index],
         price: subServiceList[index].price,
         sub_service_id: subServiceList[index].sub_service_id,
@@ -31,6 +32,7 @@ function AddOnList({ itemObjects, counters, setCounters, cart, setCart }) {
       setCart((prevCart) => {
         const newCart = [...prevCart];
         newCart[index] = {
+          sub_service_name: subServiceList[index].name,
           quantity: newCounters[index],
           price: subServiceList[index].price,
           sub_service_id: subServiceList[index].sub_service_id,
