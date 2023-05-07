@@ -6,7 +6,6 @@ function ServiceMore({ items, loading}) {
   return (
     <div className="flex justify-center w-full pb-20 pt-20 bg-gray-50 h-full">
       
-      {/* {loading && <div className="text-black bg-red h-60">Loading...</div>} */}
       {!items ? (
         <h1>ไม่พบบริการที่ค้นหา</h1>
       ) : (
@@ -61,7 +60,6 @@ function ServiceMore({ items, loading}) {
                     <button
                       className="btn-ghost mb-3 ml-4"
                       onClick={() => {
-                        console.log(item);
                         navigate(`/select-service/${item.service_id}`);
                       }}
                     >

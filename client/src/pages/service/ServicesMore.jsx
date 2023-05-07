@@ -83,7 +83,6 @@ export const NavService = ({ filter, setFilter }) => {
           sortBy: "",
         }}
         onSubmit={(values) => {
-          console.log(values);
           userGetServices(values);
         }}
       >

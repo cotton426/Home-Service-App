@@ -5,30 +5,6 @@ import { FiTag } from "react-icons/fi";
 
 function AddOnList({ itemObjects, counters, setCounters, cart, setCart }) {
   const { subServiceList } = itemObjects;
-  // useEffect(() => {
-  //   setData(subServiceList);
-  // }, [subServiceList]);
-
-  // const data = [
-  //   {
-  //     name: "9,000 - 18,000 BTU, แบบติดผนัง",
-  //     price: "800.00 ฿ / เครื่อง",
-  //   },
-  //   {
-  //     name: "9,000 - 18,000 BTU, แบบติดผนัง",
-  //     price: "800.00 ฿ / เครื่อง",
-  //   },
-  //   {
-  //     name: "9,000 - 18,000 BTU, แบบติดผนัง",
-  //     price: "800.00 ฿ / เครื่อง",
-  //   },
-  //   {
-  //     name: "9,000 - 18,000 BTU, แบบติดผนัง",
-  //     price: "800.00 ฿ / เครื่อง",
-  //   },
-  // ];
-
-  // const data = subServiceList;
 
   const handleAddCounter = (index) => {
     const newCounters = [...counters];
@@ -37,19 +13,15 @@ function AddOnList({ itemObjects, counters, setCounters, cart, setCart }) {
       : (newCounters[index] += 1);
     setCounters(newCounters);
     setCart((prevCart) => {
-      // make a copy of the previous state array
       const newCart = [...prevCart];
-      // modify the array as needed
       newCart[index] = {
-        // name: subServiceList[index].name,
+        sub_service_name: subServiceList[index].name,
         quantity: newCounters[index],
         price: subServiceList[index].price,
         sub_service_id: subServiceList[index].sub_service_id,
       };
-      // return the new array as the updated state
       return newCart;
     });
-    console.log(cart);
   };
 
   const handleSubtractCounter = (index) => {
@@ -58,19 +30,15 @@ function AddOnList({ itemObjects, counters, setCounters, cart, setCart }) {
       newCounters[index] -= 1;
       setCounters(newCounters);
       setCart((prevCart) => {
-        // make a copy of the previous state array
         const newCart = [...prevCart];
-        // modify the array as needed
         newCart[index] = {
-          // name: subServiceList[index].name,
+          sub_service_name: subServiceList[index].name,
           quantity: newCounters[index],
           price: subServiceList[index].price,
           sub_service_id: subServiceList[index].sub_service_id,
         };
-        // return the new array as the updated state
         return newCart;
       });
-      console.log(cart);
     }
   };
 

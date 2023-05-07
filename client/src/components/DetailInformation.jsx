@@ -94,7 +94,6 @@ const DetailInformation = ({ inputValues, setInputValues, handleChange }) => {
         initialValues={inputValues}
         validationSchema={validationSchema}
         onSubmit={(values) => {
-          console.log(values);
           setInputValues(values);
         }}
       >
@@ -131,8 +130,6 @@ const DetailInformation = ({ inputValues, setInputValues, handleChange }) => {
                     placeholder={field.placeholder}
                     placeholderTextColor="text-gray-700"
                     hideDisabledOptions={true}
-                    // allowClear={false}
-                    // clearIcon={false}
                     onChange={(time) => {
                       setInputValues({ ...inputValues, time: time });
                       setFieldValue("time", time);

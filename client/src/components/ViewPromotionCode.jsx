@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 
 function ViewPromotionCode() {
   const { promotion_id } = useParams();
-  console.log("promotion_id:", promotion_id);
 
   const [promotion, setPromotion] = useState(null);
   const { getPromotion } = useData();
@@ -17,7 +16,6 @@ function ViewPromotionCode() {
       setPromotion(promotionData);
     })();
   }, [promotion_id]);
-  console.log(promotion);
 
   return (
     <div className=" bg-BG h-full w-full px-[5%] flex flex-col justify-start items-center mt-10">

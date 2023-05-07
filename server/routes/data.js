@@ -43,7 +43,6 @@ dataRouter.post("/categories", async (req, res) => {
   const { data: categories, error } = await supabase
     .from("categories")
     .insert([{ name: name }]);
-  console.log(error?.message);
   if (error) {
     return res.status(400).json({ error: error.message });
   }
@@ -59,8 +58,6 @@ dataRouter.put("/categories/:id", async (req, res) => {
     .update([{ name: name }])
     .eq("category_id", categoryId);
 
-  // .order("id", { ascending: false });
-  console.log(error?.message);
   if (error) {
     return res.status(400).json({ error: error.message });
   }
@@ -70,14 +67,11 @@ dataRouter.put("/categories/:id", async (req, res) => {
 
 dataRouter.delete("/categories/:id", async (req, res) => {
   const categoryId = req.params.id;
-  console.log(categoryId);
   const { data: categories, error } = await supabase
     .from("categories")
     .delete()
     .eq("category_id", categoryId);
 
-  // .order("id", { ascending: false });
-  console.log(error?.message);
   if (error) {
     return res.status(400).json({ error: error.message });
   }
@@ -106,29 +100,21 @@ dataRouter.post("/services", upload.single("image"), async (req, res) => {
   const decodedFileName = decodeURIComponent(req.file.originalname);
   const { serviceName, category_id, subServiceList } = req.body;
 
-  console.log({
-    serviceName,
-    category_id,
-    subServiceList,
-  });
   const { data: service, error: alreadyExist } = await supabase
     .from("services")
     .select("*")
     .eq("name", serviceName)
     .eq("category_id", category_id);
 
-  // console.log(alreadyExist);
   if (service[0] !== undefined) {
     console.error("Error inserting data:", alreadyExist);
     return res.status(400).json({ error: "This Service is already exist" });
   }
-  console.log(decodedFileName);
 
   // Save the image to Supabase Storage
   const file = req.file;
   const bucket = "images/";
   const uniqueID = Date.now().toString();
-  console.log(uniqueID);
   const imagePath = `services-image/${category_id}/${decodedFileName}`;
 
   const { error: uploadError, data } = await supabase.storage
@@ -173,7 +159,6 @@ dataRouter.post("/services", upload.single("image"), async (req, res) => {
 
 dataRouter.get("/services/:id", async (req, res) => {
   const serviceId = req.params.id;
-  console.log(serviceId);
   const { data: services, error } = await supabase
     .from("sub_services")
     .select(`*,services(*)`)
@@ -253,7 +238,6 @@ dataRouter.put("/services/:id", upload.single("image"), async (req, res) => {
     .update(fieldsToUpdate)
     .eq("service_id", serviceId);
 
-  console.log(error);
   if (error) {
     return res.status(400).json({ error: error.message });
   }
@@ -261,7 +245,6 @@ dataRouter.put("/services/:id", upload.single("image"), async (req, res) => {
     Object.assign({}, { ...subService })
   );
 
-  console.log(subServiceListWithoutNullPrototype);
   const { data: subService, error: insertSubServiceError } = await supabase
     .from("sub_services")
     .insert(subServiceListWithoutNullPrototype)
@@ -322,8 +305,6 @@ dataRouter.delete("/services/:id", async (req, res) => {
 });
 
 dataRouter.post("/promotions", async (req, res) => {
-  console.log("Request body:", req.body);
-
   const {
     promotionCode,
     type,
@@ -350,8 +331,6 @@ dataRouter.post("/promotions", async (req, res) => {
     return res.status(500).json({ error: existingPromotionError.message });
   }
 
-  console.log("Existing promotion:", existingPromotion);
-
   if (existingPromotion.length > 0) {
     return res.json({ message: "Promotion code already exists." });
   }
@@ -374,8 +353,6 @@ dataRouter.post("/promotions", async (req, res) => {
     console.error("Error inserting promotion:", newPromotionError);
     return res.status(400).json({ error: newPromotionError.message });
   }
-
-  console.log("New promotion:", newPromotion);
 
   return res.json(newPromotion);
 });
@@ -404,7 +381,6 @@ dataRouter.get("/promotions/:id", async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
-    console.log("Fetched promotion:", promotion);
     return res.json(promotion);
   } catch (error) {
     console.error("Error fetching promotion:", error);
@@ -443,7 +419,6 @@ dataRouter.put("/promotions/:id", async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
-    console.log("Updated promotion:", updatedPromotion);
     return res.json(updatedPromotion);
   } catch (error) {
     console.error("Error updating promotion:", error);

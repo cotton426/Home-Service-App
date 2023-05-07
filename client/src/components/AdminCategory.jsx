@@ -118,8 +118,6 @@ export const EditCategory = ({ view }) => {
   };
 
   const confirmDelete = () => {
-    // Handle delete logic here
-    console.log("Delete item", itemToDelete);
     setShowDeleteConfirmation(false);
     setItemToDelete(null);
     deleteCategory(itemToDelete.category_id);
@@ -137,7 +135,6 @@ export const EditCategory = ({ view }) => {
           initialValues={initialValues}
           onSubmit={(values, { setSubmitting }) => {
             editCategory(param.category_id, values);
-            console.log(values);
             setSubmitting(false);
           }}
         >

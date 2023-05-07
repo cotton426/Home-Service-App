@@ -15,7 +15,6 @@ import {
 } from "../components/AdminCategory";
 import ServiceTable from "../components/ServicesTable";
 import EditService, { ViewService } from "../components/EditService";
-// import ViewService from "../components/ViewService";
 import AddOnList from "../components/AddOnList";
 import { AddPromotion } from "../components/PromotionAdd";
 import { EditPromotion } from "../components/PromotionEdit";

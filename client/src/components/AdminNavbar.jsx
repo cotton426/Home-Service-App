@@ -106,7 +106,6 @@ export const AddCategoryNavbar = ({ handleSubmit }) => (
       <button
         className="btn-primary"
         onClick={() => {
-          console.log("work");
           handleSubmit();
         }}
       >
@@ -240,7 +239,7 @@ export const DetailPromotionNavbar = () => {
   const param = useParams();
   return (
     <Navbar
-      title="HOME0202" // axios.get("")
+      title="HOME0202"
       subTitle="Promotion Code"
       backLink="/promotions"
       rightButton={

@@ -22,8 +22,7 @@ const ClearDisabledInput = ({ type, setFieldValue }) => {
 export const EditPromotion = () => {
   const today = new Date();
   const tomorrow = new Date();
-  const { promotion_id } = useParams(); // Destructure the `promotion_id` from the params
-  console.log("promotion_id:", promotion_id);
+  const { promotion_id } = useParams(); 
 
   const [promotion, setPromotion] = useState(null);
   const { getPromotion, updatePromotion, deletePromotion } = useData();
@@ -31,9 +30,6 @@ export const EditPromotion = () => {
   const [itemToDelete, setItemToDelete] = useState(null);
   tomorrow.setDate(today.getDate() + 1);
 
-  console.log(promotion);
-  console.log(tomorrow);
-  console.log(today);
 
   useEffect(() => {
     (async () => {
@@ -47,7 +43,6 @@ export const EditPromotion = () => {
     setItemToDelete(promotion);
   };
   const confirmDelete = () => {
-    console.log("Delete item", itemToDelete);
     setShowDeleteConfirmation(false);
     setItemToDelete(null);
     deletePromotion(itemToDelete.id);
@@ -108,7 +103,6 @@ export const EditPromotion = () => {
         }}
         validationSchema={EditPromotionSchema}
         onSubmit={async (values) => {
-          console.log("Edited promotion data:", values);
           const editedPromotionData = {
             promotionCode: values.promotionCode,
             type: values.type,

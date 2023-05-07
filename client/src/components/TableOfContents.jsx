@@ -3,8 +3,6 @@ import { FiEdit } from "react-icons/fi";
 import { TbGripVertical } from "react-icons/tb";
 import { HiOutlineTrash } from "react-icons/hi";
 import AlertConfirmation from "./AlertConfirmation";
-// import { useQuery, useMutation, useQueryClient } from "react-query";
-// import { useData } from "../contexts/data";
 import useData from "../hooks/useData";
 import { useNavigate } from "react-router-dom";
 import { formatTime } from "../utils/timeUtils";
@@ -123,22 +121,18 @@ const TableOfContents = ({ service, promotion }) => {
   }, [itemToDelete]);
 
   const handleEdit = (item) => {
-    // Handle edit logic here
     promotion
       ? navigate("/edit-promotion/" + item.id)
       : service
       ? navigate("/edit-service/" + item.service_id)
       : navigate("/edit-category/" + item.category_id);
-    console.log("Edit item", item);
   };
 
   const handleDelete = (item) => {
     setShowDeleteConfirmation(true);
     setItemToDelete(item);
   };
-  const confirmDelete = () => {
-    // Handle delete logic here
-    console.log("Delete item", itemToDelete);
+  const confirmDelete = () => { 
     setShowDeleteConfirmation(false);
     setItemToDelete(null);
     promotion

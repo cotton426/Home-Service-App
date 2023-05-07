@@ -27,7 +27,6 @@ userRouter.get("/", async (req, res) => {
 
 userRouter.get("/services", async (req, res) => {
   const keywords = req.query.keywords;
-  console.log(keywords);
   //   if (keywords === undefined) {
   //     return res.status(400).json({
   //       message: "Please send keywords parameter in the URL endpoint",
@@ -44,8 +43,6 @@ userRouter.get("/services", async (req, res) => {
     `
     );
 
-    console.log(data);
-    console.log(error);
     if (error) {
       console.error("Error executing SQL query:", error);
     }
@@ -89,18 +86,7 @@ userRouter.post("/orders", async (req, res) => {
     promotion_id,
     quantity_used,
   } = req.body;
-
-  // console.log("data:", {
-  //   profile_id,
-  //   status,
-  //   total_price,
-  //   address,
-  //   sub_district,
-  //   district,
-  //   province,
-  //   booking_date,
-  //   booking_time,
-  // });
+ 
 
   const { data: ordersToday, error: ordersTodayError } = await supabase
     .from("orders")
@@ -113,7 +99,6 @@ userRouter.post("/orders", async (req, res) => {
   }
 
   const orderCountToday = ordersToday.length;
-  // console.log("Orders count for today:", orderCountToday);
 
   // Generate unique order code
   const orderCode = generateOrderCode(orderCountToday, booking_date);
@@ -126,10 +111,9 @@ userRouter.post("/orders", async (req, res) => {
       description: "Order #" + orderCode,
     });
 
-    console.log(charge);
-    // handle successful charge
+
+
   } catch (error) {
-    console.log(error);
     return res.status(400).json({ error: error.message });
   }
 
@@ -155,7 +139,6 @@ userRouter.post("/orders", async (req, res) => {
     ])
     .select("order_id");
 
-  // console.log(newOrder[0].order_id);
 
   if (newOrderError) {
     console.error("Error inserting order:", newOrderError);
@@ -167,14 +150,12 @@ userRouter.post("/orders", async (req, res) => {
     return item;
   });
 
-  // console.log(newCart);
 
   const { order_id } = newOrder[0];
   const addCart = newCart.map((subService) => {
     return { ...subService, order_id: order_id };
   });
 
-  // console.log(addCart);
 
   const { data: orderItem, error: insertSubServiceError } = await supabase
     .from("order_items")
@@ -235,7 +216,6 @@ userRouter.post("/check-promotion", async (req, res) => {
     return res.json({ message: "ไม่พบ Promotion code" });
   }
   if (!data) {
-    console.log("Promotion code not found.");
     return res.json({ message: "ไม่พบ Promotion code" });
   }
 
@@ -244,15 +224,12 @@ userRouter.post("/check-promotion", async (req, res) => {
   const expTime = new Date(data.exp_time);
 
   if (currentDate > expDate || currentDate > expTime) {
-    console.log("Promotion code has expired.");
     return res.json({ message: "Promotion code หมดอายุ" });
   }
 
   if (data.quantity_used >= data.useable_quantity) {
-    console.log("Promotion code has reached its usage limit.");
     return res.json({ message: "Promotion code ถูกใช้งานเต็มจำนวนแล้ว" });
   }
-  console.log("res is here :", data);
   return res.json({
     valid: true,
     ...data,

@@ -13,7 +13,6 @@ const navigate = useNavigate()
     homepageGetServices();
   }, []);
 
-  console.log(items);
   return (
     <div className="flex justify-center w-full ">
       <div className="grid grid-cols-3 gap-10 w-full">
@@ -63,7 +62,6 @@ const navigate = useNavigate()
                   <button
                     className="btn-ghost mb-3 ml-4"
                     onClick={() => {
-                      console.log(item);
                       navigate(`/select-service/${item.service_id}`);
                     }}
                   >
