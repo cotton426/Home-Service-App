@@ -3,8 +3,6 @@ import { FiEdit } from "react-icons/fi";
 import { TbGripVertical } from "react-icons/tb";
 import { HiOutlineTrash } from "react-icons/hi";
 import AlertConfirmation from "./AlertConfirmation";
-// import { useQuery, useMutation, useQueryClient } from "react-query";
-// import { useData } from "../contexts/data";
 import useData from "../hooks/useData";
 import { useNavigate } from "react-router-dom";
 import { formatTime } from "../utils/timeUtils";
@@ -13,26 +11,48 @@ const TableRow = ({
   service,
   item,
   index,
+  promotion,
   handleDragStart,
   handleDrop,
   handleDragOver,
   handleEdit,
   handleDelete,
 }) => {
+  const navigate = useNavigate();
+
+  const navigateToItem = () => {
+    navigate(
+      promotion ? `/view-promotion/${item.id}` 
+      :
+      service
+        ? `/view-service/${item.service_id}`
+        : `/view-category/${item.category_id}`
+    );
+  };
+
   return (
     <tr
       key={item.category_id}
       className="bg-white w-full h-20 text-black border-t border-gray-200 hover:bg-gray-100 transition-all duration-200 ease-in"
-      // draggable
-      // onDragStart={(e) => handleDragStart(e, index)}
-      // onDragOver={handleDragOver}
-      // onDrop={(e) => handleDrop(e, index)}
+      onClick={navigateToItem}
     >
-      {/* <td className="py-3 px-4 text-gray-300">
-        <TbGripVertical className="w-full" />
-      </td> */}
-      <td className="py-3 px-4 text-center">{index + 1}</td>
-      {service ? (
+      {promotion ? (
+        <td className="py-3 px-4 text-center">{item.promotion_code}</td>
+      ) : (
+        <td className="py-3 px-4 text-center">{index + 1}</td>
+      )}
+      {promotion ? (
+        <>
+          <td className="py-3 px-4">{item.type}</td>
+          <td className="py-3 px-4 ">
+            {item.quantity_used}/{item.useable_quantity}
+          </td>
+          <td className="py-3 px-4 text-red">
+            -{item.discount.toFixed(2)}
+            {item.type === "Fixed" ? "฿" : "%"}
+          </td>
+        </>
+      ) : service ? (
         <>
           <td className="py-3 px-4">{item.name}</td>
           <td className="py-3 px-4">
@@ -59,103 +79,67 @@ const TableRow = ({
 
       <td className="py-3 px-4">{formatTime(item.created_at)}</td>
       <td className="py-3 px-4">{formatTime(item.updated_at)}</td>
-      <td className="py-3 px-4">
+      <td className="py-7 px-4 flex">
         <button
-          className="text-gray-500 hover:text-red-700  mr-2"
-          onClick={() => handleDelete(item)}
+          className="text-gray-500 hover:text-red-700 mr-2"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDelete(item);
+          }}
         >
           <HiOutlineTrash className="scale-110" />
         </button>
 
-        <button
-          className="text-blue-500 hover:text-blue-700"
-          onClick={() => handleEdit(item)}
-        >
-          <FiEdit />
-        </button>
+        <FiEdit
+          className="text-blue-500 hover:text-blue-700 cursor-pointer"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleEdit(item);
+          }}
+        />
       </td>
     </tr>
   );
 };
 
-const TableOfContents = ({ service }) => {
+const TableOfContents = ({ service, promotion }) => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  const { items, getCategories, getServices, deleteCategory, deleteService } =
-    useData();
+  const {
+    items,
+    getCategories,
+    getServices,
+    getPromotions,
+    deleteCategory,
+    deleteService,
+    deletePromotion,
+  } = useData();
   const navigate = useNavigate();
 
   useEffect(() => {
-    service ? getServices() : getCategories();
-  }, [items]);
-
-  // const queryClient = useQueryClient();
-
-  // const fetchItems = async () => {
-  //   const response = await fetch("http://localhost:4000/data/categories"); // Replace with your actual API endpoint
-  //   const data = await response.json();
-  //   return data;
-  // };
-
-  // const {
-  //   data: items,
-  //   isLoading,
-  //   isError,
-  // } = useQuery("categories", getCategories);
-
-  // const handleDragStart = (e, index) => {
-  //   e.dataTransfer.setData("index", index);
-  // };
-
-  // const handleDrop = async (e, index) => {
-  //   e.preventDefault();
-  //   const sourceIndex = e.dataTransfer.getData("index");
-  //   const updatedItems = [...items];
-  //   console.log(updatedItems);
-  //   const [removed] = updatedItems.splice(sourceIndex, 1);
-  //   console.log(removed);
-  //   updatedItems.splice(index, 0, removed);
-  //   console.log(updatedItems);
-  // Update the server/database with the updatedItems array using React Query
-  // try {
-  //   const mutation = useMutation("/api/items", {
-  //     method: "PUT",
-  //     body: JSON.stringify({ items: updatedItems }),
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   });
-  //   await mutation.mutateAsync(); // Trigger the mutation and wait for it to complete
-  //   console.log("Items updated successfully");
-  // } catch (error) {
-  //   console.error(error); // Handle any errors that may occur
-  // }
-  // };
-
-  // const handleDragOver = (e) => {
-  //   e.preventDefault();
-  // };
+    promotion ? getPromotions() : service ? getServices() : getCategories();
+  }, [itemToDelete]);
 
   const handleEdit = (item) => {
-    // Handle edit logic here
-    service
+    promotion
+      ? navigate("/edit-promotion/" + item.id)
+      : service
       ? navigate("/edit-service/" + item.service_id)
       : navigate("/edit-category/" + item.category_id);
-    console.log("Edit item", item);
   };
 
   const handleDelete = (item) => {
     setShowDeleteConfirmation(true);
     setItemToDelete(item);
   };
-  const confirmDelete = () => {
-    // Handle delete logic here
-    console.log("Delete item", itemToDelete);
+  const confirmDelete = async () => { 
+    promotion
+    ? await deletePromotion(itemToDelete.id)
+    : service
+    ? await deleteService(itemToDelete.service_id)
+    : await deleteCategory(itemToDelete.category_id);
     setShowDeleteConfirmation(false);
     setItemToDelete(null);
-    service
-      ? deleteService(itemToDelete.service_id)
-      : deleteCategory(itemToDelete.category_id);
   };
 
   const cancelDelete = () => {
@@ -170,8 +154,19 @@ const TableOfContents = ({ service }) => {
           <thead className="bg-gray-100">
             <tr>
               {/* <th className="py-3 px-4 w-[5%]"></th> */}
-              <th className="py-3 px-4 text-center w-1/12">ลำดับ</th>
-              {service ? (
+              {promotion ? (
+                <th className="py-3 px-4 text-center w-1/6">Promotion Code</th>
+              ) : (
+                <th className="py-3 px-4 text-center w-1/12">ลำดับ</th>
+              )}
+
+              {promotion ? (
+                <>
+                  <th className="py-3 px-4 w-[12%]">ประเภท</th>
+                  <th className="py-3 px-4 w-[15%]">โควต้าการใช้(ครั้ง)</th>
+                  <th className="py-3 px-4 w-[12%]">ราคาที่ลด</th>
+                </>
+              ) : service ? (
                 <>
                   <th className="py-3 px-4 w-1/6">ชื่อบริการ</th>
                   <th className="py-3 px-4 w-1/6">หมวดหมู่</th>
@@ -188,6 +183,7 @@ const TableOfContents = ({ service }) => {
             {items?.map((item, index) => (
               <TableRow
                 service={service}
+                promotion={promotion}
                 key={index}
                 item={item}
                 index={index}

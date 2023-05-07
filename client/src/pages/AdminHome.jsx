@@ -1,5 +1,10 @@
 import { AdminSidebar } from "../components/AdminSidebar";
-import { CategoryNavbar, ServiceNavbar } from "../components/AdminNavbar";
+import {
+  CategoryNavbar,
+  ServiceNavbar,
+  PromotionNavbar,
+  DetailPromotionNavbar,
+} from "../components/AdminNavbar";
 import { Routes, Route } from "react-router-dom";
 import AddService from "../components/AddService";
 import TableOfContents from "../components/TableOfContents";
@@ -9,8 +14,12 @@ import {
   ViewCategory,
 } from "../components/AdminCategory";
 import ServiceTable from "../components/ServicesTable";
-import EditService from "../components/EditService";
-import DetailService from "../components/DetailService";
+import EditService, { ViewService } from "../components/EditService";
+import AddOnList from "../components/AddOnList";
+import { AddPromotion } from "../components/PromotionAdd";
+import { EditPromotion } from "../components/PromotionEdit";
+import PromotionTable from "../components/PromotionTable";
+import ViewPromotionCode from "../components/ViewPromotionCode";
 
 const AdminHomepage = () => {
   return (
@@ -23,6 +32,15 @@ const AdminHomepage = () => {
         className="bg-BG h-full w-full text-white"
       >
         <Routes>
+          <Route
+            path="/promotions"
+            element={
+              <>
+                <PromotionNavbar />
+                <PromotionTable />
+              </>
+            }
+          />
           <Route
             path="/categories"
             element={
@@ -82,7 +100,39 @@ const AdminHomepage = () => {
               </>
             }
           />
-          
+          <Route
+            path="/view-service/:service_id"
+            element={
+              <>
+                <ViewService />
+              </>
+            }
+          />
+          <Route
+            path="/add-promotion"
+            element={
+              <>
+                <AddPromotion />
+              </>
+            }
+          />
+          <Route
+            path="/edit-promotion/:promotion_id"
+            element={
+              <>
+                <EditPromotion />
+              </>
+            }
+          />
+          <Route
+            path="/view-promotion/:promotion_id"
+            element={
+              <>
+                <DetailPromotionNavbar />
+                <ViewPromotionCode />
+              </>
+            }
+          />
         </Routes>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -31,10 +31,62 @@ const useUser = () => {
       const response = await axios.get(
         `http://localhost:4000/user/services?keywords=${keywords}`
       );
-      console.log(response.data);
       setItems(response.data);
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const getOrders = useCallback(
+    async (profile_id) => {
+      try {
+        const response = await axios.get(
+          `http://localhost:4000/user/orders?profile_id=${profile_id}`
+        );
+        setItems(response.data);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    },
+    [setItems, axios]
+  );
+
+  const addOrder = async (formData) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/user/orders",
+        formData
+      );
+      return { success: true, message: "Add Order successfully!" };
+    } catch (error) {
+      console.error(error);
+      return {
+        success: false,
+        message: "Failed Add Order. Please try again.",
+      };
+    }
+  };
+
+  const checkPromotion = async (promotionCode) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/user/check-promotion",
+        { promotionCode }
+      );
+      return {
+        ...response?.data,
+        valid: response?.data.valid ?? false,
+        discount: response?.data.discount,
+        message: response?.data.message,
+        type: response?.data.type,
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        valid: false,
+        discount: 0,
+        message: error.response?.message
+      };
     }
   };
 
@@ -45,6 +97,9 @@ const useUser = () => {
     homepageGetServices,
     isLoading,
     error,
+    getOrders,
+    addOrder,
+    checkPromotion,
   };
 };
 

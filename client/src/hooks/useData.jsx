@@ -86,9 +86,9 @@ const useData = () => {
       navigate("/services");
     } catch (error) {
       console.error(error);
-      return error.response.data.error
+      return error.response.data.error;
+      return error.response.data.error;
     }
-    
   };
 
   const getService = async (param) => {
@@ -122,7 +122,7 @@ const useData = () => {
       navigate("/services");
     } catch (error) {
       console.error(error);
-      return error.response.data.error
+      return error.response.data.error;
     }
   };
 
@@ -137,6 +137,91 @@ const useData = () => {
     }
   };
 
+  const addPayment = async (formData) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/data/services",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      navigate("/services");
+    } catch (error) {
+      console.error(error);
+      return error.response.data.error;
+    }
+  };
+
+  const getPromotions = async () => {
+    try {
+      const response = await axios.get("http://localhost:4000/data/promotions");
+      setItems(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const addPromotion = async (promotionData) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/data/promotions",
+        promotionData
+      );
+      if (response?.data?.message === "Promotion code already exists.") {
+        return response.data.message;
+      }
+      navigate("/promotions");
+    } catch (error) {
+      console.error(error);
+      return {
+        success: false,
+        message: "Failed to add the promotion. Please try again.",
+      };
+    }
+  };
+
+  const getPromotion = async (param) => {
+    try {
+      const response = await axios.get(
+        "http://localhost:4000/data/promotions/" + param
+      );
+      setItemObjects(response);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
+
+  const updatePromotion = async (promotionId, promotionData) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:4000/data/promotions/${promotionId}`,
+        promotionData
+      );
+      navigate("/promotions");
+    } catch (error) {
+      console.error(error);
+      return {
+        success: false,
+        message: "Failed to update the promotion. Please try again.",
+      };
+    }
+  };
+
+  const deletePromotion = async (id) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:4000/data/promotions/${id}`
+      );
+      navigate("/promotions");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return {
     items,
@@ -151,6 +236,12 @@ const useData = () => {
     getService,
     editService,
     deleteService,
+    addPayment,
+    addPromotion,
+    getPromotion,
+    updatePromotion,
+    getPromotions,
+    deletePromotion,
   };
 };
 

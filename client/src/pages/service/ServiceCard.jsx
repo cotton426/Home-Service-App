@@ -1,12 +1,11 @@
 import { FiTag } from "react-icons/fi";
-import useUser from "../../hooks/useUser";
-import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-function ServiceMore({ items }) {
-  // useEffect(() => {}, [items]);
-
+function ServiceMore({ items, loading}) {
+  const navigate = useNavigate();
   return (
-    <div className="flex justify-center w-full pb-20 pt-20 bg-gray-50 ">
+    <div className="flex justify-center w-full pb-20 pt-20 bg-gray-50 h-full">
+      
       {!items ? (
         <h1>ไม่พบบริการที่ค้นหา</h1>
       ) : (
@@ -60,7 +59,9 @@ function ServiceMore({ items }) {
                     </div>
                     <button
                       className="btn-ghost mb-3 ml-4"
-                      onClick={() => console.log(item)}
+                      onClick={() => {
+                        navigate(`/select-service/${item.service_id}`);
+                      }}
                     >
                       เลือกบริการ
                     </button>

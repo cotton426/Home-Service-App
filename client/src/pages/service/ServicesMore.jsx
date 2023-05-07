@@ -51,6 +51,7 @@ export const NavService = ({ filter, setFilter }) => {
   const [valueLeft, setvalueLeft] = useState("0");
   const [valueRight, setvalueRight] = useState("0");
   const { userGetServices, items } = useUser();
+  const [loading, setloading] = useState(true);
 
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
@@ -63,21 +64,12 @@ export const NavService = ({ filter, setFilter }) => {
   //   setValueRight(event.target.value);
   // };
 
-  // const handleSelection = (item) => {
-  //   // setSelect(item)
-  //   const { category_id } = items.filter((x) => x.name === item)[0];
-  // };
-
-  // const getCategoryName = (categoryId) => {
-  //   const category = items.find((item) => item.category_id === categoryId);
-  //   return category ? category.name : "";
-  // };
-
   useEffect(() => {
-    getCategories();
+    // getCategories();
     userGetServices({
       search: "",
     });
+    setloading(false);
   }, []);
 
   return (
@@ -91,7 +83,6 @@ export const NavService = ({ filter, setFilter }) => {
           sortBy: "",
         }}
         onSubmit={(values) => {
-          console.log(values);
           userGetServices(values);
         }}
       >
@@ -100,6 +91,7 @@ export const NavService = ({ filter, setFilter }) => {
             <Form>
               <div className="flex w-full justify-center">
                 <div className="w-full flex justify-between ">
+                {loading && <div className="text-black bg-red">Loading...</div>}
                   <div>
                     <div className="w-[350px] flex items-center border rounded-lg overflow-hidden border-gray-300">
                       <div className="flex-shrink-0 px-4 py-2">
@@ -256,9 +248,10 @@ export const NavService = ({ filter, setFilter }) => {
               </div>
             </Form>
           </nav>
+          
         )}
       </Formik>
-      <ServiceMore items={items} />
+      <ServiceMore items={items} loading={loading} />
     </>
   );
 };

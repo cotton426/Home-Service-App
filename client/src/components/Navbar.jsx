@@ -20,12 +20,12 @@ const NavbarLeftContainer = () => {
           src={logoHomeService}
           alt="HomeServices Logo"
         />
-        <a href="/" className=" text-blue-600 font-bold text-[24px] mx-[5%]">
+        <a href="/" className=" text-blue-600 font-medium text-[24px] mx-[5%]">
           HomeServices
         </a>
       </div>
 
-      <a href="/" className=" text-black  text-[16px] pt-1 pl-[5%]">
+      <a href="/services" className=" text-black  text-[16px] pt-1 pl-[5%]">
         บริการของเรา
       </a>
     </div>
@@ -103,10 +103,8 @@ const Navbar = ({ menuItems }) => {
             </div>
 
             <div className="relative">
-              <img
-                src={userProfile}
-                alt="userProfile"
-                className="w-10 h-10 p-2 bg-gray-100 rounded-full mx-2 cursor-pointer"
+              <BiUser
+                className="w-10 h-10 p-2 bg-gray-100 rounded-full mx-2 cursor-pointer text-gray-400 hover:bg-gray-200 duration-300"
                 onClick={toggleDropdown}
               />
               {dropdownVisible && (
@@ -156,21 +154,21 @@ const Navbar = ({ menuItems }) => {
 
 export const NavbarLogout = ({ isAdmin }) => {
   const menuItems = [
-    {
-      label: "ข้อมูลผู้ใช้งาน",
-      IconComponent: BiUser,
-      to: "/user",
-    },
+    // {
+    //   label: "ข้อมูลผู้ใช้งาน",
+    //   IconComponent: BiUser,
+    //   to: "/user",
+    // },
     {
       label: "รายการคำสั่งซ่อม",
       IconComponent: TiClipboard,
-      to: "/orders",
+      to: "/user-orders-list",
     },
-    {
-      label: "ประวัติการซ่อม",
-      IconComponent: MdHistory,
-      to: "/history",
-    },
+    // {
+    //   label: "ประวัติการซ่อม",
+    //   IconComponent: MdHistory,
+    //   to: "/history",
+    // },
     {
       label: "Admin Dashboard",
       IconComponent: MdHistory,
@@ -184,21 +182,21 @@ export const NavbarLogout = ({ isAdmin }) => {
 
 export const AdminNavbarLogout = () => {
   const menuItems = [
-    {
-      label: "ข้อมูลผู้ใช้งาน",
-      IconComponent: BiUser,
-      to: "/user",
-    },
+    // {
+    //   label: "ข้อมูลผู้ใช้งาน",
+    //   IconComponent: BiUser,
+    //   to: "/user",
+    // },
     {
       label: "รายการคำสั่งซ่อม",
       IconComponent: TiClipboard,
-      to: "/orders",
+      to: "/user-orders-list",
     },
-    {
-      label: "ประวัติการซ่อม",
-      IconComponent: MdHistory,
-      to: "/history",
-    },
+    // {
+    //   label: "ประวัติการซ่อม",
+    //   IconComponent: MdHistory,
+    //   to: "/history",
+    // },
     {
       label: "Admin Dashbroad",
       IconComponent: MdHistory,

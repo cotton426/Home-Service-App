@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { GoSearch } from "react-icons/go";
 import { IoIosArrowBack } from "react-icons/io";
 
@@ -29,7 +29,7 @@ const Navbar = ({
               )}
               <div
                 id="left-container"
-                className="font-medium text-xl text-black w-[200px]"
+                className="font-medium text-xl text-black "
               >
                 {title}
               </div>
@@ -37,7 +37,7 @@ const Navbar = ({
           </div>
 
           <div className="flex items-center ">
-            {inputPlaceholder && (
+            {/* {inputPlaceholder && (
               <div className="flex flex-row items-center border border-gray-300 px-2 rounded-xl ">
                 <GoSearch className="h-5 w-5 text-gray-500 ml-2" />
                 <input
@@ -46,7 +46,7 @@ const Navbar = ({
                   className=" text-black focus:outline-none  ml-2 px-1 py-2 rounded border-none"
                 />
               </div>
-            )}
+            )} */}
             {leftButton && <div className="pl-6">{leftButton}</div>}
             {rightButton && <div className="pl-6">{rightButton}</div>}
           </div>
@@ -106,7 +106,6 @@ export const AddCategoryNavbar = ({ handleSubmit }) => (
       <button
         className="btn-primary"
         onClick={() => {
-          console.log("work");
           handleSubmit();
         }}
       >
@@ -120,7 +119,7 @@ export const AddServiceNavbar = () => (
   <Navbar
     title="เพิ่มบริการ"
     leftButton={
-      <Link to="/categories">
+      <Link to="/services">
         <button className="btn-primary">ยกเลิก</button>
       </Link>
     }
@@ -132,11 +131,11 @@ export const AddServiceNavbar = () => (
   />
 );
 
-export const EditServiceNavbar = () => (
+export const EditServiceNavbar = ({ title }) => (
   <Navbar
-    title="บริการย่อย"
+    title={title}
     subTitle="บริการ"
-    backLink="/service"
+    // backLink="/services"
     leftButton={
       <Link to="/services">
         <button className="btn-primary">ยกเลิก</button>
@@ -150,13 +149,13 @@ export const EditServiceNavbar = () => (
   />
 );
 
-export const EditCategoryNavbar = ({ onConfirm }) => {
+export const EditCategoryNavbar = ({ onConfirm, title }) => {
   const navigate = useNavigate();
   return (
     <Navbar
-      title="บริการย่อย"
+      title={title}
       subTitle="หมวดหมู่"
-      backLink="/service"
+      // backLink="/categories"
       leftButton={
         <button
           className="btn-primary"
@@ -175,20 +174,97 @@ export const EditCategoryNavbar = ({ onConfirm }) => {
     />
   );
 };
-export const DetailCategoryNavbar = () => (
+
+export const DetailCategoryNavbar = ({ title }) => {
+  const param = useParams();
+  return (
+    <Navbar
+      title={title}
+      subTitle="หมวดหมู่"
+      backLink="/categories"
+      rightButton={
+        <Link to={`/edit-category/${param.category_id}`}>
+          <button className="btn-primary">แก้ไข</button>
+        </Link>
+      }
+    />
+  );
+};
+
+export const DetailServiceNavbar = ({ title }) => {
+  const param = useParams();
+  return (
+    <Navbar
+      title={title}
+      subTitle="บริการ"
+      backLink="/services"
+      rightButton={
+        <Link to={`/edit-service/${param.service_id}`}>
+          <button className="btn-primary">แก้ไข</button>
+        </Link>
+      }
+    />
+  );
+};
+
+export const AddPromotionNavbar = ({ onConfirm }) => (
   <Navbar
-    title="แก้ไขหมวดหมู่ย่อย"
-    subTitle="หมวดหมู่"
-    backLink="/categories"
-    rightButton={<button className="btn-primary">แก้ไข</button>}
+    title="เพิ่มบริการ"
+    leftButton={
+      <Link to="/promotions">
+        <button className="btn-primary">ยกเลิก</button>
+      </Link>
+    }
+    rightButton={
+      <button className="btn-primary" onClick={onConfirm} type="submit">
+        ยืนยัน
+      </button>
+    }
   />
 );
 
-export const DetailServiceNavbar = () => (
+export const PromotionNavbar = () => (
   <Navbar
-    title="แก้ไขบริการย่อย"
+    title="Promotion Code"
+    inputPlaceholder="ค้นหา Promotion Code..."
+    rightButton={
+      <Link to="/add-promotion">
+        <button className="btn-primary">เพิ่ม Promotion Code +</button>
+      </Link>
+    }
+  />
+);
+
+export const DetailPromotionNavbar = () => {
+  const param = useParams();
+  return (
+    <Navbar
+      title="HOME0202"
+      subTitle="Promotion Code"
+      backLink="/promotions"
+      rightButton={
+        <Link to={`/edit-promotion/${param.promotion_id}`}>
+          <button className="btn-primary">แก้ไข</button>
+        </Link>
+      }
+    />
+  );
+};
+
+export const EditPromotionNavbar = ({ onConfirm }) => (
+  <Navbar
+    title="บริการย่อย"
     subTitle="บริการ"
-    backLink="/service"
-    rightButton={<button className="btn-primary">แก้ไข</button>}
+    // backLink="/services"
+    leftButton={
+      <Link to="/promotions">
+        <button className="btn-primary">ยกเลิก</button>
+      </Link>
+    }
+    rightButton={
+      <button className="btn-primary" onClick={onConfirm} type="submit">
+        ยืนยัน
+      </button>
+    }
   />
 );

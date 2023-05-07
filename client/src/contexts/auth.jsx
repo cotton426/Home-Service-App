@@ -34,8 +34,6 @@ const AuthProvider = ({ children }) => {
       await axios.post("http://localhost:4000/auth/register", data);
       navigate("/login");
     } catch (error) {
-      console.error(error);
-      // console.log(error);
       return error;
     }
   };

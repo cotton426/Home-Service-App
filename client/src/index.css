@@ -27,7 +27,7 @@ label {
 }
 
 .input-default {
-  @apply border-gray-300 border rounded-lg h-11 placeholder:text-gray-700 placeholder:font-normal px-4 py-2.5 outline-none focus:placeholder:text-gray-950  focus:border-blue-600;
+  @apply border-gray-300 border rounded-lg h-11 placeholder:text-gray-700 placeholder:font-normal px-4 py-2.5 outline-none focus:placeholder:text-gray-950  focus:border-blue-600 disabled:bg-gray-200;
 }
 
 .error-massage {
@@ -93,4 +93,39 @@ td {
 
 .shadow {
   @apply shadow-[8px_8px_24px_0px_rgba(23,51,106,0.12)] rounded-lg;
+}
+
+.count {
+  @apply bg-white text-blue-600 w-[43px] h-[43px] rounded-lg border-blue-600 border;
+}
+
+.select-box {
+  @apply text-gray-800 border border-gray-300 bg-white rounded-lg 
+  /* hover:border-blue-600 hover:text-blue-600 
+  focus:bg-blue-100 focus:text-blue-600 focus:border-blue-600
+  active:bg-blue-100 */
+}
+
+
+.present-stage {
+  @apply text-blue-500 font-medium border-blue-500 bg-white;
+}
+
+.future-stage {
+  @apply font-medium border-gray-300 bg-white;
+}
+
+div ~ .future-stage {
+  @apply text-gray-300;
+}
+p ~ .future-stage {
+  @apply text-gray-700;
+}
+
+.past-stage {
+  @apply bg-blue-500 text-white border-2 border-blue-500;
+}
+
+.progress-icon {
+  @apply border-2 rounded-full w-10 h-10 flex justify-center items-center;
 }

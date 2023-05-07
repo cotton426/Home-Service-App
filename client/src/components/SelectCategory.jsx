@@ -2,8 +2,7 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import useData from "../hooks/useData";
 import { useEffect, useState } from "react";
 
-function SelectCategory({ field, form }) {
-  // const [select, setSelect] = useState();
+function SelectCategory({ field, form, view }) {
 
   const { getCategories, items } = useData();
 
@@ -12,7 +11,6 @@ function SelectCategory({ field, form }) {
   }, []);
 
   const handleSelection = (item) => {
-    // setSelect(item)
     const { category_id } = items.filter((x) => x.name === item)[0];
     form.setFieldValue(field.name, category_id);
   };
@@ -26,29 +24,34 @@ function SelectCategory({ field, form }) {
       <div className="relative flex flex-row justify-center space-x-40 text-gray-950 mt-10">
         <label htmlFor="category" className="w-[100px] text-gray-700">
           หมวดหมู่
-          <label className="text-red">*</label>
+          {!view && <label className="text-red">*</label>}
         </label>
-        <select
-          value={getCategoryName(field.value)}
-          id="category"
-          className="block appearance-none input-default w-[450px] bg-white border border-gray-400 hover:border-gray-500 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-          onChange={(event) => handleSelection(event.target.value)}
-        >
-          <option value="" disabled hidden>
-            บริการทั้งหมด
-          </option>
-          {items.map((item, index) => {
-            return (
-              <option key={index} value={item.name}>
-                {item.name}
+        {view ? (
+          <div className="flex flex-col items-start justify-end w-[450px]">{getCategoryName(field.value)}</div>
+        ) : (
+          <>
+            <select
+              value={getCategoryName(field.value)}
+              id="category"
+              className="block appearance-none input-default w-[450px] bg-white border border-gray-400 hover:border-gray-500 rounded leading-tight focus:outline-none focus:shadow-outline"
+              onChange={(event) => handleSelection(event.target.value)}
+            >
+              <option value="" disabled hidden>
+                บริการทั้งหมด
               </option>
-            );
-          })}
-        </select>
-
-        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-          <IoMdArrowDropdown />
-        </div>
+              {items.map((item, index) => {
+                return (
+                  <option key={index} value={item.name}>
+                    {item.name}
+                  </option>
+                );
+              })}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <IoMdArrowDropdown />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

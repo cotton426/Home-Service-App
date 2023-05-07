@@ -1,8 +1,10 @@
 import { Router } from "express";
 import multer from "multer";
 import { supabase } from "../utils/supabase.js";
-
+import { requireAuth } from "../middleware/authMiddleware.js";
 const dataRouter = Router();
+
+dataRouter.use(requireAuth);
 const upload = multer({ storage: multer.memoryStorage() });
 
 dataRouter.get("/categories", async (req, res) => {
@@ -41,7 +43,6 @@ dataRouter.post("/categories", async (req, res) => {
   const { data: categories, error } = await supabase
     .from("categories")
     .insert([{ name: name }]);
-  console.log(error?.message);
   if (error) {
     return res.status(400).json({ error: error.message });
   }
@@ -57,8 +58,6 @@ dataRouter.put("/categories/:id", async (req, res) => {
     .update([{ name: name }])
     .eq("category_id", categoryId);
 
-  // .order("id", { ascending: false });
-  console.log(error?.message);
   if (error) {
     return res.status(400).json({ error: error.message });
   }
@@ -68,14 +67,11 @@ dataRouter.put("/categories/:id", async (req, res) => {
 
 dataRouter.delete("/categories/:id", async (req, res) => {
   const categoryId = req.params.id;
-  console.log(categoryId);
   const { data: categories, error } = await supabase
     .from("categories")
     .delete()
     .eq("category_id", categoryId);
 
-  // .order("id", { ascending: false });
-  console.log(error?.message);
   if (error) {
     return res.status(400).json({ error: error.message });
   }
@@ -103,25 +99,22 @@ dataRouter.get("/services", async (req, res) => {
 dataRouter.post("/services", upload.single("image"), async (req, res) => {
   const decodedFileName = decodeURIComponent(req.file.originalname);
   const { serviceName, category_id, subServiceList } = req.body;
-console.log({ serviceName, category_id, subServiceList });
+
   const { data: service, error: alreadyExist } = await supabase
     .from("services")
     .select("*")
-    .eq( "name", serviceName) 
-    .eq( "category_id", category_id) 
-    
-// console.log(alreadyExist);
-  if (service[0]!==undefined) {
+    .eq("name", serviceName)
+    .eq("category_id", category_id);
+
+  if (service[0] !== undefined) {
     console.error("Error inserting data:", alreadyExist);
-    return res.status(400).json({ error: "This Service is already exist"});
+    return res.status(400).json({ error: "This Service is already exist" });
   }
-console.log(decodedFileName);
 
   // Save the image to Supabase Storage
   const file = req.file;
   const bucket = "images/";
   const uniqueID = Date.now().toString();
-  console.log(uniqueID);
   const imagePath = `services-image/${category_id}/${decodedFileName}`;
 
   const { error: uploadError, data } = await supabase.storage
@@ -191,21 +184,23 @@ dataRouter.get("/services/:id", async (req, res) => {
 });
 
 dataRouter.put("/services/:id", upload.single("image"), async (req, res) => {
-
   const serviceId = req.params.id;
   const { name, category_id, subServiceList } = req.body;
 
+  const { data: deleteSubservice, error: deleteError } = await supabase
+    .from("sub_services")
+    .delete()
+    .eq("service_id", serviceId);
 
-  
   // const { data: editService, error: alreadyExist } = await supabase
   //   .from("services")
   //   .select("*")
-  //   .eq( "name", name) 
-  //   .eq( "category_id", category_id) 
-    
-  // if (editService[0]!==undefined) {
+  //   .eq("name", name)
+  //   .eq("category_id", category_id);
+
+  // if (editService[0] !== undefined) {
   //   console.error("Error inserting data:", alreadyExist);
-  //   return res.status(400).json({ error: "This Service is already exist"});
+  //   return res.status(400).json({ error: "This Service is already exist" });
   // }
 
   const decodedFileName = decodeURIComponent(req.file?.originalname);
@@ -243,14 +238,22 @@ dataRouter.put("/services/:id", upload.single("image"), async (req, res) => {
     .update(fieldsToUpdate)
     .eq("service_id", serviceId);
 
-  console.log(error);
   if (error) {
     return res.status(400).json({ error: error.message });
   }
-  console.log(subServiceList);
-  const { data: subService, error: subServiceError } = await supabase
+  const subServiceListWithoutNullPrototype = subServiceList.map((subService) =>
+    Object.assign({}, { ...subService })
+  );
+
+  const { data: subService, error: insertSubServiceError } = await supabase
     .from("sub_services")
-    .upsert(subServiceList, { onConflict: "sub_service_id" });
+    .insert(subServiceListWithoutNullPrototype)
+    .select("*");
+
+  if (insertSubServiceError) {
+    console.log(insertSubServiceError);
+  }
+
   return res.json(service);
 });
 
@@ -287,18 +290,153 @@ dataRouter.delete("/services/:id", async (req, res) => {
     )
   )}`;
 
-  const { error: deleteImageError } = await supabase.storage
-    .from(bucket)
-    .remove(
-      "public/images/services-image/Screenshot 2566-04-09 at 14.41.30.png"
-    );
+  // const { error: deleteImageError } = await supabase.storage
+  //   .from(bucket)
+  //   .remove(
+  //     "public/images/services-image/Screenshot 2566-04-09 at 14.41.30.png"
+  //   );
 
-  if (deleteImageError) {
-    console.error("Error deleting image:", deleteImageError);
-    return res.status(400).json({ error: deleteImageError.message });
-  }
+  // if (deleteImageError) {
+  //   console.error("Error deleting image:", deleteImageError);
+  //   return res.status(400).json({ error: deleteImageError.message });
+  // }
 
   return res.json(service);
+});
+
+dataRouter.post("/promotions", async (req, res) => {
+  const {
+    promotionCode,
+    type,
+    fixedAmount,
+    percentage,
+    usageLimit,
+    expirationDate,
+    expirationTime,
+  } = req.body;
+
+  const {
+    data: existingPromotion,
+    error: existingPromotionError,
+  } = await supabase
+    .from("promotions")
+    .select("*")
+    .filter("promotion_code", "eq", promotionCode);
+
+  if (existingPromotionError) {
+    console.error(
+      "Error checking for existing promotion:",
+      existingPromotionError
+    );
+    return res.status(500).json({ error: existingPromotionError.message });
+  }
+
+  if (existingPromotion.length > 0) {
+    return res.json({ message: "Promotion code already exists." });
+  }
+
+  const { data: newPromotion, error: newPromotionError } = await supabase
+    .from("promotions")
+    .insert([
+      {
+        promotion_code: promotionCode,
+        useable_quantity: usageLimit,
+        quantity_used: 0,
+        exp_date: expirationDate,
+        exp_time: expirationTime,
+        type,
+        discount: type === "Fixed" ? fixedAmount : percentage,
+      },
+    ]);
+
+  if (newPromotionError) {
+    console.error("Error inserting promotion:", newPromotionError);
+    return res.status(400).json({ error: newPromotionError.message });
+  }
+
+  return res.json(newPromotion);
+});
+
+dataRouter.get("/promotions", async (req, res) => {
+  const { data: promotions, error } = await supabase
+    .from("promotions")
+    .select("*")
+    .order("updated_at", { ascending: false });
+
+  return res.json(promotions);
+});
+
+dataRouter.get("/promotions/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const { data: promotion, error } = await supabase
+      .from("promotions")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      console.error("Error fetching promotion:", error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    return res.json(promotion);
+  } catch (error) {
+    console.error("Error fetching promotion:", error);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+dataRouter.put("/promotions/:id", async (req, res) => {
+  const { id } = req.params;
+  const {
+    promotionCode,
+    type,
+    fixedAmount,
+    percentage,
+    usageLimit,
+    expirationDate,
+    expirationTime,
+  } = req.body;
+
+  try {
+    const { data: updatedPromotion, error } = await supabase
+      .from("promotions")
+      .update({
+        promotion_code: promotionCode,
+        useable_quantity: usageLimit,
+        quantity_used: 0,
+        exp_date: expirationDate,
+        exp_time: expirationTime,
+        type,
+        discount: type === "Fixed" ? fixedAmount : percentage,
+      })
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error updating promotion:", error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    return res.json(updatedPromotion);
+  } catch (error) {
+    console.error("Error updating promotion:", error);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+dataRouter.delete("/promotions/:id", async (req, res) => {
+  const promotionId = req.params.id;
+  const { data: promotions, error } = await supabase
+    .from("promotions")
+    .delete()
+    .eq("id", promotionId);
+  if (error) {
+    return res.status(400).json({ error: error.message });
+  }
+
+  return res.json(promotions);
 });
 
 export default dataRouter;
