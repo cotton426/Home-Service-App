@@ -86,7 +86,6 @@ userRouter.post("/orders", async (req, res) => {
     promotion_id,
     quantity_used,
   } = req.body;
-console.log(cart);
  
 
   const { data: ordersToday, error: ordersTodayError } = await supabase
