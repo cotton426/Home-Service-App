@@ -90,21 +90,22 @@ const useUser = () => {
         { promotionCode }
       );
       console.log(promotionCode);
-      console.log(response.data);
+      console.log(response?.data);
       return {
-        valid: response.data.valid,
-        discount: response.data.discount,
-        message: response.data.message,
-        type:response.data.type,
+        ...response?.data,
+        valid: response?.data.valid ?? false,
+        discount: response?.data.discount,
+        message: response?.data.message,
+        type: response?.data.type,
       };
     } catch (error) {
       console.error(error);
+      console.log(error);
       return {
         valid: false,
         discount: 0,
-        message:
-          error.response?.data?.message ||
-          "Failed to check promotion code. Please try again.",
+        message: error.response?.message,
+        //  || "กรุณากรอกโปรโมชั่นใหม่อีกครั้งค่ะ"
       };
     }
   };

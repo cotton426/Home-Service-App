@@ -171,7 +171,10 @@ const useData = () => {
         "http://localhost:4000/data/promotions",
         promotionData
       );
-      return { success: true, message: "Promotion added successfully!" };
+      if (response?.data?.message === "Promotion code already exists.") {
+        return response.data.message;
+      }
+      navigate("/promotions");
     } catch (error) {
       console.error(error);
       return {

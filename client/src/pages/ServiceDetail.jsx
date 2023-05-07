@@ -36,7 +36,7 @@ export const ServiceSummary = ({
   return (
     <>
       <div
-        className={`box flex flex-col justify-between w-1/3 h-1/3 ${
+        className={`sticky top-5 box flex flex-col justify-between w-1/3 h-1/3 ${
           page === "summary-page" ? "px-[3%] py-[3%]" : "px-4"
         }`}
       >
@@ -148,6 +148,7 @@ const ServiceDetail = () => {
   const [paid, setPaid] = useState(false);
   const [paymentError, setPaymentError] = useState("");
 
+  const [promotion, setPromotion] = useState({});
   const { addOrder } = useUser();
 
   // const [showPromptpay, setShowPromptpay] = useState(false);
@@ -327,8 +328,10 @@ const ServiceDetail = () => {
                 paymentError={paymentError}
                 setDiscountType={setDiscountType}
                 setDiscount={setDiscount}
+                setPromotion={setPromotion}
               />
             )}
+            {console.log(promotion)}
             {page !== "summary-page" && (
               <ServiceSummary
                 subServiceList={itemObjects.subServiceList}
@@ -366,8 +369,10 @@ const ServiceDetail = () => {
               }
               onClick={async () => {
                 if (page === "payment-page") {
+                  console.log(cart);
                   let totalPrice = cart.reduce(
-                    (sum, item) => sum + item.price * item.quantity,
+                    (sum, item) =>
+                      sum + (item?.price ?? 0) * (item?.quantity ?? 0),
                     0
                   );
 
@@ -379,7 +384,7 @@ const ServiceDetail = () => {
                     }
                   }
 
-                  const selectCart = cart.filter((item) => item.quantity > 0);
+                  const selectCart = cart.filter((item) => item?.quantity > 0);
                   const profiles = localStorage.getItem("userData");
                   const profile = JSON.parse(profiles);
                   const profile_id = profile.profiles[0].id;
@@ -401,6 +406,8 @@ const ServiceDetail = () => {
                     ...inputValues,
                     profile_id,
                     status: "On Process",
+                    promotion_id: promotion.id,
+                    quantity_used: promotion.quantity_used,
                   };
                   console.log(orderItems);
                   // console.log(selectCart, inputValues, initialValues);

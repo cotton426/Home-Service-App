@@ -30,11 +30,11 @@ export function UserOrderList() {
     >
       <div
         id="header"
-        className="flex flex-col items-center w-screen bg-BG pb-20"
+        className="flex flex-col items-center w-screen bg-BG pb-20 relative "
       >
         <div
           id="box-topic"
-          className="flex w-full bg-blue-600 h-[98px] justify-center items-center"
+          className="flex w-full bg-blue-600 h-[98px] justify-center items-center sticky top-0 z-[1]"
         >
           <p className="flex text-3xl text-white font-medium">
             รายการคำสั่งซ่อม
@@ -68,7 +68,7 @@ const CustomerOrderBox = ({ orders, loading }) => {
   }
 
   if (orders.length === 0) {
-    return <div>No orders found.</div>;
+    return <div className="text-center pt-2">No orders found.</div>;
   }
   return (
     <>
@@ -86,7 +86,8 @@ const OrderCard = ({ order }) => {
     total_price,
     order_items,
   } = order;
-  const formattedTotalPrice = formatter.format(total_price);  return (
+  const formattedTotalPrice = formatter.format(total_price);
+  return (
     <div className="flex justify-center items-center w-[100%] h-auto border py-6 px-7 box mb-4">
       <div id="box-1" className="flex flex-col w-[100%] h-auto">
         <div id="order-code" className="flex text-xl pb-3">
@@ -149,7 +150,7 @@ const OrderCard = ({ order }) => {
 
 const CustomerOrderSidebar = () => {
   return (
-    <div id="sidebar" className="flex w-[253px] h-auto box">
+    <div id="sidebar" className="flex w-[253px] h-auto box sticky top-[124px]">
       <div
         id="sidebar-orders"
         className="w-full flex justify-center items-start"
@@ -180,11 +181,11 @@ const CustomerOrderSidebar = () => {
 };
 
 const menuList = [
-  {
-    label: "ข้อมูลผู้ใช้งาน",
-    IconComponent: BiUser,
-    to: "/user-orders-list",
-  },
+  // {
+  //   label: "ข้อมูลผู้ใช้งาน",
+  //   IconComponent: BiUser,
+  //   to: "/user-orders-list",
+  // },
   {
     label: "รายการคำสั่งซ่อม",
     IconComponent: TiClipboard,
