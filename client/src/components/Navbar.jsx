@@ -103,10 +103,8 @@ const Navbar = ({ menuItems }) => {
             </div>
 
             <div className="relative">
-              <img
-                src={userProfile}
-                alt="userProfile"
-                className="w-10 h-10 p-2 bg-gray-100 rounded-full mx-2 cursor-pointer"
+              <BiUser
+                className="w-10 h-10 p-2 bg-gray-100 rounded-full mx-2 cursor-pointer text-gray-400 hover:bg-gray-200 duration-300"
                 onClick={toggleDropdown}
               />
               {dropdownVisible && (
@@ -156,11 +154,11 @@ const Navbar = ({ menuItems }) => {
 
 export const NavbarLogout = ({ isAdmin }) => {
   const menuItems = [
-    {
-      label: "ข้อมูลผู้ใช้งาน",
-      IconComponent: BiUser,
-      to: "/user",
-    },
+    // {
+    //   label: "ข้อมูลผู้ใช้งาน",
+    //   IconComponent: BiUser,
+    //   to: "/user",
+    // },
     {
       label: "รายการคำสั่งซ่อม",
       IconComponent: TiClipboard,
@@ -184,11 +182,11 @@ export const NavbarLogout = ({ isAdmin }) => {
 
 export const AdminNavbarLogout = () => {
   const menuItems = [
-    {
-      label: "ข้อมูลผู้ใช้งาน",
-      IconComponent: BiUser,
-      to: "/user",
-    },
+    // {
+    //   label: "ข้อมูลผู้ใช้งาน",
+    //   IconComponent: BiUser,
+    //   to: "/user",
+    // },
     {
       label: "รายการคำสั่งซ่อม",
       IconComponent: TiClipboard,
