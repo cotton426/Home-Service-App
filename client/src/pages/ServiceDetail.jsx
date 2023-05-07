@@ -36,7 +36,7 @@ export const ServiceSummary = ({
   return (
     <>
       <div
-        className={`box flex flex-col justify-between w-1/3 h-1/3 ${
+        className={`sticky top-5 box flex flex-col justify-between w-1/3 h-1/3 ${
           page === "summary-page" ? "px-[3%] py-[3%]" : "px-4"
         }`}
       >
