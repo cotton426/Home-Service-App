@@ -1,11 +1,10 @@
 import { FiTag } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
-function ServiceMore({ items, loading}) {
+function ServiceMore({ items, loading }) {
   const navigate = useNavigate();
   return (
     <div className="flex justify-center w-full pb-20 pt-20 bg-gray-50 h-full">
-      
       {!items ? (
         <h1>ไม่พบบริการที่ค้นหา</h1>
       ) : (
@@ -48,12 +47,24 @@ function ServiceMore({ items, loading}) {
                                 ...item.sub_services.map(
                                   (sub_price) => sub_price.price
                                 )
-                              )} - ${Math.max(
+                              ).toLocaleString("en-US", {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              })} - ${Math.max(
                                 ...item.sub_services.map(
                                   (sub_price) => sub_price.price
                                 )
-                              )} ฿`
-                            : item.sub_services[0]?.price + " ฿"}
+                              ).toLocaleString("en-US", {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              })} ฿`
+                            : item.sub_services[0]?.price.toLocaleString(
+                                "en-US",
+                                {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }
+                              ) + " ฿"}
                         </span>
                       </div>
                     </div>

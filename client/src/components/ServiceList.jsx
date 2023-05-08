@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 function ServiceList() {
   const { items, homepageGetServices } = useUser();
 
-const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     homepageGetServices();
@@ -52,10 +52,22 @@ const navigate = useNavigate()
                         {item.sub_services.length > 1
                           ? `${Math.min(
                               ...item.sub_services.map((s) => s.price)
-                            )} ฿ - ${Math.max(
+                            ).toLocaleString("en-US", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })} ฿ - ${Math.max(
                               ...item.sub_services.map((s) => s.price)
-                            )} ฿`
-                          : item.sub_services[0]?.price + " ฿"}
+                            ).toLocaleString("en-US", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })} ฿`
+                          : item.sub_services[0]?.price.toLocaleString(
+                              "en-US",
+                              {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              }
+                            ) + " ฿"}
                       </span>
                     </div>
                   </div>

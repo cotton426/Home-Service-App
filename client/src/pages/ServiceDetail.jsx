@@ -103,8 +103,14 @@ export const ServiceSummary = ({
                 <p className="text-red text-sm font-medium">
                   -
                   {discountType === "Fixed"
-                    ? discount
-                    : totalPrice * (discount / 100)}{" "}
+                    ? discount.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })
+                    : (totalPrice * (discount / 100)).toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}{" "}
                   ฿{" "}
                 </p>
               </div>
@@ -114,15 +120,26 @@ export const ServiceSummary = ({
             <p className="text-gray-700">รวม</p>
             <p className="font-semibold">
               {!discount
-                ? totalPrice
+                ? totalPrice.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
                 : discountType === "Fixed"
-                ? totalPrice - discount
-                : totalPrice * ((100 - discount) / 100)}{" "}
+                ? (totalPrice - discount).toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                : (totalPrice * ((100 - discount) / 100)).toLocaleString(
+                    "en-US",
+                    {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }
+                  )}{" "}
               ฿
             </p>
           </div>
         </div>
-
 
         {page === "summary-page" && (
           <Link to="/user-orders-list">
@@ -182,7 +199,6 @@ const ServiceDetail = () => {
     code: "",
     promotionCode: "",
   });
-
 
   const handleChange = (event) => {
     const fieldName = event.target.name;

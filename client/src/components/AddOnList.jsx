@@ -58,7 +58,11 @@ function AddOnList({ itemObjects, counters, setCounters, cart, setCart }) {
                 <div className="flex flex-row items-center">
                   <FiTag className="w-3.5 mr-2 text-gray-700" />
                   <p className="text-gray-700">
-                    {item.price} ฿ / {item.unit}
+                    {item.price.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    ฿ / {item.unit}
                   </p>
                 </div>
               </div>
