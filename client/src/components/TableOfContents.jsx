@@ -22,9 +22,9 @@ const TableRow = ({
 
   const navigateToItem = () => {
     navigate(
-      promotion ? `/view-promotion/${item.id}` 
-      :
-      service
+      promotion
+        ? `/view-promotion/${item.id}`
+        : service
         ? `/view-service/${item.service_id}`
         : `/view-category/${item.category_id}`
     );
@@ -132,12 +132,12 @@ const TableOfContents = ({ service, promotion }) => {
     setShowDeleteConfirmation(true);
     setItemToDelete(item);
   };
-  const confirmDelete = async () => { 
+  const confirmDelete = async () => {
     promotion
-    ? await deletePromotion(itemToDelete.id)
-    : service
-    ? await deleteService(itemToDelete.service_id)
-    : await deleteCategory(itemToDelete.category_id);
+      ? await deletePromotion(itemToDelete.id)
+      : service
+      ? await deleteService(itemToDelete.service_id)
+      : await deleteCategory(itemToDelete.category_id);
     setShowDeleteConfirmation(false);
     setItemToDelete(null);
   };
@@ -162,9 +162,9 @@ const TableOfContents = ({ service, promotion }) => {
 
               {promotion ? (
                 <>
-                  <th className="py-3 px-4 w-[12%]">ประเภท</th>
+                  <th className="py-3 px-4 w-[8%]">ประเภท</th>
                   <th className="py-3 px-4 w-[15%]">โควต้าการใช้(ครั้ง)</th>
-                  <th className="py-3 px-4 w-[12%]">ราคาที่ลด</th>
+                  <th className="py-3 px-4 w-[10%]">ราคาที่ลด</th>
                 </>
               ) : service ? (
                 <>
@@ -174,7 +174,7 @@ const TableOfContents = ({ service, promotion }) => {
               ) : (
                 <th className="py-3 px-4 w-1/4">ชื่อหมวดหมู่</th>
               )}
-              <th className="py-3 px-4 w-1/6">สร้างเมื่อ</th>
+              <th className="py-3 px-4 w-1/5">สร้างเมื่อ</th>
               <th className="py-3 px-4 ">แก้ไขล่าสุด</th>
               <th className="py-3 px-4 w-1/12">Actions</th>
             </tr>
