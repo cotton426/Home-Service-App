@@ -33,6 +33,15 @@ const AdminHomepage = () => {
       >
         <Routes>
           <Route
+            path="*"
+            element={
+              <>
+                <CategoryNavbar />
+                <TableOfContents />
+              </>
+            }
+          />
+          <Route
             path="/promotions"
             element={
               <>
